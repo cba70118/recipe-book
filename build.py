@@ -95,10 +95,26 @@ def build_recipe_card(r):
     """
 
 
+def build_recipe_summary(recipes):
+    """Build a text summary of all recipes for the chef chat context."""
+    lines = []
+    for r in recipes:
+        tags = r.get("tags", {})
+        tag_str = ", ".join(tags.get("meal", []) + tags.get("cuisine", []))
+        notes = f" Notes: {r['notes']}" if r.get("notes") else ""
+        ingredients = ", ".join(r["recipe"]["ingredients"])
+        lines.append(
+            f"- {r['dish']} ({tag_str}): {r['recipe'].get('yield', 'No yield listed')}. "
+            f"Ingredients: {ingredients}.{notes}"
+        )
+    return "\\n".join(lines)
+
+
 def build_site():
     recipes = load_recipes()
     meal_tags, cuisine_tags = collect_tags(recipes)
     cards_html = "\n".join(build_recipe_card(r) for r in recipes)
+    recipe_summary = build_recipe_summary(recipes)
 
     with open(TEMPLATE_PATH, "r", encoding="utf-8") as f:
         template = f.read()
@@ -123,6 +139,7 @@ def build_site():
     html = html.replace("{{CUISINE_TAG_BUTTONS}}", cuisine_btns)
     html = html.replace("{{MEAL_TAG_CHECKS}}", meal_checks)
     html = html.replace("{{CUISINE_TAG_CHECKS}}", cuisine_checks)
+    html = html.replace("{{RECIPE_SUMMARY}}", recipe_summary)
 
     DOCS_DIR.mkdir(exist_ok=True)
     with open(DOCS_DIR / "index.html", "w", encoding="utf-8") as f:

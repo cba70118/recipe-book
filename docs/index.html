@@ -425,6 +425,86 @@
     .instructions strong {
       color: var(--ink);
     }
+
+    /* --- Chef Chat --- */
+    #chef-view { display: none; }
+    #chef-view.active { display: flex; flex-direction: column; height: calc(100vh - 200px); }
+    #chef-key-view { display: none; }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .chat-msg {
+      max-width: 88%;
+      padding: 12px 16px;
+      font-size: 0.9rem;
+      line-height: 1.55;
+      word-wrap: break-word;
+    }
+
+    .chat-msg.assistant {
+      align-self: flex-start;
+      background: var(--warm-white);
+      border: 1px solid var(--linen);
+      border-left: 3px solid var(--bourbon);
+    }
+
+    .chat-msg.user {
+      align-self: flex-end;
+      background: var(--ink);
+      color: var(--cream);
+    }
+
+    .chat-msg strong { color: var(--tobacco); }
+    .chat-msg.user strong { color: var(--parchment); }
+
+    .chat-msg p { margin: 6px 0; }
+    .chat-msg p:first-child { margin-top: 0; }
+    .chat-msg p:last-child { margin-bottom: 0; }
+
+    .chat-input-row {
+      display: flex; gap: 8px;
+      padding: 12px 0 0;
+      border-top: 1px solid var(--light-rule);
+    }
+
+    .chat-input-row input {
+      flex: 1; padding: 12px 14px;
+      border: 1px solid var(--light-rule);
+      border-radius: 4px;
+      font-size: 0.9rem; font-family: inherit;
+      background: var(--warm-white);
+      color: var(--charcoal);
+      outline: none;
+    }
+
+    .chat-input-row input:focus { border-color: var(--tobacco); }
+
+    .chat-input-row button {
+      padding: 12px 20px;
+      background: var(--ink); color: var(--cream);
+      border: none; border-radius: 4px;
+      font-size: 0.8rem; font-family: inherit;
+      font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+    }
+
+    .chat-input-row button:disabled { background: var(--warm-gray); cursor: not-allowed; }
+
+    .chat-typing {
+      align-self: flex-start;
+      color: var(--warm-gray);
+      font-size: 0.85rem;
+      font-style: italic;
+      padding: 8px 0;
+    }
   </style>
 </head>
 <body>
@@ -437,6 +517,7 @@
   <div class="container">
     <div class="tabs">
       <div class="tab active" onclick="showView('recipes')">Recipes</div>
+      <div class="tab" onclick="showView(getChefKey() ? 'chef' : 'chef-key')">Ask the Chef</div>
       <div class="tab" onclick="showView(getToken() ? 'add' : 'token')">Add New</div>
     </div>
 
@@ -708,6 +789,30 @@
       <div class="status-msg" id="status-msg"></div>
     </div>
 
+    <!-- Chef Chat View -->
+    <div id="chef-view">
+      <div class="chat-messages" id="chat-messages">
+        <div class="chat-msg assistant">What are we cooking tonight? Tell me what you're in the mood for, what's in your fridge, or just say hi — I'll find something great.</div>
+      </div>
+      <div class="chat-input-row">
+        <input type="text" id="chat-input" placeholder="e.g. something quick with chicken..." onkeydown="if(event.key==='Enter')sendChat()">
+        <button id="chat-send" onclick="sendChat()">Send</button>
+      </div>
+    </div>
+
+    <!-- Chef Key Setup (shown once) -->
+    <div id="chef-key-view">
+      <div class="instructions">
+        <strong>One-time setup:</strong> To chat with the Chef, paste the API key below. It stays in your browser only.
+      </div>
+      <div class="form-group">
+        <label>Claude API Key</label>
+        <input type="password" id="chef-key-input" placeholder="Paste API key here...">
+      </div>
+      <button class="btn" onclick="saveChefKey()">Save Key</button>
+      <div class="status-msg" id="chef-key-status"></div>
+    </div>
+
     <!-- Token Setup (shown once) -->
     <div id="token-view">
       <div class="instructions">
@@ -726,6 +831,20 @@
     const REPO = 'cba70118/recipe-book';
 
     function getToken() { return localStorage.getItem('recipe_book_token') || ''; }
+    function getChefKey() { return localStorage.getItem('recipe_book_chef_key') || ''; }
+
+    function saveChefKey() {
+      const val = document.getElementById('chef-key-input').value.trim();
+      if (!val) {
+        document.getElementById('chef-key-status').textContent = 'Please paste an API key.';
+        document.getElementById('chef-key-status').className = 'status-msg error';
+        return;
+      }
+      localStorage.setItem('recipe_book_chef_key', val);
+      document.getElementById('chef-key-status').textContent = 'Key saved!';
+      document.getElementById('chef-key-status').className = 'status-msg success';
+      setTimeout(() => showView('chef'), 500);
+    }
 
     function saveToken() {
       const val = document.getElementById('token-input').value.trim();
@@ -769,17 +888,23 @@
     }
 
     function showView(view) {
-      const views = ['recipes', 'add', 'token'];
+      const views = ['recipes', 'add', 'token', 'chef', 'chef-key'];
       views.forEach(v => {
         const el = document.getElementById(v + '-view');
         if (!el) return;
         if (v === 'recipes') el.classList.toggle('hidden', view !== 'recipes');
         else if (v === 'add') el.classList.toggle('active', view === 'add');
-        else if (v === 'token') el.style.display = view === 'token' ? 'block' : 'none';
+        else if (v === 'chef') el.classList.toggle('active', view === 'chef');
+        else el.style.display = view === v ? 'block' : 'none';
       });
       const tabs = document.querySelectorAll('.tab');
       tabs[0].classList.toggle('active', view === 'recipes');
-      tabs[1].classList.toggle('active', view === 'add' || view === 'token');
+      tabs[1].classList.toggle('active', view === 'chef' || view === 'chef-key');
+      tabs[2].classList.toggle('active', view === 'add' || view === 'token');
+
+      if (view === 'chef') {
+        setTimeout(() => document.getElementById('chat-input').focus(), 100);
+      }
     }
 
     function addCustomTag(type) {
@@ -913,6 +1038,104 @@
       // Fall back to decimal
       const rounded = Math.round(n * 100) / 100;
       return rounded % 1 === 0 ? rounded.toString() : rounded.toFixed(rounded < 10 ? 1 : 0);
+    }
+
+    // --- Chef Chat ---
+    const RECIPE_CONTEXT = `- Cheap "Paella" (dinner, cajun): Serves 8. Ingredients: 2 cups water, 1/2 package Cajun style smoked sausage, halved lengthwise and sliced 1/4-inch thick, 1 can (14.5 oz) diced tomatoes, undrained, 1/2 cup chopped onion, 1 tsp parsley flakes, 1 package Zatarain's Yellow Rice Mix, 1 lb large shrimp, peeled and deveined, 1 cup frozen peas. Notes: Prep: 10 min, Cook: 30 min. Serves 8. Quick weeknight crowd-feeder.\n- Classic Genovese Basil Pesto (dinner, lunch, italian): About 1 cup (enough for 1 lb pasta). Ingredients: 3 packed cups fresh basil leaves (~3 oz / 85g), 1/3 cup pine nuts, 2 medium cloves garlic, peeled, 1/2 cup extra-virgin olive oil, 1/2 cup finely grated Parmigiano-Reggiano, 1/4 cup finely grated Pecorino Romano, 1/2 tsp kosher salt, plus more to taste, Pinch of black pepper. Notes: Might benefit from a squeeze of lemon juice — try it next time.\n- Cory's Fresh Salsa (snack, appetizer, mexican): About 3 cups. Ingredients: 6-7 Roma tomatoes, seeded, 2 jalapeños, seeded and chopped, 1/2 cup chopped cilantro, ~10 green onions, 2 tbsp hot sauce, 1 tsp garlic powder (or minced garlic), 1 tsp salt, 1 tsp pepper, 2 tbsp lime juice.\n- New Orleans Red Beans and Rice (dinner, southern, cajun): Serves 6-8. Ingredients: 1 lb dry red kidney beans, 1/2 lb andouille sausage, 4 oz tasso, 2 ham hocks, 1/2 stick unsalted butter plus one more pad, 1 tbsp avocado oil, 32 oz low sodium chicken broth, 1 red bell pepper, 1 green bell pepper, 1 yellow onion, 2 tbsp fresh parsley, Tony's seasoning (4 good back-and-forth shakes), Garlic powder (4 good back-and-forth shakes), Onion powder (4 good back-and-forth shakes), Italian seasoning (2 good shakes), Thyme (1 good shake), 5 bay leaves. Notes: Low and slow — plan for 5-6 hours total cook time.\n- Taco Meat with Corn Tortillas (dinner, mexican): Serves 4 (8 tacos). Ingredients: 1 lb ground beef (70-80% lean), 1 tbsp chili powder, 1/2 tsp salt, 3/4 tsp cumin, 1/2 tsp dried Mexican oregano, 1/4 tsp granulated garlic, 1/4 tsp granulated onion, 1/2 cup tomato sauce, 8 white corn tortillas, 1/2 cup avocado or vegetable oil. Notes: Use 70-80% lean ground beef for best flavor. Mexican oregano is key — it's different from Italian oregano.\n- Vodka Sauce with Sausage (dinner, italian): Serves 4. Ingredients: 8 oz uncooked penne pasta, 1 tbsp butter, 16 oz Italian sausage, 1/2 small onion, chopped finely, 1 clove garlic, minced, 1/3 cup vodka, 1/3 cup tomato paste, 1 cup heavy/whipping cream, Salt and pepper to taste, Fresh basil, sliced thin (optional), Freshly grated parmesan cheese (optional). Notes: Use double-concentrated tomato paste (Mutti or DeLallo). Don't sub the heavy cream for milk or half-and-half — it'll curdle. Buy bulk Italian sausage or remove from casings.`;
+
+    const CHEF_SYSTEM = `You are an enthusiastic, knowledgeable culinary expert — like a warm, confident friend who loves food. Your job is to help decide what to cook.
+
+You have access to the family recipe book. Here are the current recipes:
+
+${RECIPE_CONTEXT || 'No recipes in the book yet.'}
+
+When suggesting meals:
+- Give 2-4 concrete options with a dish name, why it works, a brief method sketch, and difficulty/time estimate
+- Use sensory language — flavors, textures, aromas
+- Be practical about weeknight vs. weekend cooking
+- If a dish from the recipe book fits, mention it and that it's already in the book
+- Suggest variety if the book is heavy on one cuisine
+- Cite culinary sources (Serious Eats, NYT Cooking, Ottolenghi, etc.) when relevant — but only when genuine
+- Keep responses concise and readable
+- Use markdown formatting for readability
+
+If the user wants to log a meal, rate a dish, or asks about cooking history, help with that too.`;
+
+    let chatHistory = [];
+
+    function addChatMsg(role, text) {
+      const container = document.getElementById('chat-messages');
+      const div = document.createElement('div');
+      div.className = 'chat-msg ' + role;
+      div.innerHTML = formatChat(text);
+      container.appendChild(div);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function formatChat(text) {
+      // Basic markdown: bold, italic, line breaks
+      return text
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.+?)\*/g, '<em>$1</em>')
+        .replace(/\n\n/g, '</p><p>')
+        .replace(/\n/g, '<br>')
+        .replace(/^(.*)$/, '<p>$1</p>');
+    }
+
+    async function sendChat() {
+      const input = document.getElementById('chat-input');
+      const btn = document.getElementById('chat-send');
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      addChatMsg('user', msg);
+      input.value = '';
+      btn.disabled = true;
+
+      chatHistory.push({ role: 'user', content: msg });
+
+      // Show typing indicator
+      const container = document.getElementById('chat-messages');
+      const typing = document.createElement('div');
+      typing.className = 'chat-typing';
+      typing.textContent = 'The chef is thinking...';
+      container.appendChild(typing);
+      container.scrollTop = container.scrollHeight;
+
+      try {
+        const resp = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': getChefKey(),
+            'anthropic-version': '2023-06-01',
+            'anthropic-dangerous-direct-browser-access': 'true'
+          },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-20250514',
+            max_tokens: 1024,
+            system: CHEF_SYSTEM,
+            messages: chatHistory
+          })
+        });
+
+        if (!resp.ok) {
+          const err = await resp.json();
+          throw new Error(err.error?.message || 'API error');
+        }
+
+        const data = await resp.json();
+        const reply = data.content[0].text;
+        chatHistory.push({ role: 'assistant', content: reply });
+        typing.remove();
+        addChatMsg('assistant', reply);
+      } catch (e) {
+        typing.remove();
+        addChatMsg('assistant', `Sorry, something went wrong: ${e.message}`);
+      }
+
+      btn.disabled = false;
+      input.focus();
     }
 
     function scaleRecipe(btn, multiplier) {
