@@ -197,6 +197,14 @@
     .recipe-card.open .toggle-icon { transform: rotate(45deg); }
     .recipe-card.open .recipe-meta { display: block; }
 
+    .difficulty-time {
+      display: inline-block;
+      font-size: 0.78rem;
+      color: var(--tobacco);
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
     .yield {
       display: inline-block;
       padding: 2px 0;
@@ -211,6 +219,46 @@
       color: var(--warm-gray);
       font-style: italic;
       margin-bottom: 8px;
+    }
+
+    .why-this-works {
+      margin: 16px 0;
+      padding: 14px 16px;
+      background: var(--parchment);
+      border-left: 3px solid var(--sage-dark);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: var(--charcoal);
+    }
+
+    .why-this-works strong {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      color: var(--sage-dark);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .family-notes {
+      margin-top: 16px; padding: 14px 16px;
+      background: var(--warm-white);
+      border: 1px dashed var(--light-rule);
+      font-size: 0.85rem;
+      font-style: italic;
+      color: var(--warm-gray);
+    }
+
+    .family-notes strong {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      color: var(--tobacco);
+      font-style: normal;
     }
 
     .tag-pills { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
@@ -667,33 +715,46 @@
 
       <div class="filter-section">
         <div class="filter-label">Meal</div>
-        <div class="filter-row" id="meal-filters">
-          <button class="filter-btn" data-tag="appetizer">appetizer</button><button class="filter-btn" data-tag="dinner">dinner</button><button class="filter-btn" data-tag="lunch">lunch</button><button class="filter-btn" data-tag="snack">snack</button>
-        </div>
+        <div class="filter-row" id="meal-filters"><button class="filter-btn" data-tag="appetizer">appetizer</button><button class="filter-btn" data-tag="dinner">dinner</button><button class="filter-btn" data-tag="lunch">lunch</button><button class="filter-btn" data-tag="snack">snack</button></div>
       </div>
-
       <div class="filter-section">
         <div class="filter-label">Cuisine</div>
-        <div class="filter-row" id="cuisine-filters">
-          <button class="filter-btn" data-tag="cajun">cajun</button><button class="filter-btn" data-tag="italian">italian</button><button class="filter-btn" data-tag="mexican">mexican</button><button class="filter-btn" data-tag="southern">southern</button>
-        </div>
+        <div class="filter-row" id="cuisine-filters"><button class="filter-btn" data-tag="cajun">cajun</button><button class="filter-btn" data-tag="italian">italian</button><button class="filter-btn" data-tag="mexican">mexican</button><button class="filter-btn" data-tag="southern">southern</button></div>
+      </div>
+      <div class="filter-section">
+        <div class="filter-label">Protein</div>
+        <div class="filter-row" id="protein-filters"><button class="filter-btn" data-tag="beef">beef</button><button class="filter-btn" data-tag="pork">pork</button><button class="filter-btn" data-tag="seafood">seafood</button><button class="filter-btn" data-tag="vegetarian">vegetarian</button></div>
+      </div>
+      <div class="filter-section">
+        <div class="filter-label">Style</div>
+        <div class="filter-row" id="style-filters"><button class="filter-btn" data-tag="batch-cooking">batch-cooking</button><button class="filter-btn" data-tag="make-ahead">make-ahead</button><button class="filter-btn" data-tag="one-pan">one-pan</button><button class="filter-btn" data-tag="weekend-project">weekend-project</button><button class="filter-btn" data-tag="weeknight">weeknight</button></div>
+      </div>
+      <div class="filter-section">
+        <div class="filter-label">Occasion</div>
+        <div class="filter-row" id="occasion-filters"><button class="filter-btn" data-tag="date-night">date-night</button><button class="filter-btn" data-tag="family-dinner">family-dinner</button><button class="filter-btn" data-tag="summer">summer</button><button class="filter-btn" data-tag="winter-warmer">winter-warmer</button></div>
+      </div>
+      <div class="filter-section">
+        <div class="filter-label">Tool</div>
+        <div class="filter-row" id="tool-filters"><button class="filter-btn" data-tag="dutch-oven">dutch-oven</button><button class="filter-btn" data-tag="food-processor">food-processor</button><button class="filter-btn" data-tag="skillet">skillet</button></div>
       </div>
 
       <hr class="section-rule">
 
       <div id="recipe-list">
         
-    <article class="recipe-card" id="cheap-paella" data-tags="dinner cajun">
+    <article class="recipe-card" id="cheap-paella" data-tags="dinner cajun pork seafood weeknight one-pan family-dinner skillet dutch-oven">
       <div class="recipe-header" onclick="toggleRecipe(this)">
         <h2>Cheap &quot;Paella&quot;</h2>
         <div class="recipe-meta">
+          <span class="difficulty-time">Easy · 40 min</span>
           <span class="yield">Serves 8</span>
           <div class="source">Zatarain&#x27;s</div>
-          <div class="tag-pills"><span class="tag-pill">dinner</span><span class="tag-pill">cajun</span></div>
+          <div class="tag-pills"><span class="tag-pill">dinner</span><span class="tag-pill">cajun</span><span class="tag-pill">pork</span><span class="tag-pill">seafood</span><span class="tag-pill">weeknight</span><span class="tag-pill">one-pan</span><span class="tag-pill">family-dinner</span><span class="tag-pill">skillet</span><span class="tag-pill">dutch-oven</span></div>
         </div>
         <span class="toggle-icon">+</span>
       </div>
       <div class="recipe-body">
+        <div class="why-this-works"><strong>Why This Works:</strong> Browning the sausage first renders fat that you then use to saute the onion, building a fond that adds depth to what is essentially a box rice mix. Adding the shrimp and peas at the very end keeps the shrimp from turning rubbery and the peas from going army-green. The Zatarain&#x27;s yellow rice handles the saffron-turmeric flavor so you get paella vibes without the price tag.</div>
         <h3>Ingredients</h3>
         <div class="scaler">
           <button class="scale-btn" onclick="scaleRecipe(this, 0.5)">&#189;x</button>
@@ -707,21 +768,24 @@
         <div class="notes"><strong>Notes:</strong> Prep: 10 min, Cook: 30 min. Serves 8. Quick weeknight crowd-feeder.</div>
         
         
+        
       </div>
     </article>
     
 
-    <article class="recipe-card" id="classic-genovese-basil-pesto" data-tags="dinner lunch italian">
+    <article class="recipe-card" id="classic-genovese-basil-pesto" data-tags="dinner lunch italian vegetarian weeknight make-ahead batch-cooking summer date-night food-processor skillet">
       <div class="recipe-header" onclick="toggleRecipe(this)">
         <h2>Classic Genovese Basil Pesto</h2>
         <div class="recipe-meta">
+          <span class="difficulty-time">Easy · 20 min</span>
           <span class="yield">About 1 cup (enough for 1 lb pasta)</span>
           <div class="source">Adapted from Serious Eats / J. Kenji López-Alt</div>
-          <div class="tag-pills"><span class="tag-pill">dinner</span><span class="tag-pill">lunch</span><span class="tag-pill">italian</span></div>
+          <div class="tag-pills"><span class="tag-pill">dinner</span><span class="tag-pill">lunch</span><span class="tag-pill">italian</span><span class="tag-pill">vegetarian</span><span class="tag-pill">weeknight</span><span class="tag-pill">make-ahead</span><span class="tag-pill">batch-cooking</span><span class="tag-pill">summer</span><span class="tag-pill">date-night</span><span class="tag-pill">food-processor</span><span class="tag-pill">skillet</span></div>
         </div>
         <span class="toggle-icon">+</span>
       </div>
       <div class="recipe-body">
+        <div class="why-this-works"><strong>Why This Works:</strong> Toasting the pine nuts deepens their flavor and drives off moisture so the pesto doesn&#x27;t turn watery. Folding the cheese in by hand instead of processing it avoids the heat and friction that would make the Parm gummy and greasy. The optional blanch-and-shock step denatures the enzymes that brown basil on contact with air, locking in a vivid green color for days.</div>
         <h3>Ingredients</h3>
         <div class="scaler">
           <button class="scale-btn" onclick="scaleRecipe(this, 0.5)">&#189;x</button>
@@ -735,21 +799,24 @@
         <div class="notes"><strong>Notes:</strong> Might benefit from a squeeze of lemon juice — try it next time.</div>
         <div class="serving"><strong>Serving:</strong> Cook 1 lb pasta (trofie, linguine, or gemelli are traditional). Reserve 1 cup pasta water before draining. Toss pasta with pesto, loosening with pasta water a few tablespoons at a time. Never heat the pesto directly in a pan — the basil will turn dark and bitter.</div>
         <div class="storage"><strong>Storage:</strong> Fridge: press plastic wrap onto the surface, drizzle olive oil on top, keeps 4-5 days. Freezer: spoon into ice cube trays, freeze solid, transfer to a bag — keeps 3+ months.</div>
+        
       </div>
     </article>
     
 
-    <article class="recipe-card" id="corys-fresh-salsa" data-tags="snack appetizer mexican">
+    <article class="recipe-card" id="corys-fresh-salsa" data-tags="snack appetizer mexican vegetarian weeknight make-ahead batch-cooking summer family-dinner food-processor">
       <div class="recipe-header" onclick="toggleRecipe(this)">
         <h2>Cory&#x27;s Fresh Salsa</h2>
         <div class="recipe-meta">
+          <span class="difficulty-time">Easy · 15 min</span>
           <span class="yield">About 3 cups</span>
           <div class="source">Original / Cory</div>
-          <div class="tag-pills"><span class="tag-pill">snack</span><span class="tag-pill">appetizer</span><span class="tag-pill">mexican</span></div>
+          <div class="tag-pills"><span class="tag-pill">snack</span><span class="tag-pill">appetizer</span><span class="tag-pill">mexican</span><span class="tag-pill">vegetarian</span><span class="tag-pill">weeknight</span><span class="tag-pill">make-ahead</span><span class="tag-pill">batch-cooking</span><span class="tag-pill">summer</span><span class="tag-pill">family-dinner</span><span class="tag-pill">food-processor</span></div>
         </div>
         <span class="toggle-icon">+</span>
       </div>
       <div class="recipe-body">
+        <div class="why-this-works"><strong>Why This Works:</strong> Seeding the Romas removes excess water so you get a thick, chunky salsa instead of soup. The lime juice and hot sauce hit both acid and heat, which brightens the raw tomatoes and keeps the cilantro from tasting soapy to borderline tasters. Pulsing in the food processor rather than hand-chopping gives you an even texture fast while still leaving enough body.</div>
         <h3>Ingredients</h3>
         <div class="scaler">
           <button class="scale-btn" onclick="scaleRecipe(this, 0.5)">&#189;x</button>
@@ -763,21 +830,24 @@
         
         
         
+        
       </div>
     </article>
     
 
-    <article class="recipe-card" id="new-orleans-red-beans-and-rice" data-tags="dinner southern cajun">
+    <article class="recipe-card" id="new-orleans-red-beans-and-rice" data-tags="dinner southern cajun pork weekend-project batch-cooking make-ahead winter-warmer family-dinner dutch-oven">
       <div class="recipe-header" onclick="toggleRecipe(this)">
         <h2>New Orleans Red Beans and Rice</h2>
         <div class="recipe-meta">
+          <span class="difficulty-time">Weekend Project · 6+ hours (plus overnight soak)</span>
           <span class="yield">Serves 6-8</span>
           <div class="source">Original / Cory</div>
-          <div class="tag-pills"><span class="tag-pill">dinner</span><span class="tag-pill">southern</span><span class="tag-pill">cajun</span></div>
+          <div class="tag-pills"><span class="tag-pill">dinner</span><span class="tag-pill">southern</span><span class="tag-pill">cajun</span><span class="tag-pill">pork</span><span class="tag-pill">weekend-project</span><span class="tag-pill">batch-cooking</span><span class="tag-pill">make-ahead</span><span class="tag-pill">winter-warmer</span><span class="tag-pill">family-dinner</span><span class="tag-pill">dutch-oven</span></div>
         </div>
         <span class="toggle-icon">+</span>
       </div>
       <div class="recipe-body">
+        <div class="why-this-works"><strong>Why This Works:</strong> The trinity of andouille, tasso, and ham hocks layers three different styles of pork smoke and salt into the broth, which the beans absorb over the long simmer. Mashing a portion of the beans partway through creates a creamy, gravy-like body without any added thickener. The butter at the end rounds out the richness and gives the pot liquor a velvety finish.</div>
         <h3>Ingredients</h3>
         <div class="scaler">
           <button class="scale-btn" onclick="scaleRecipe(this, 0.5)">&#189;x</button>
@@ -791,21 +861,24 @@
         <div class="notes"><strong>Notes:</strong> Low and slow — plan for 5-6 hours total cook time.</div>
         
         
+        
       </div>
     </article>
     
 
-    <article class="recipe-card" id="taco-meat-with-corn-tortillas" data-tags="dinner mexican">
+    <article class="recipe-card" id="taco-meat-with-corn-tortillas" data-tags="dinner mexican beef weeknight family-dinner skillet">
       <div class="recipe-header" onclick="toggleRecipe(this)">
         <h2>Taco Meat with Corn Tortillas</h2>
         <div class="recipe-meta">
+          <span class="difficulty-time">Easy · 30 min</span>
           <span class="yield">Serves 4 (8 tacos)</span>
           
-          <div class="tag-pills"><span class="tag-pill">dinner</span><span class="tag-pill">mexican</span></div>
+          <div class="tag-pills"><span class="tag-pill">dinner</span><span class="tag-pill">mexican</span><span class="tag-pill">beef</span><span class="tag-pill">weeknight</span><span class="tag-pill">family-dinner</span><span class="tag-pill">skillet</span></div>
         </div>
         <span class="toggle-icon">+</span>
       </div>
       <div class="recipe-body">
+        <div class="why-this-works"><strong>Why This Works:</strong> Using fattier ground beef (70-80% lean) keeps the meat juicy after draining and gives the spice blend something to cling to. The tomato sauce simmers into the meat and acts as a binder that holds the seasoning in a thin glaze rather than dusty dry spices. Shallow-frying the corn tortillas transforms them from floppy and bland into crisp, toasty shells that hold up under toppings.</div>
         <h3>Ingredients</h3>
         <div class="scaler">
           <button class="scale-btn" onclick="scaleRecipe(this, 0.5)">&#189;x</button>
@@ -819,21 +892,24 @@
         <div class="notes"><strong>Notes:</strong> Use 70-80% lean ground beef for best flavor. Mexican oregano is key — it&#x27;s different from Italian oregano.</div>
         
         
+        
       </div>
     </article>
     
 
-    <article class="recipe-card" id="vodka-sauce-with-sausage" data-tags="dinner italian">
+    <article class="recipe-card" id="vodka-sauce-with-sausage" data-tags="dinner italian pork weeknight one-pan family-dinner date-night skillet">
       <div class="recipe-header" onclick="toggleRecipe(this)">
         <h2>Vodka Sauce with Sausage</h2>
         <div class="recipe-meta">
+          <span class="difficulty-time">Easy · 30 min</span>
           <span class="yield">Serves 4</span>
           
-          <div class="tag-pills"><span class="tag-pill">dinner</span><span class="tag-pill">italian</span></div>
+          <div class="tag-pills"><span class="tag-pill">dinner</span><span class="tag-pill">italian</span><span class="tag-pill">pork</span><span class="tag-pill">weeknight</span><span class="tag-pill">one-pan</span><span class="tag-pill">family-dinner</span><span class="tag-pill">date-night</span><span class="tag-pill">skillet</span></div>
         </div>
         <span class="toggle-icon">+</span>
       </div>
       <div class="recipe-body">
+        <div class="why-this-works"><strong>Why This Works:</strong> The vodka dissolves flavor compounds in the tomato paste that are alcohol-soluble but not water- or fat-soluble, unlocking a fuller tomato taste you can&#x27;t get otherwise. Browning the sausage hard before building the sauce creates a fond that deglazes into the vodka, adding meaty depth. The heavy cream emulsifies with the tomato paste to create a stable, silky sauce that clings to penne.</div>
         <h3>Ingredients</h3>
         <div class="scaler">
           <button class="scale-btn" onclick="scaleRecipe(this, 0.5)">&#189;x</button>
@@ -845,6 +921,7 @@
         <h3>Steps</h3>
         <ol class="steps"><li>Boil a generously salted pot of water and cook the penne al dente according to package directions.</li><li>Meanwhile, add butter, sausage meat, and onions to a skillet over medium-high heat. Cook 7-10 minutes until nicely browned, breaking the sausage up as you go. Drain excess fat.</li><li>Stir in the garlic and vodka. Let the sauce bubble for about 30 seconds.</li><li>Stir in the tomato paste and cream until you have a smooth mixture.</li><li>Reduce heat to medium-low. Let the sauce warm through and thicken to your liking.</li><li>Season with salt and pepper. Stir in fresh basil if using. Toss with drained pasta, thinning with a splash of pasta water if needed. Serve with freshly grated parmesan.</li></ol>
         <div class="notes"><strong>Notes:</strong> Use double-concentrated tomato paste (Mutti or DeLallo). Don&#x27;t sub the heavy cream for milk or half-and-half — it&#x27;ll curdle. Buy bulk Italian sausage or remove from casings.</div>
+        
         
         
       </div>
@@ -906,23 +983,50 @@
 
       <div class="form-group">
         <label>Meal Type</label>
-        <div class="check-group" id="meal-checks">
-          <label class="check-label"><input type="checkbox" value="appetizer"> appetizer</label><label class="check-label"><input type="checkbox" value="dinner"> dinner</label><label class="check-label"><input type="checkbox" value="lunch"> lunch</label><label class="check-label"><input type="checkbox" value="snack"> snack</label>
-        </div>
+        <div class="check-group" id="meal-checks"><label class="check-label"><input type="checkbox" value="appetizer"> appetizer</label><label class="check-label"><input type="checkbox" value="dinner"> dinner</label><label class="check-label"><input type="checkbox" value="lunch"> lunch</label><label class="check-label"><input type="checkbox" value="snack"> snack</label></div>
         <div class="custom-tag-row">
-          <input type="text" id="custom-meal" placeholder="Add new meal tag...">
+          <input type="text" id="custom-meal" placeholder="Add new...">
           <button onclick="addCustomTag('meal')">Add</button>
         </div>
       </div>
-
       <div class="form-group">
         <label>Cuisine</label>
-        <div class="check-group" id="cuisine-checks">
-          <label class="check-label"><input type="checkbox" value="cajun"> cajun</label><label class="check-label"><input type="checkbox" value="italian"> italian</label><label class="check-label"><input type="checkbox" value="mexican"> mexican</label><label class="check-label"><input type="checkbox" value="southern"> southern</label>
-        </div>
+        <div class="check-group" id="cuisine-checks"><label class="check-label"><input type="checkbox" value="cajun"> cajun</label><label class="check-label"><input type="checkbox" value="italian"> italian</label><label class="check-label"><input type="checkbox" value="mexican"> mexican</label><label class="check-label"><input type="checkbox" value="southern"> southern</label></div>
         <div class="custom-tag-row">
-          <input type="text" id="custom-cuisine" placeholder="Add new cuisine tag...">
+          <input type="text" id="custom-cuisine" placeholder="Add new...">
           <button onclick="addCustomTag('cuisine')">Add</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Protein</label>
+        <div class="check-group" id="protein-checks"><label class="check-label"><input type="checkbox" value="beef"> beef</label><label class="check-label"><input type="checkbox" value="pork"> pork</label><label class="check-label"><input type="checkbox" value="seafood"> seafood</label><label class="check-label"><input type="checkbox" value="vegetarian"> vegetarian</label></div>
+        <div class="custom-tag-row">
+          <input type="text" id="custom-protein" placeholder="Add new...">
+          <button onclick="addCustomTag('protein')">Add</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Style</label>
+        <div class="check-group" id="style-checks"><label class="check-label"><input type="checkbox" value="batch-cooking"> batch-cooking</label><label class="check-label"><input type="checkbox" value="make-ahead"> make-ahead</label><label class="check-label"><input type="checkbox" value="one-pan"> one-pan</label><label class="check-label"><input type="checkbox" value="weekend-project"> weekend-project</label><label class="check-label"><input type="checkbox" value="weeknight"> weeknight</label></div>
+        <div class="custom-tag-row">
+          <input type="text" id="custom-style" placeholder="Add new...">
+          <button onclick="addCustomTag('style')">Add</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Occasion</label>
+        <div class="check-group" id="occasion-checks"><label class="check-label"><input type="checkbox" value="date-night"> date-night</label><label class="check-label"><input type="checkbox" value="family-dinner"> family-dinner</label><label class="check-label"><input type="checkbox" value="summer"> summer</label><label class="check-label"><input type="checkbox" value="winter-warmer"> winter-warmer</label></div>
+        <div class="custom-tag-row">
+          <input type="text" id="custom-occasion" placeholder="Add new...">
+          <button onclick="addCustomTag('occasion')">Add</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Tool</label>
+        <div class="check-group" id="tool-checks"><label class="check-label"><input type="checkbox" value="dutch-oven"> dutch-oven</label><label class="check-label"><input type="checkbox" value="food-processor"> food-processor</label><label class="check-label"><input type="checkbox" value="skillet"> skillet</label></div>
+        <div class="custom-tag-row">
+          <input type="text" id="custom-tool" placeholder="Add new...">
+          <button onclick="addCustomTag('tool')">Add</button>
         </div>
       </div>
 
@@ -1095,14 +1199,17 @@
       if (!ingredients.length) { showStatus('Please enter at least one ingredient.', 'error'); return; }
       if (!steps.length) { showStatus('Please enter at least one step.', 'error'); return; }
 
-      const mealTags = [...document.querySelectorAll('#meal-checks input:checked')].map(cb => cb.value);
-      const cuisineTags = [...document.querySelectorAll('#cuisine-checks input:checked')].map(cb => cb.value);
+      const tagCats = ['meal', 'cuisine', 'protein', 'style', 'occasion', 'tool'];
+      const tags = {};
+      tagCats.forEach(cat => {
+        tags[cat] = [...document.querySelectorAll(`#${cat}-checks input:checked`)].map(cb => cb.value);
+      });
 
       const recipe = {
         dish: dish,
         source: document.getElementById('add-source').value.trim() || null,
         date_added: new Date().toISOString().split('T')[0],
-        tags: { meal: mealTags, cuisine: cuisineTags },
+        tags: tags,
         notes: document.getElementById('add-notes').value.trim() || null,
         recipe: {
           yield: document.getElementById('add-yield').value.trim() || null,
@@ -1326,8 +1433,15 @@
   "storage": "Storage info or null"
 }
 
-For tags, pick from these meal types: breakfast, lunch, dinner, snack, appetizer, dessert, side.
-For cuisine, pick the best match: american, italian, mexican, cajun, southern, asian, korean, japanese, chinese, thai, indian, mediterranean, french, greek, or add a new one if needed.
+For tags, use this system:
+- meal: breakfast, lunch, dinner, snack, appetizer, dessert, side
+- cuisine: american, italian, mexican, cajun, southern, asian, korean, japanese, chinese, thai, indian, mediterranean, french, greek
+- protein: chicken, beef, pork, lamb, seafood, fish, vegetarian, vegan
+- style: weeknight, weekend-project, one-pan, make-ahead, batch-cooking, entertaining
+- occasion: family-dinner, date-night, summer, winter-warmer, holiday
+- tool: cast-iron, dutch-oven, sheet-pan, food-processor, blender, skillet, wok, air-fryer, grill, instant-pot
+Also include "why_this_works": 2-3 sentences of culinary reasoning — why the technique and flavor pairings succeed.
+And "difficulty": "Easy", "Medium", or "Weekend Project".
 Clean up the ingredients and steps to be clear and concise. Standardize measurements (e.g. "tablespoon" to "tbsp", "teaspoon" to "tsp", "ounces" to "oz").`;
 
     async function importRecipe() {
@@ -1433,17 +1547,14 @@ Clean up the ingredients and steps to be clear and concise. Standardize measurem
       document.getElementById('add-serving').value = r.serving || '';
       document.getElementById('add-storage').value = r.storage || '';
 
-      // Check matching tag checkboxes
+      // Check matching tag checkboxes across all categories
       const tags = r.tags || {};
-      (tags.meal || []).forEach(tag => {
-        const cb = document.querySelector(`#meal-checks input[value="${tag}"]`);
-        if (cb) cb.checked = true;
-        else addCustomTagFromImport('meal', tag);
-      });
-      (tags.cuisine || []).forEach(tag => {
-        const cb = document.querySelector(`#cuisine-checks input[value="${tag}"]`);
-        if (cb) cb.checked = true;
-        else addCustomTagFromImport('cuisine', tag);
+      ['meal', 'cuisine', 'protein', 'style', 'occasion', 'tool'].forEach(cat => {
+        (tags[cat] || []).forEach(tag => {
+          const cb = document.querySelector(`#${cat}-checks input[value="${tag}"]`);
+          if (cb) cb.checked = true;
+          else addCustomTagFromImport(cat, tag);
+        });
       });
 
       // Scroll to form
@@ -1459,23 +1570,32 @@ Clean up the ingredients and steps to be clear and concise. Standardize measurem
     }
 
     // --- Chef Chat ---
-    const RECIPE_CONTEXT = `- Cheap "Paella" (dinner, cajun): Serves 8. Ingredients: 2 cups water, 1/2 package Cajun style smoked sausage, halved lengthwise and sliced 1/4-inch thick, 1 can (14.5 oz) diced tomatoes, undrained, 1/2 cup chopped onion, 1 tsp parsley flakes, 1 package Zatarain's Yellow Rice Mix, 1 lb large shrimp, peeled and deveined, 1 cup frozen peas. Notes: Prep: 10 min, Cook: 30 min. Serves 8. Quick weeknight crowd-feeder.\n- Classic Genovese Basil Pesto (dinner, lunch, italian): About 1 cup (enough for 1 lb pasta). Ingredients: 3 packed cups fresh basil leaves (~3 oz / 85g), 1/3 cup pine nuts, 2 medium cloves garlic, peeled, 1/2 cup extra-virgin olive oil, 1/2 cup finely grated Parmigiano-Reggiano, 1/4 cup finely grated Pecorino Romano, 1/2 tsp kosher salt, plus more to taste, Pinch of black pepper. Notes: Might benefit from a squeeze of lemon juice — try it next time.\n- Cory's Fresh Salsa (snack, appetizer, mexican): About 3 cups. Ingredients: 6-7 Roma tomatoes, seeded, 2 jalapeños, seeded and chopped, 1/2 cup chopped cilantro, ~10 green onions, 2 tbsp hot sauce, 1 tsp garlic powder (or minced garlic), 1 tsp salt, 1 tsp pepper, 2 tbsp lime juice.\n- New Orleans Red Beans and Rice (dinner, southern, cajun): Serves 6-8. Ingredients: 1 lb dry red kidney beans, 1/2 lb andouille sausage, 4 oz tasso, 2 ham hocks, 1/2 stick unsalted butter plus one more pad, 1 tbsp avocado oil, 32 oz low sodium chicken broth, 1 red bell pepper, 1 green bell pepper, 1 yellow onion, 2 tbsp fresh parsley, Tony's seasoning (4 good back-and-forth shakes), Garlic powder (4 good back-and-forth shakes), Onion powder (4 good back-and-forth shakes), Italian seasoning (2 good shakes), Thyme (1 good shake), 5 bay leaves. Notes: Low and slow — plan for 5-6 hours total cook time.\n- Taco Meat with Corn Tortillas (dinner, mexican): Serves 4 (8 tacos). Ingredients: 1 lb ground beef (70-80% lean), 1 tbsp chili powder, 1/2 tsp salt, 3/4 tsp cumin, 1/2 tsp dried Mexican oregano, 1/4 tsp granulated garlic, 1/4 tsp granulated onion, 1/2 cup tomato sauce, 8 white corn tortillas, 1/2 cup avocado or vegetable oil. Notes: Use 70-80% lean ground beef for best flavor. Mexican oregano is key — it's different from Italian oregano.\n- Vodka Sauce with Sausage (dinner, italian): Serves 4. Ingredients: 8 oz uncooked penne pasta, 1 tbsp butter, 16 oz Italian sausage, 1/2 small onion, chopped finely, 1 clove garlic, minced, 1/3 cup vodka, 1/3 cup tomato paste, 1 cup heavy/whipping cream, Salt and pepper to taste, Fresh basil, sliced thin (optional), Freshly grated parmesan cheese (optional). Notes: Use double-concentrated tomato paste (Mutti or DeLallo). Don't sub the heavy cream for milk or half-and-half — it'll curdle. Buy bulk Italian sausage or remove from casings.`;
+    const RECIPE_CONTEXT = `- Cheap "Paella" [Easy, 40 min] (dinner, cajun, pork, seafood, weeknight, one-pan, family-dinner, skillet, dutch-oven): Serves 8. Ingredients: 2 cups water, 1/2 package Cajun style smoked sausage, halved lengthwise and sliced 1/4-inch thick, 1 can (14.5 oz) diced tomatoes, undrained, 1/2 cup chopped onion, 1 tsp parsley flakes, 1 package Zatarain's Yellow Rice Mix, 1 lb large shrimp, peeled and deveined, 1 cup frozen peas. Why it works: Browning the sausage first renders fat that you then use to saute the onion, building a fond that adds depth to what is essentially a box rice mix. Adding the shrimp and peas at the very end keeps the shrimp from turning rubbery and the peas from going army-green. The Zatarain's yellow rice handles the saffron-turmeric flavor so you get paella vibes without the price tag. Notes: Prep: 10 min, Cook: 30 min. Serves 8. Quick weeknight crowd-feeder.\n- Classic Genovese Basil Pesto [Easy, 20 min] (dinner, lunch, italian, vegetarian, weeknight, make-ahead, batch-cooking, summer, date-night, food-processor, skillet): About 1 cup (enough for 1 lb pasta). Ingredients: 3 packed cups fresh basil leaves (~3 oz / 85g), 1/3 cup pine nuts, 2 medium cloves garlic, peeled, 1/2 cup extra-virgin olive oil, 1/2 cup finely grated Parmigiano-Reggiano, 1/4 cup finely grated Pecorino Romano, 1/2 tsp kosher salt, plus more to taste, Pinch of black pepper. Why it works: Toasting the pine nuts deepens their flavor and drives off moisture so the pesto doesn't turn watery. Folding the cheese in by hand instead of processing it avoids the heat and friction that would make the Parm gummy and greasy. The optional blanch-and-shock step denatures the enzymes that brown basil on contact with air, locking in a vivid green color for days. Notes: Might benefit from a squeeze of lemon juice — try it next time.\n- Cory's Fresh Salsa [Easy, 15 min] (snack, appetizer, mexican, vegetarian, weeknight, make-ahead, batch-cooking, summer, family-dinner, food-processor): About 3 cups. Ingredients: 6-7 Roma tomatoes, seeded, 2 jalapeños, seeded and chopped, 1/2 cup chopped cilantro, ~10 green onions, 2 tbsp hot sauce, 1 tsp garlic powder (or minced garlic), 1 tsp salt, 1 tsp pepper, 2 tbsp lime juice. Why it works: Seeding the Romas removes excess water so you get a thick, chunky salsa instead of soup. The lime juice and hot sauce hit both acid and heat, which brightens the raw tomatoes and keeps the cilantro from tasting soapy to borderline tasters. Pulsing in the food processor rather than hand-chopping gives you an even texture fast while still leaving enough body.\n- New Orleans Red Beans and Rice [Weekend Project, 6+ hours (plus overnight soak)] (dinner, southern, cajun, pork, weekend-project, batch-cooking, make-ahead, winter-warmer, family-dinner, dutch-oven): Serves 6-8. Ingredients: 1 lb dry red kidney beans, 1/2 lb andouille sausage, 4 oz tasso, 2 ham hocks, 1/2 stick unsalted butter plus one more pad, 1 tbsp avocado oil, 32 oz low sodium chicken broth, 1 red bell pepper, 1 green bell pepper, 1 yellow onion, 2 tbsp fresh parsley, Tony's seasoning (4 good back-and-forth shakes), Garlic powder (4 good back-and-forth shakes), Onion powder (4 good back-and-forth shakes), Italian seasoning (2 good shakes), Thyme (1 good shake), 5 bay leaves. Why it works: The trinity of andouille, tasso, and ham hocks layers three different styles of pork smoke and salt into the broth, which the beans absorb over the long simmer. Mashing a portion of the beans partway through creates a creamy, gravy-like body without any added thickener. The butter at the end rounds out the richness and gives the pot liquor a velvety finish. Notes: Low and slow — plan for 5-6 hours total cook time.\n- Taco Meat with Corn Tortillas [Easy, 30 min] (dinner, mexican, beef, weeknight, family-dinner, skillet): Serves 4 (8 tacos). Ingredients: 1 lb ground beef (70-80% lean), 1 tbsp chili powder, 1/2 tsp salt, 3/4 tsp cumin, 1/2 tsp dried Mexican oregano, 1/4 tsp granulated garlic, 1/4 tsp granulated onion, 1/2 cup tomato sauce, 8 white corn tortillas, 1/2 cup avocado or vegetable oil. Why it works: Using fattier ground beef (70-80% lean) keeps the meat juicy after draining and gives the spice blend something to cling to. The tomato sauce simmers into the meat and acts as a binder that holds the seasoning in a thin glaze rather than dusty dry spices. Shallow-frying the corn tortillas transforms them from floppy and bland into crisp, toasty shells that hold up under toppings. Notes: Use 70-80% lean ground beef for best flavor. Mexican oregano is key — it's different from Italian oregano.\n- Vodka Sauce with Sausage [Easy, 30 min] (dinner, italian, pork, weeknight, one-pan, family-dinner, date-night, skillet): Serves 4. Ingredients: 8 oz uncooked penne pasta, 1 tbsp butter, 16 oz Italian sausage, 1/2 small onion, chopped finely, 1 clove garlic, minced, 1/3 cup vodka, 1/3 cup tomato paste, 1 cup heavy/whipping cream, Salt and pepper to taste, Fresh basil, sliced thin (optional), Freshly grated parmesan cheese (optional). Why it works: The vodka dissolves flavor compounds in the tomato paste that are alcohol-soluble but not water- or fat-soluble, unlocking a fuller tomato taste you can't get otherwise. Browning the sausage hard before building the sauce creates a fond that deglazes into the vodka, adding meaty depth. The heavy cream emulsifies with the tomato paste to create a stable, silky sauce that clings to penne. Notes: Use double-concentrated tomato paste (Mutti or DeLallo). Don't sub the heavy cream for milk or half-and-half — it'll curdle. Buy bulk Italian sausage or remove from casings.`;
 
-    const CHEF_SYSTEM = `You are an enthusiastic, knowledgeable culinary expert — like a warm, confident friend who loves food. Your job is to help decide what to cook.
+    const CHEF_SYSTEM = `You are a working chef's inner monologue made useful — warm, confident, and direct. You reason through food the way a trained cook would: reading the ingredients, reading the situation, choosing technique deliberately, and building flavor in layers.
 
 You have access to the family recipe book. Here are the current recipes:
 
 ${RECIPE_CONTEXT || 'No recipes in the book yet.'}
 
+Before suggesting anything, think through the Chef's Five Questions internally:
+1. What does the star ingredient need? (fat, moisture, heat tolerance, texture)
+2. What technique serves this situation? (time, energy, equipment)
+3. What are the flavor pillars? (fat / salt / acid / heat / umami / texture contrast)
+4. How does flavor develop through the process? (stage by stage)
+5. What's the plating and presentation logic?
+
 When suggesting meals:
-- Give 2-4 concrete options with a dish name, why it works, a brief method sketch, and difficulty/time estimate
-- Use sensory language — flavors, textures, aromas
+- Give 2-4 concrete options with dish name, WHY it works (the culinary logic, not just description), a method sketch, and difficulty/time
+- Use sensory language — "until deeply golden and fragrant" over "8 minutes"
 - Be practical about weeknight vs. weekend cooking
-- If a dish from the recipe book fits, mention it and that it's already in the book
+- If a dish from the recipe book fits, mention it
 - Suggest variety if the book is heavy on one cuisine
-- Cite culinary sources (Serious Eats, NYT Cooking, Ottolenghi, etc.) when relevant — but only when genuine
-- Keep responses concise and readable
+- Cite culinary sources (Serious Eats, NYT Cooking, Ottolenghi, Salt Fat Acid Heat, etc.) when genuinely relevant
 - Use markdown formatting for readability
+- When explaining technique, briefly explain WHY — a cook who understands the reason produces better results
+
+Flavor pairing shortcuts: fatty+acid, savory+sweet, bitter+fat, heat+dairy, earthy+bright, umami stacking.
 
 If the user wants to log a meal, rate a dish, or asks about cooking history, help with that too.`;
 

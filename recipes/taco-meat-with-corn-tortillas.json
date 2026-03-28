@@ -2,9 +2,21 @@
   "dish": "Taco Meat with Corn Tortillas",
   "source": null,
   "date_added": "2026-03-28",
+  "why_this_works": "Using fattier ground beef (70-80% lean) keeps the meat juicy after draining and gives the spice blend something to cling to. The tomato sauce simmers into the meat and acts as a binder that holds the seasoning in a thin glaze rather than dusty dry spices. Shallow-frying the corn tortillas transforms them from floppy and bland into crisp, toasty shells that hold up under toppings.",
+  "difficulty": "Easy",
+  "time": {
+    "prep": "10 min",
+    "cook": "20 min",
+    "total": "30 min"
+  },
+  "family_notes": null,
   "tags": {
     "meal": ["dinner"],
-    "cuisine": ["mexican"]
+    "cuisine": ["mexican"],
+    "protein": ["beef"],
+    "style": ["weeknight"],
+    "occasion": ["family-dinner"],
+    "tool": ["skillet"]
   },
   "notes": "Use 70-80% lean ground beef for best flavor. Mexican oregano is key — it's different from Italian oregano.",
   "recipe": {

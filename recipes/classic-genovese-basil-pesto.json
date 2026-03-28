@@ -2,9 +2,21 @@
   "dish": "Classic Genovese Basil Pesto",
   "source": "Adapted from Serious Eats / J. Kenji López-Alt",
   "date_added": "2026-03-28",
+  "why_this_works": "Toasting the pine nuts deepens their flavor and drives off moisture so the pesto doesn't turn watery. Folding the cheese in by hand instead of processing it avoids the heat and friction that would make the Parm gummy and greasy. The optional blanch-and-shock step denatures the enzymes that brown basil on contact with air, locking in a vivid green color for days.",
+  "difficulty": "Easy",
+  "time": {
+    "prep": "15 min",
+    "cook": "5 min",
+    "total": "20 min"
+  },
+  "family_notes": null,
   "tags": {
     "meal": ["dinner", "lunch"],
-    "cuisine": ["italian"]
+    "cuisine": ["italian"],
+    "protein": ["vegetarian"],
+    "style": ["weeknight", "make-ahead", "batch-cooking"],
+    "occasion": ["summer", "date-night"],
+    "tool": ["food-processor", "skillet"]
   },
   "notes": "Might benefit from a squeeze of lemon juice — try it next time.",
   "recipe": {

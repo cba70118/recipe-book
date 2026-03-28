@@ -2,9 +2,21 @@
   "dish": "Cory's Fresh Salsa",
   "source": "Original / Cory",
   "date_added": "2026-03-28",
+  "why_this_works": "Seeding the Romas removes excess water so you get a thick, chunky salsa instead of soup. The lime juice and hot sauce hit both acid and heat, which brightens the raw tomatoes and keeps the cilantro from tasting soapy to borderline tasters. Pulsing in the food processor rather than hand-chopping gives you an even texture fast while still leaving enough body.",
+  "difficulty": "Easy",
+  "time": {
+    "prep": "15 min",
+    "cook": "0 min",
+    "total": "15 min"
+  },
+  "family_notes": null,
   "tags": {
     "meal": ["snack", "appetizer"],
-    "cuisine": ["mexican"]
+    "cuisine": ["mexican"],
+    "protein": ["vegetarian"],
+    "style": ["weeknight", "make-ahead", "batch-cooking"],
+    "occasion": ["summer", "family-dinner"],
+    "tool": ["food-processor"]
   },
   "notes": null,
   "recipe": {

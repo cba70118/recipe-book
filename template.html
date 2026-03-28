@@ -197,6 +197,14 @@
     .recipe-card.open .toggle-icon { transform: rotate(45deg); }
     .recipe-card.open .recipe-meta { display: block; }
 
+    .difficulty-time {
+      display: inline-block;
+      font-size: 0.78rem;
+      color: var(--tobacco);
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
     .yield {
       display: inline-block;
       padding: 2px 0;
@@ -211,6 +219,46 @@
       color: var(--warm-gray);
       font-style: italic;
       margin-bottom: 8px;
+    }
+
+    .why-this-works {
+      margin: 16px 0;
+      padding: 14px 16px;
+      background: var(--parchment);
+      border-left: 3px solid var(--sage-dark);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: var(--charcoal);
+    }
+
+    .why-this-works strong {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      color: var(--sage-dark);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .family-notes {
+      margin-top: 16px; padding: 14px 16px;
+      background: var(--warm-white);
+      border: 1px dashed var(--light-rule);
+      font-size: 0.85rem;
+      font-style: italic;
+      color: var(--warm-gray);
+    }
+
+    .family-notes strong {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      color: var(--tobacco);
+      font-style: normal;
     }
 
     .tag-pills { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
@@ -667,16 +715,27 @@
 
       <div class="filter-section">
         <div class="filter-label">Meal</div>
-        <div class="filter-row" id="meal-filters">
-          {{MEAL_TAG_BUTTONS}}
-        </div>
+        <div class="filter-row" id="meal-filters">{{MEAL_TAG_BUTTONS}}</div>
       </div>
-
       <div class="filter-section">
         <div class="filter-label">Cuisine</div>
-        <div class="filter-row" id="cuisine-filters">
-          {{CUISINE_TAG_BUTTONS}}
-        </div>
+        <div class="filter-row" id="cuisine-filters">{{CUISINE_TAG_BUTTONS}}</div>
+      </div>
+      <div class="filter-section">
+        <div class="filter-label">Protein</div>
+        <div class="filter-row" id="protein-filters">{{PROTEIN_TAG_BUTTONS}}</div>
+      </div>
+      <div class="filter-section">
+        <div class="filter-label">Style</div>
+        <div class="filter-row" id="style-filters">{{STYLE_TAG_BUTTONS}}</div>
+      </div>
+      <div class="filter-section">
+        <div class="filter-label">Occasion</div>
+        <div class="filter-row" id="occasion-filters">{{OCCASION_TAG_BUTTONS}}</div>
+      </div>
+      <div class="filter-section">
+        <div class="filter-label">Tool</div>
+        <div class="filter-row" id="tool-filters">{{TOOL_TAG_BUTTONS}}</div>
       </div>
 
       <hr class="section-rule">
@@ -739,23 +798,50 @@
 
       <div class="form-group">
         <label>Meal Type</label>
-        <div class="check-group" id="meal-checks">
-          {{MEAL_TAG_CHECKS}}
-        </div>
+        <div class="check-group" id="meal-checks">{{MEAL_TAG_CHECKS}}</div>
         <div class="custom-tag-row">
-          <input type="text" id="custom-meal" placeholder="Add new meal tag...">
+          <input type="text" id="custom-meal" placeholder="Add new...">
           <button onclick="addCustomTag('meal')">Add</button>
         </div>
       </div>
-
       <div class="form-group">
         <label>Cuisine</label>
-        <div class="check-group" id="cuisine-checks">
-          {{CUISINE_TAG_CHECKS}}
-        </div>
+        <div class="check-group" id="cuisine-checks">{{CUISINE_TAG_CHECKS}}</div>
         <div class="custom-tag-row">
-          <input type="text" id="custom-cuisine" placeholder="Add new cuisine tag...">
+          <input type="text" id="custom-cuisine" placeholder="Add new...">
           <button onclick="addCustomTag('cuisine')">Add</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Protein</label>
+        <div class="check-group" id="protein-checks">{{PROTEIN_TAG_CHECKS}}</div>
+        <div class="custom-tag-row">
+          <input type="text" id="custom-protein" placeholder="Add new...">
+          <button onclick="addCustomTag('protein')">Add</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Style</label>
+        <div class="check-group" id="style-checks">{{STYLE_TAG_CHECKS}}</div>
+        <div class="custom-tag-row">
+          <input type="text" id="custom-style" placeholder="Add new...">
+          <button onclick="addCustomTag('style')">Add</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Occasion</label>
+        <div class="check-group" id="occasion-checks">{{OCCASION_TAG_CHECKS}}</div>
+        <div class="custom-tag-row">
+          <input type="text" id="custom-occasion" placeholder="Add new...">
+          <button onclick="addCustomTag('occasion')">Add</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Tool</label>
+        <div class="check-group" id="tool-checks">{{TOOL_TAG_CHECKS}}</div>
+        <div class="custom-tag-row">
+          <input type="text" id="custom-tool" placeholder="Add new...">
+          <button onclick="addCustomTag('tool')">Add</button>
         </div>
       </div>
 
@@ -928,14 +1014,17 @@
       if (!ingredients.length) { showStatus('Please enter at least one ingredient.', 'error'); return; }
       if (!steps.length) { showStatus('Please enter at least one step.', 'error'); return; }
 
-      const mealTags = [...document.querySelectorAll('#meal-checks input:checked')].map(cb => cb.value);
-      const cuisineTags = [...document.querySelectorAll('#cuisine-checks input:checked')].map(cb => cb.value);
+      const tagCats = ['meal', 'cuisine', 'protein', 'style', 'occasion', 'tool'];
+      const tags = {};
+      tagCats.forEach(cat => {
+        tags[cat] = [...document.querySelectorAll(`#${cat}-checks input:checked`)].map(cb => cb.value);
+      });
 
       const recipe = {
         dish: dish,
         source: document.getElementById('add-source').value.trim() || null,
         date_added: new Date().toISOString().split('T')[0],
-        tags: { meal: mealTags, cuisine: cuisineTags },
+        tags: tags,
         notes: document.getElementById('add-notes').value.trim() || null,
         recipe: {
           yield: document.getElementById('add-yield').value.trim() || null,
@@ -1159,8 +1248,15 @@
   "storage": "Storage info or null"
 }
 
-For tags, pick from these meal types: breakfast, lunch, dinner, snack, appetizer, dessert, side.
-For cuisine, pick the best match: american, italian, mexican, cajun, southern, asian, korean, japanese, chinese, thai, indian, mediterranean, french, greek, or add a new one if needed.
+For tags, use this system:
+- meal: breakfast, lunch, dinner, snack, appetizer, dessert, side
+- cuisine: american, italian, mexican, cajun, southern, asian, korean, japanese, chinese, thai, indian, mediterranean, french, greek
+- protein: chicken, beef, pork, lamb, seafood, fish, vegetarian, vegan
+- style: weeknight, weekend-project, one-pan, make-ahead, batch-cooking, entertaining
+- occasion: family-dinner, date-night, summer, winter-warmer, holiday
+- tool: cast-iron, dutch-oven, sheet-pan, food-processor, blender, skillet, wok, air-fryer, grill, instant-pot
+Also include "why_this_works": 2-3 sentences of culinary reasoning — why the technique and flavor pairings succeed.
+And "difficulty": "Easy", "Medium", or "Weekend Project".
 Clean up the ingredients and steps to be clear and concise. Standardize measurements (e.g. "tablespoon" to "tbsp", "teaspoon" to "tsp", "ounces" to "oz").`;
 
     async function importRecipe() {
@@ -1266,17 +1362,14 @@ Clean up the ingredients and steps to be clear and concise. Standardize measurem
       document.getElementById('add-serving').value = r.serving || '';
       document.getElementById('add-storage').value = r.storage || '';
 
-      // Check matching tag checkboxes
+      // Check matching tag checkboxes across all categories
       const tags = r.tags || {};
-      (tags.meal || []).forEach(tag => {
-        const cb = document.querySelector(`#meal-checks input[value="${tag}"]`);
-        if (cb) cb.checked = true;
-        else addCustomTagFromImport('meal', tag);
-      });
-      (tags.cuisine || []).forEach(tag => {
-        const cb = document.querySelector(`#cuisine-checks input[value="${tag}"]`);
-        if (cb) cb.checked = true;
-        else addCustomTagFromImport('cuisine', tag);
+      ['meal', 'cuisine', 'protein', 'style', 'occasion', 'tool'].forEach(cat => {
+        (tags[cat] || []).forEach(tag => {
+          const cb = document.querySelector(`#${cat}-checks input[value="${tag}"]`);
+          if (cb) cb.checked = true;
+          else addCustomTagFromImport(cat, tag);
+        });
       });
 
       // Scroll to form
@@ -1294,21 +1387,30 @@ Clean up the ingredients and steps to be clear and concise. Standardize measurem
     // --- Chef Chat ---
     const RECIPE_CONTEXT = `{{RECIPE_SUMMARY}}`;
 
-    const CHEF_SYSTEM = `You are an enthusiastic, knowledgeable culinary expert — like a warm, confident friend who loves food. Your job is to help decide what to cook.
+    const CHEF_SYSTEM = `You are a working chef's inner monologue made useful — warm, confident, and direct. You reason through food the way a trained cook would: reading the ingredients, reading the situation, choosing technique deliberately, and building flavor in layers.
 
 You have access to the family recipe book. Here are the current recipes:
 
 ${RECIPE_CONTEXT || 'No recipes in the book yet.'}
 
+Before suggesting anything, think through the Chef's Five Questions internally:
+1. What does the star ingredient need? (fat, moisture, heat tolerance, texture)
+2. What technique serves this situation? (time, energy, equipment)
+3. What are the flavor pillars? (fat / salt / acid / heat / umami / texture contrast)
+4. How does flavor develop through the process? (stage by stage)
+5. What's the plating and presentation logic?
+
 When suggesting meals:
-- Give 2-4 concrete options with a dish name, why it works, a brief method sketch, and difficulty/time estimate
-- Use sensory language — flavors, textures, aromas
+- Give 2-4 concrete options with dish name, WHY it works (the culinary logic, not just description), a method sketch, and difficulty/time
+- Use sensory language — "until deeply golden and fragrant" over "8 minutes"
 - Be practical about weeknight vs. weekend cooking
-- If a dish from the recipe book fits, mention it and that it's already in the book
+- If a dish from the recipe book fits, mention it
 - Suggest variety if the book is heavy on one cuisine
-- Cite culinary sources (Serious Eats, NYT Cooking, Ottolenghi, etc.) when relevant — but only when genuine
-- Keep responses concise and readable
+- Cite culinary sources (Serious Eats, NYT Cooking, Ottolenghi, Salt Fat Acid Heat, etc.) when genuinely relevant
 - Use markdown formatting for readability
+- When explaining technique, briefly explain WHY — a cook who understands the reason produces better results
+
+Flavor pairing shortcuts: fatty+acid, savory+sweet, bitter+fat, heat+dairy, earthy+bright, umami stacking.
 
 If the user wants to log a meal, rate a dish, or asks about cooking history, help with that too.`;
 

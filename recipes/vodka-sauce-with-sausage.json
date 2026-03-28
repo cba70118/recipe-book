@@ -2,9 +2,21 @@
   "dish": "Vodka Sauce with Sausage",
   "source": null,
   "date_added": "2026-03-28",
+  "why_this_works": "The vodka dissolves flavor compounds in the tomato paste that are alcohol-soluble but not water- or fat-soluble, unlocking a fuller tomato taste you can't get otherwise. Browning the sausage hard before building the sauce creates a fond that deglazes into the vodka, adding meaty depth. The heavy cream emulsifies with the tomato paste to create a stable, silky sauce that clings to penne.",
+  "difficulty": "Easy",
+  "time": {
+    "prep": "10 min",
+    "cook": "20 min",
+    "total": "30 min"
+  },
+  "family_notes": null,
   "tags": {
     "meal": ["dinner"],
-    "cuisine": ["italian"]
+    "cuisine": ["italian"],
+    "protein": ["pork"],
+    "style": ["weeknight", "one-pan"],
+    "occasion": ["family-dinner", "date-night"],
+    "tool": ["skillet"]
   },
   "notes": "Use double-concentrated tomato paste (Mutti or DeLallo). Don't sub the heavy cream for milk or half-and-half — it'll curdle. Buy bulk Italian sausage or remove from casings.",
   "recipe": {

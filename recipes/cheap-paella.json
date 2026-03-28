@@ -2,9 +2,21 @@
   "dish": "Cheap \"Paella\"",
   "source": "Zatarain's",
   "date_added": "2026-03-28",
+  "why_this_works": "Browning the sausage first renders fat that you then use to saute the onion, building a fond that adds depth to what is essentially a box rice mix. Adding the shrimp and peas at the very end keeps the shrimp from turning rubbery and the peas from going army-green. The Zatarain's yellow rice handles the saffron-turmeric flavor so you get paella vibes without the price tag.",
+  "difficulty": "Easy",
+  "time": {
+    "prep": "10 min",
+    "cook": "30 min",
+    "total": "40 min"
+  },
+  "family_notes": null,
   "tags": {
     "meal": ["dinner"],
-    "cuisine": ["cajun"]
+    "cuisine": ["cajun"],
+    "protein": ["pork", "seafood"],
+    "style": ["weeknight", "one-pan"],
+    "occasion": ["family-dinner"],
+    "tool": ["skillet", "dutch-oven"]
   },
   "notes": "Prep: 10 min, Cook: 30 min. Serves 8. Quick weeknight crowd-feeder.",
   "recipe": {

@@ -11,6 +11,8 @@ RECIPES_DIR = ROOT / "recipes"
 DOCS_DIR = ROOT / "docs"
 TEMPLATE_PATH = ROOT / "template.html"
 
+TAG_CATEGORIES = ["meal", "cuisine", "protein", "style", "occasion", "tool"]
+
 
 def load_recipes():
     recipes = []
@@ -22,14 +24,14 @@ def load_recipes():
     return recipes
 
 
-def collect_tags(recipes):
-    meal_tags = set()
-    cuisine_tags = set()
+def collect_all_tags(recipes):
+    """Collect tags across all categories."""
+    tag_sets = {cat: set() for cat in TAG_CATEGORIES}
     for r in recipes:
         tags = r.get("tags", {})
-        meal_tags.update(tags.get("meal", []))
-        cuisine_tags.update(tags.get("cuisine", []))
-    return sorted(meal_tags), sorted(cuisine_tags)
+        for cat in TAG_CATEGORIES:
+            tag_sets[cat].update(tags.get(cat, []))
+    return {cat: sorted(vals) for cat, vals in tag_sets.items()}
 
 
 def build_recipe_card(r):
@@ -39,11 +41,27 @@ def build_recipe_card(r):
     )
     steps_html = "".join(f"<li>{escape(s)}</li>" for s in r["recipe"]["steps"])
 
+    # Collect ALL tags for data attribute (used for filtering)
     tags = r.get("tags", {})
-    all_tags = tags.get("meal", []) + tags.get("cuisine", [])
+    all_tags = []
+    for cat in TAG_CATEGORIES:
+        all_tags.extend(tags.get(cat, []))
     data_tags = " ".join(all_tags)
 
     tag_pills = "".join(f'<span class="tag-pill">{escape(t)}</span>' for t in all_tags)
+
+    # Why This Works
+    why_html = ""
+    if r.get("why_this_works"):
+        why_html = f'<div class="why-this-works"><strong>Why This Works:</strong> {escape(r["why_this_works"])}</div>'
+
+    # Difficulty + Time
+    meta_bits = []
+    if r.get("difficulty"):
+        meta_bits.append(escape(r["difficulty"]))
+    if r.get("time", {}).get("total"):
+        meta_bits.append(escape(r["time"]["total"]))
+    difficulty_time = f'<span class="difficulty-time">{" · ".join(meta_bits)}</span>' if meta_bits else ""
 
     notes_html = ""
     if r.get("notes"):
@@ -56,6 +74,10 @@ def build_recipe_card(r):
     storage_html = ""
     if r["recipe"].get("storage"):
         storage_html = f'<div class="storage"><strong>Storage:</strong> {escape(r["recipe"]["storage"])}</div>'
+
+    family_notes_html = ""
+    if r.get("family_notes"):
+        family_notes_html = f'<div class="family-notes"><strong>Family Notes:</strong> {escape(r["family_notes"])}</div>'
 
     source_html = ""
     if r.get("source"):
@@ -70,6 +92,7 @@ def build_recipe_card(r):
       <div class="recipe-header" onclick="toggleRecipe(this)">
         <h2>{escape(r['dish'])}</h2>
         <div class="recipe-meta">
+          {difficulty_time}
           {yield_html}
           {source_html}
           <div class="tag-pills">{tag_pills}</div>
@@ -77,6 +100,7 @@ def build_recipe_card(r):
         <span class="toggle-icon">+</span>
       </div>
       <div class="recipe-body">
+        {why_html}
         <h3>Ingredients</h3>
         <div class="scaler">
           <button class="scale-btn" onclick="scaleRecipe(this, 0.5)">&#189;x</button>
@@ -90,6 +114,7 @@ def build_recipe_card(r):
         {notes_html}
         {serving_html}
         {storage_html}
+        {family_notes_html}
       </div>
     </article>
     """
@@ -100,46 +125,53 @@ def build_recipe_summary(recipes):
     lines = []
     for r in recipes:
         tags = r.get("tags", {})
-        tag_str = ", ".join(tags.get("meal", []) + tags.get("cuisine", []))
+        tag_parts = []
+        for cat in TAG_CATEGORIES:
+            tag_parts.extend(tags.get(cat, []))
+        tag_str = ", ".join(tag_parts)
         notes = f" Notes: {r['notes']}" if r.get("notes") else ""
+        why = f" Why it works: {r['why_this_works']}" if r.get("why_this_works") else ""
         ingredients = ", ".join(r["recipe"]["ingredients"])
+        difficulty = r.get("difficulty", "")
+        time_total = r.get("time", {}).get("total", "")
         lines.append(
-            f"- {r['dish']} ({tag_str}): {r['recipe'].get('yield', 'No yield listed')}. "
-            f"Ingredients: {ingredients}.{notes}"
+            f"- {r['dish']} [{difficulty}, {time_total}] ({tag_str}): "
+            f"{r['recipe'].get('yield', 'No yield listed')}. "
+            f"Ingredients: {ingredients}.{why}{notes}"
         )
     return "\\n".join(lines)
 
 
 def build_site():
     recipes = load_recipes()
-    meal_tags, cuisine_tags = collect_tags(recipes)
+    all_tags = collect_all_tags(recipes)
     cards_html = "\n".join(build_recipe_card(r) for r in recipes)
     recipe_summary = build_recipe_summary(recipes)
 
     with open(TEMPLATE_PATH, "r", encoding="utf-8") as f:
         template = f.read()
 
-    # Build tag filter buttons
-    meal_btns = "".join(f'<button class="filter-btn" data-tag="{escape(t)}">{escape(t)}</button>' for t in meal_tags)
-    cuisine_btns = "".join(f'<button class="filter-btn" data-tag="{escape(t)}">{escape(t)}</button>' for t in cuisine_tags)
-
-    # Build tag checkboxes for the add form
-    meal_checks = "".join(
-        f'<label class="check-label"><input type="checkbox" value="{escape(t)}"> {escape(t)}</label>'
-        for t in meal_tags
-    )
-    cuisine_checks = "".join(
-        f'<label class="check-label"><input type="checkbox" value="{escape(t)}"> {escape(t)}</label>'
-        for t in cuisine_tags
-    )
+    # Build tag filter buttons for each category
+    tag_btns = {}
+    tag_checks = {}
+    for cat in TAG_CATEGORIES:
+        tag_btns[cat] = "".join(
+            f'<button class="filter-btn" data-tag="{escape(t)}">{escape(t)}</button>'
+            for t in all_tags[cat]
+        )
+        tag_checks[cat] = "".join(
+            f'<label class="check-label"><input type="checkbox" value="{escape(t)}"> {escape(t)}</label>'
+            for t in all_tags[cat]
+        )
 
     html = template.replace("{{RECIPE_CARDS}}", cards_html)
     html = html.replace("{{RECIPE_COUNT}}", str(len(recipes)))
-    html = html.replace("{{MEAL_TAG_BUTTONS}}", meal_btns)
-    html = html.replace("{{CUISINE_TAG_BUTTONS}}", cuisine_btns)
-    html = html.replace("{{MEAL_TAG_CHECKS}}", meal_checks)
-    html = html.replace("{{CUISINE_TAG_CHECKS}}", cuisine_checks)
     html = html.replace("{{RECIPE_SUMMARY}}", recipe_summary)
+
+    # Replace tag placeholders for each category
+    for cat in TAG_CATEGORIES:
+        html = html.replace(f"{{{{{cat.upper()}_TAG_BUTTONS}}}}", tag_btns[cat])
+        html = html.replace(f"{{{{{cat.upper()}_TAG_CHECKS}}}}", tag_checks[cat])
 
     DOCS_DIR.mkdir(exist_ok=True)
     with open(DOCS_DIR / "index.html", "w", encoding="utf-8") as f:
