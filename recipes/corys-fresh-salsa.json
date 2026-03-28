@@ -10,6 +10,20 @@
     "total": "15 min"
   },
   "family_notes": null,
+  "you_might_also_like": [
+    {
+      "dish": "Salsa Verde",
+      "url": "https://www.seriouseats.com/search?q=salsa+verde"
+    },
+    {
+      "dish": "Mango Salsa",
+      "url": "https://www.simplyrecipes.com/?s=mango+salsa"
+    },
+    {
+      "dish": "Guacamole",
+      "url": "https://www.bonappetit.com/search?q=guacamole"
+    }
+  ],
   "tags": {
     "meal": ["snack", "appetizer"],
     "cuisine": ["mexican"],

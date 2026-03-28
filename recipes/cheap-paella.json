@@ -10,6 +10,20 @@
     "total": "40 min"
   },
   "family_notes": null,
+  "you_might_also_like": [
+    {
+      "dish": "Jambalaya",
+      "url": "https://www.seriouseats.com/search?q=jambalaya"
+    },
+    {
+      "dish": "Arroz con Pollo",
+      "url": "https://cooking.nytimes.com/search?q=arroz+con+pollo"
+    },
+    {
+      "dish": "Shrimp and Grits",
+      "url": "https://www.bonappetit.com/search?q=shrimp+and+grits"
+    }
+  ],
   "tags": {
     "meal": ["dinner"],
     "cuisine": ["cajun"],

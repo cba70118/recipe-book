@@ -10,6 +10,20 @@
     "total": "6+ hours (plus overnight soak)"
   },
   "family_notes": null,
+  "you_might_also_like": [
+    {
+      "dish": "Hoppin' John",
+      "url": "https://www.seriouseats.com/search?q=hoppin+john"
+    },
+    {
+      "dish": "Cajun White Bean Soup",
+      "url": "https://www.budgetbytes.com/?s=white+bean+sausage+soup"
+    },
+    {
+      "dish": "Chicken and Sausage Gumbo",
+      "url": "https://cooking.nytimes.com/search?q=chicken+sausage+gumbo"
+    }
+  ],
   "tags": {
     "meal": ["dinner"],
     "cuisine": ["southern", "cajun"],

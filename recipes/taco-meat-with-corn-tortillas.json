@@ -10,6 +10,20 @@
     "total": "30 min"
   },
   "family_notes": null,
+  "you_might_also_like": [
+    {
+      "dish": "Birria Tacos",
+      "url": "https://www.seriouseats.com/search?q=birria+tacos"
+    },
+    {
+      "dish": "Carnitas",
+      "url": "https://cooking.nytimes.com/search?q=carnitas"
+    },
+    {
+      "dish": "Chicken Tinga",
+      "url": "https://thewoksoflife.com/?s=chicken+tinga"
+    }
+  ],
   "tags": {
     "meal": ["dinner"],
     "cuisine": ["mexican"],

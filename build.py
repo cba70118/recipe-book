@@ -34,28 +34,6 @@ def collect_all_tags(recipes):
     return {cat: sorted(vals) for cat, vals in tag_sets.items()}
 
 
-def find_similar(recipe, all_recipes, max_results=3):
-    """Find similar recipes based on tag overlap, excluding exact match."""
-    tags = recipe.get("tags", {})
-    my_tags = set()
-    for cat in TAG_CATEGORIES:
-        my_tags.update(tags.get(cat, []))
-
-    scores = []
-    for other in all_recipes:
-        if other["_slug"] == recipe["_slug"]:
-            continue
-        other_tags = set()
-        for cat in TAG_CATEGORIES:
-            other_tags.update(other.get("tags", {}).get(cat, []))
-        overlap = len(my_tags & other_tags)
-        if overlap > 0:
-            scores.append((overlap, other))
-
-    scores.sort(key=lambda x: x[0], reverse=True)
-    return [r for _, r in scores[:max_results]]
-
-
 def build_recipe_card(r, all_recipes=None):
     ingredients_html = "".join(
         f'<li data-original="{escape(i)}">{escape(i)}</li>'
@@ -73,12 +51,12 @@ def build_recipe_card(r, all_recipes=None):
     tag_pills = "".join(f'<span class="tag-pill">{escape(t)}</span>' for t in all_tags)
 
     # Why This Works + You Might Also Like
-    similar = find_similar(r, all_recipes or [])
+    also_like = r.get("you_might_also_like", [])
     similar_html = ""
-    if similar:
+    if also_like:
         links = "".join(
-            f'<a href="#{escape(s["_slug"])}" class="similar-link" onclick="openRecipe(\'{escape(s["_slug"])}\')">{escape(s["dish"])}</a>'
-            for s in similar
+            f'<a href="{escape(item["url"])}" target="_blank" rel="noopener" class="similar-link">{escape(item["dish"])}</a>'
+            for item in also_like
         )
         similar_html = f'<div class="similar-recipes"><strong>You Might Also Like:</strong> {links}</div>'
 
@@ -178,7 +156,7 @@ def build_recipe_summary(recipes):
 def build_site():
     recipes = load_recipes()
     all_tags = collect_all_tags(recipes)
-    cards_html = "\n".join(build_recipe_card(r, recipes) for r in recipes)
+    cards_html = "\n".join(build_recipe_card(r) for r in recipes)
     recipe_summary = build_recipe_summary(recipes)
 
     with open(TEMPLATE_PATH, "r", encoding="utf-8") as f:

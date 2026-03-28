@@ -10,6 +10,20 @@
     "total": "30 min"
   },
   "family_notes": null,
+  "you_might_also_like": [
+    {
+      "dish": "Rigatoni alla Norma",
+      "url": "https://www.seriouseats.com/search?q=rigatoni+alla+norma"
+    },
+    {
+      "dish": "Bolognese",
+      "url": "https://cooking.nytimes.com/search?q=bolognese"
+    },
+    {
+      "dish": "Pasta al Forno",
+      "url": "https://www.bonappetit.com/search?q=pasta+al+forno"
+    }
+  ],
   "tags": {
     "meal": ["dinner"],
     "cuisine": ["italian"],

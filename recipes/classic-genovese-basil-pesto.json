@@ -10,6 +10,20 @@
     "total": "20 min"
   },
   "family_notes": null,
+  "you_might_also_like": [
+    {
+      "dish": "Chimichurri",
+      "url": "https://www.seriouseats.com/search?q=chimichurri"
+    },
+    {
+      "dish": "Romesco Sauce",
+      "url": "https://www.bonappetit.com/search?q=romesco+sauce"
+    },
+    {
+      "dish": "Pistachio Pesto",
+      "url": "https://cooking.nytimes.com/search?q=pistachio+pesto"
+    }
+  ],
   "tags": {
     "meal": ["dinner", "lunch"],
     "cuisine": ["italian"],
