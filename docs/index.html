@@ -468,6 +468,28 @@
     .chat-msg p:first-child { margin-top: 0; }
     .chat-msg p:last-child { margin-bottom: 0; }
 
+    .chat-actions {
+      display: flex; gap: 8px; margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--linen);
+    }
+
+    .chat-action-btn {
+      padding: 5px 12px;
+      border: 1px solid var(--light-rule);
+      border-radius: 3px;
+      background: var(--warm-white);
+      font-size: 0.72rem; font-family: inherit;
+      font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.06em;
+      cursor: pointer; color: var(--tobacco);
+      transition: all 0.15s;
+    }
+
+    .chat-action-btn:active { background: var(--parchment); }
+    .chat-action-btn.saving { color: var(--warm-gray); cursor: not-allowed; }
+    .chat-action-btn.saved { background: var(--sage-dark); color: var(--cream); border-color: var(--sage-dark); }
+
     .chat-input-row {
       display: flex; gap: 8px;
       padding: 12px 0 0;
@@ -1181,6 +1203,97 @@
       return rounded % 1 === 0 ? rounded.toString() : rounded.toFixed(rounded < 10 ? 1 : 0);
     }
 
+    // --- Save from Chef Chat ---
+    async function saveFromChat(text, btn) {
+      const ghToken = getToken();
+      const chefKey = getChefKey();
+
+      if (!ghToken) {
+        btn.textContent = 'Set up GitHub token first';
+        setTimeout(() => { btn.textContent = 'Save as Recipe'; }, 3000);
+        return;
+      }
+
+      btn.textContent = 'Parsing...';
+      btn.classList.add('saving');
+
+      try {
+        // Ask Claude to extract structured recipe from the chat message
+        const resp = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': chefKey,
+            'anthropic-version': '2023-06-01',
+            'anthropic-dangerous-direct-browser-access': 'true'
+          },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-20250514',
+            max_tokens: 2048,
+            messages: [{
+              role: 'user',
+              content: `Extract a recipe from this chef's suggestion. If there are multiple recipes, pick the most detailed one. Return ONLY valid JSON:\n\n${IMPORT_PROMPT}\n\nChef's message:\n${text}`
+            }]
+          })
+        });
+
+        if (!resp.ok) throw new Error('API error');
+
+        const data = await resp.json();
+        const jsonMatch = data.content[0].text.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) throw new Error('Could not parse recipe');
+
+        const r = JSON.parse(jsonMatch[0]);
+
+        // Build the recipe JSON
+        const recipe = {
+          dish: r.dish,
+          source: r.source || null,
+          date_added: new Date().toISOString().split('T')[0],
+          tags: r.tags || { meal: [], cuisine: [] },
+          notes: r.notes || null,
+          recipe: {
+            yield: r.yield || null,
+            ingredients: r.ingredients || [],
+            steps: r.steps || []
+          }
+        };
+        if (r.serving) recipe.recipe.serving = r.serving;
+        if (r.storage) recipe.recipe.storage = r.storage;
+
+        // Clean nulls
+        Object.keys(recipe.recipe).forEach(k => { if (recipe.recipe[k] === null) delete recipe.recipe[k]; });
+        if (!recipe.source) delete recipe.source;
+        if (!recipe.notes) delete recipe.notes;
+
+        const slug = r.dish.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        const filename = `recipes/${slug}.json`;
+        const content = JSON.stringify(recipe, null, 2);
+        const encoded = btoa(unescape(encodeURIComponent(content)));
+
+        btn.textContent = 'Saving...';
+
+        const ghResp = await fetch(`https://api.github.com/repos/${REPO}/contents/${filename}`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `token ${ghToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ message: `Add recipe: ${r.dish}`, content: encoded }),
+        });
+
+        if (!ghResp.ok) throw new Error('GitHub save failed');
+
+        btn.textContent = 'Saved!';
+        btn.classList.remove('saving');
+        btn.classList.add('saved');
+      } catch (e) {
+        btn.textContent = 'Error — try again';
+        btn.classList.remove('saving');
+        setTimeout(() => { btn.textContent = 'Save as Recipe'; }, 3000);
+      }
+    }
+
     // --- Import Recipe ---
     function showImportPane(pane) {
       document.querySelectorAll('.import-tab').forEach((t, i) => {
@@ -1373,6 +1486,32 @@ If the user wants to log a meal, rate a dish, or asks about cooking history, hel
       const div = document.createElement('div');
       div.className = 'chat-msg ' + role;
       div.innerHTML = formatChat(text);
+
+      if (role === 'assistant') {
+        const actions = document.createElement('div');
+        actions.className = 'chat-actions';
+
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'chat-action-btn';
+        copyBtn.textContent = 'Copy';
+        copyBtn.onclick = () => {
+          navigator.clipboard.writeText(text).then(() => {
+            copyBtn.textContent = 'Copied';
+            copyBtn.classList.add('saved');
+            setTimeout(() => { copyBtn.textContent = 'Copy'; copyBtn.classList.remove('saved'); }, 2000);
+          });
+        };
+
+        const saveBtn = document.createElement('button');
+        saveBtn.className = 'chat-action-btn';
+        saveBtn.textContent = 'Save as Recipe';
+        saveBtn.onclick = () => saveFromChat(text, saveBtn);
+
+        actions.appendChild(copyBtn);
+        actions.appendChild(saveBtn);
+        div.appendChild(actions);
+      }
+
       container.appendChild(div);
       container.scrollTop = container.scrollHeight;
     }
