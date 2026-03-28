@@ -1,0 +1,32 @@
+{
+  "dish": "Cheap \"Paella\"",
+  "source": "Zatarain's",
+  "date_added": "2026-03-28",
+  "tags": {
+    "meal": ["dinner"],
+    "cuisine": ["cajun"]
+  },
+  "notes": "Prep: 10 min, Cook: 30 min. Serves 8. Quick weeknight crowd-feeder.",
+  "recipe": {
+    "yield": "Serves 8",
+    "ingredients": [
+      "2 cups water",
+      "1/2 package Cajun style smoked sausage, halved lengthwise and sliced 1/4-inch thick",
+      "1 can (14.5 oz) diced tomatoes, undrained",
+      "1/2 cup chopped onion",
+      "1 tsp parsley flakes",
+      "1 package Zatarain's Yellow Rice Mix",
+      "1 lb large shrimp, peeled and deveined",
+      "1 cup frozen peas"
+    ],
+    "steps": [
+      "Brown the sliced sausage in a large skillet or Dutch oven over medium-high heat. Remove and set aside.",
+      "Sauté the onion in the same pan using the rendered sausage fat until softened, about 3-5 minutes.",
+      "Add water and diced tomatoes (undrained). Bring to a boil.",
+      "Stir in the Zatarain's Yellow Rice Mix. Return the sausage to the pan.",
+      "Reduce heat to low, cover, and simmer for about 20 minutes until rice is nearly tender.",
+      "Stir in shrimp and frozen peas. Cover and cook 5-7 minutes until shrimp are pink and cooked through.",
+      "Remove from heat, sprinkle with parsley flakes, fluff with a fork, and serve."
+    ]
+  }
+}

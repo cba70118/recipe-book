@@ -1,0 +1,34 @@
+{
+  "dish": "Vodka Sauce with Sausage",
+  "source": null,
+  "date_added": "2026-03-28",
+  "tags": {
+    "meal": ["dinner"],
+    "cuisine": ["italian"]
+  },
+  "notes": "Use double-concentrated tomato paste (Mutti or DeLallo). Don't sub the heavy cream for milk or half-and-half — it'll curdle. Buy bulk Italian sausage or remove from casings.",
+  "recipe": {
+    "yield": "Serves 4",
+    "ingredients": [
+      "8 oz uncooked penne pasta",
+      "1 tbsp butter",
+      "16 oz Italian sausage",
+      "1/2 small onion, chopped finely",
+      "1 clove garlic, minced",
+      "1/3 cup vodka",
+      "1/3 cup tomato paste",
+      "1 cup heavy/whipping cream",
+      "Salt and pepper to taste",
+      "Fresh basil, sliced thin (optional)",
+      "Freshly grated parmesan cheese (optional)"
+    ],
+    "steps": [
+      "Boil a generously salted pot of water and cook the penne al dente according to package directions.",
+      "Meanwhile, add butter, sausage meat, and onions to a skillet over medium-high heat. Cook 7-10 minutes until nicely browned, breaking the sausage up as you go. Drain excess fat.",
+      "Stir in the garlic and vodka. Let the sauce bubble for about 30 seconds.",
+      "Stir in the tomato paste and cream until you have a smooth mixture.",
+      "Reduce heat to medium-low. Let the sauce warm through and thicken to your liking.",
+      "Season with salt and pepper. Stir in fresh basil if using. Toss with drained pasta, thinning with a splash of pasta water if needed. Serve with freshly grated parmesan."
+    ]
+  }
+}

@@ -240,6 +240,31 @@
 
     .recipe-body h3:first-child { margin-top: 16px; }
 
+    /* --- Scaler --- */
+    .scaler {
+      display: flex; align-items: center; gap: 0;
+      margin-bottom: 12px;
+    }
+
+    .scale-btn {
+      padding: 6px 14px;
+      border: 1px solid var(--light-rule);
+      background: var(--warm-white);
+      font-size: 0.78rem; font-family: inherit;
+      font-weight: 600;
+      cursor: pointer; color: var(--tobacco);
+      transition: all 0.15s;
+    }
+
+    .scale-btn:first-child { border-radius: 3px 0 0 3px; }
+    .scale-btn:last-child { border-radius: 0 3px 3px 0; }
+    .scale-btn + .scale-btn { border-left: none; }
+
+    .scale-btn.active {
+      background: var(--ink); color: var(--cream);
+      border-color: var(--ink);
+    }
+
     .ingredients { list-style: none; padding: 0; }
 
     .ingredients li {
@@ -406,7 +431,7 @@
   <header>
     <div class="rule"></div>
     <h1>Our Recipe Book</h1>
-    <p>3 recipes &middot; a family collection</p>
+    <p>5 recipes &middot; a family collection</p>
   </header>
 
   <div class="container">
@@ -439,6 +464,34 @@
 
       <div id="recipe-list">
         
+    <article class="recipe-card" id="cheap-paella" data-tags="dinner cajun">
+      <div class="recipe-header" onclick="toggleRecipe(this)">
+        <h2>Cheap &quot;Paella&quot;</h2>
+        <div class="recipe-meta">
+          <span class="yield">Serves 8</span>
+          <div class="source">Zatarain&#x27;s</div>
+          <div class="tag-pills"><span class="tag-pill">dinner</span><span class="tag-pill">cajun</span></div>
+        </div>
+        <span class="toggle-icon">+</span>
+      </div>
+      <div class="recipe-body">
+        <h3>Ingredients</h3>
+        <div class="scaler">
+          <button class="scale-btn" onclick="scaleRecipe(this, 0.5)">&#189;x</button>
+          <button class="scale-btn active" onclick="scaleRecipe(this, 1)">1x</button>
+          <button class="scale-btn" onclick="scaleRecipe(this, 2)">2x</button>
+          <button class="scale-btn" onclick="scaleRecipe(this, 3)">3x</button>
+        </div>
+        <ul class="ingredients"><li data-original="2 cups water">2 cups water</li><li data-original="1/2 package Cajun style smoked sausage, halved lengthwise and sliced 1/4-inch thick">1/2 package Cajun style smoked sausage, halved lengthwise and sliced 1/4-inch thick</li><li data-original="1 can (14.5 oz) diced tomatoes, undrained">1 can (14.5 oz) diced tomatoes, undrained</li><li data-original="1/2 cup chopped onion">1/2 cup chopped onion</li><li data-original="1 tsp parsley flakes">1 tsp parsley flakes</li><li data-original="1 package Zatarain&#x27;s Yellow Rice Mix">1 package Zatarain&#x27;s Yellow Rice Mix</li><li data-original="1 lb large shrimp, peeled and deveined">1 lb large shrimp, peeled and deveined</li><li data-original="1 cup frozen peas">1 cup frozen peas</li></ul>
+        <h3>Steps</h3>
+        <ol class="steps"><li>Brown the sliced sausage in a large skillet or Dutch oven over medium-high heat. Remove and set aside.</li><li>Sauté the onion in the same pan using the rendered sausage fat until softened, about 3-5 minutes.</li><li>Add water and diced tomatoes (undrained). Bring to a boil.</li><li>Stir in the Zatarain&#x27;s Yellow Rice Mix. Return the sausage to the pan.</li><li>Reduce heat to low, cover, and simmer for about 20 minutes until rice is nearly tender.</li><li>Stir in shrimp and frozen peas. Cover and cook 5-7 minutes until shrimp are pink and cooked through.</li><li>Remove from heat, sprinkle with parsley flakes, fluff with a fork, and serve.</li></ol>
+        <div class="notes"><strong>Notes:</strong> Prep: 10 min, Cook: 30 min. Serves 8. Quick weeknight crowd-feeder.</div>
+        
+        
+      </div>
+    </article>
+    
+
     <article class="recipe-card" id="classic-genovese-basil-pesto" data-tags="dinner lunch italian">
       <div class="recipe-header" onclick="toggleRecipe(this)">
         <h2>Classic Genovese Basil Pesto</h2>
@@ -451,7 +504,13 @@
       </div>
       <div class="recipe-body">
         <h3>Ingredients</h3>
-        <ul class="ingredients"><li>3 packed cups fresh basil leaves (~3 oz / 85g)</li><li>1/3 cup pine nuts</li><li>2 medium cloves garlic, peeled</li><li>1/2 cup extra-virgin olive oil</li><li>1/2 cup finely grated Parmigiano-Reggiano</li><li>1/4 cup finely grated Pecorino Romano</li><li>1/2 tsp kosher salt, plus more to taste</li><li>Pinch of black pepper</li></ul>
+        <div class="scaler">
+          <button class="scale-btn" onclick="scaleRecipe(this, 0.5)">&#189;x</button>
+          <button class="scale-btn active" onclick="scaleRecipe(this, 1)">1x</button>
+          <button class="scale-btn" onclick="scaleRecipe(this, 2)">2x</button>
+          <button class="scale-btn" onclick="scaleRecipe(this, 3)">3x</button>
+        </div>
+        <ul class="ingredients"><li data-original="3 packed cups fresh basil leaves (~3 oz / 85g)">3 packed cups fresh basil leaves (~3 oz / 85g)</li><li data-original="1/3 cup pine nuts">1/3 cup pine nuts</li><li data-original="2 medium cloves garlic, peeled">2 medium cloves garlic, peeled</li><li data-original="1/2 cup extra-virgin olive oil">1/2 cup extra-virgin olive oil</li><li data-original="1/2 cup finely grated Parmigiano-Reggiano">1/2 cup finely grated Parmigiano-Reggiano</li><li data-original="1/4 cup finely grated Pecorino Romano">1/4 cup finely grated Pecorino Romano</li><li data-original="1/2 tsp kosher salt, plus more to taste">1/2 tsp kosher salt, plus more to taste</li><li data-original="Pinch of black pepper">Pinch of black pepper</li></ul>
         <h3>Steps</h3>
         <ol class="steps"><li>Toast pine nuts in a dry skillet over medium-low heat, stirring frequently, 3-4 minutes until golden and fragrant. Transfer to a plate to cool.</li><li>(Optional) Blanch basil in boiling water for 10 seconds, then transfer to ice water. Squeeze dry in a clean towel. This locks in vivid green color.</li><li>Add garlic and cooled pine nuts to the food processor. Pulse 8-10 times until coarsely chopped.</li><li>Add basil leaves and 1/2 tsp salt. Pulse 10-15 times until broken down but still slightly textured — don&#x27;t purée.</li><li>With the motor running continuously, pour olive oil in a slow, steady stream through the feed tube. Process just until combined, about 15 seconds.</li><li>Transfer to a bowl. Fold in the parmigiano and pecorino by hand with a spatula. (Processing the cheese in the machine can make it gummy from the heat.)</li><li>Taste and adjust salt.</li></ol>
         <div class="notes"><strong>Notes:</strong> Might benefit from a squeeze of lemon juice — try it next time.</div>
@@ -473,7 +532,13 @@
       </div>
       <div class="recipe-body">
         <h3>Ingredients</h3>
-        <ul class="ingredients"><li>6-7 Roma tomatoes, seeded</li><li>2 jalapeños, seeded and chopped</li><li>1/2 cup chopped cilantro</li><li>~10 green onions</li><li>2 tbsp hot sauce</li><li>1 tsp garlic powder (or minced garlic)</li><li>1 tsp salt</li><li>1 tsp pepper</li><li>2 tbsp lime juice</li></ul>
+        <div class="scaler">
+          <button class="scale-btn" onclick="scaleRecipe(this, 0.5)">&#189;x</button>
+          <button class="scale-btn active" onclick="scaleRecipe(this, 1)">1x</button>
+          <button class="scale-btn" onclick="scaleRecipe(this, 2)">2x</button>
+          <button class="scale-btn" onclick="scaleRecipe(this, 3)">3x</button>
+        </div>
+        <ul class="ingredients"><li data-original="6-7 Roma tomatoes, seeded">6-7 Roma tomatoes, seeded</li><li data-original="2 jalapeños, seeded and chopped">2 jalapeños, seeded and chopped</li><li data-original="1/2 cup chopped cilantro">1/2 cup chopped cilantro</li><li data-original="~10 green onions">~10 green onions</li><li data-original="2 tbsp hot sauce">2 tbsp hot sauce</li><li data-original="1 tsp garlic powder (or minced garlic)">1 tsp garlic powder (or minced garlic)</li><li data-original="1 tsp salt">1 tsp salt</li><li data-original="1 tsp pepper">1 tsp pepper</li><li data-original="2 tbsp lime juice">2 tbsp lime juice</li></ul>
         <h3>Steps</h3>
         <ol class="steps"><li>Seed and chop the Roma tomatoes.</li><li>Seed and chop the jalapeños.</li><li>Roughly chop the cilantro and green onions.</li><li>Combine tomatoes, jalapeños, cilantro, and green onions in a food processor or blender.</li><li>Blend to desired consistency.</li><li>Transfer to a bowl.</li><li>Mix in hot sauce, garlic powder, salt, pepper, and lime juice.</li><li>Taste and adjust seasoning as needed.</li><li>Chill before serving for best flavor.</li></ol>
         
@@ -495,10 +560,44 @@
       </div>
       <div class="recipe-body">
         <h3>Ingredients</h3>
-        <ul class="ingredients"><li>1 lb dry red kidney beans</li><li>1/2 lb andouille sausage</li><li>4 oz tasso</li><li>2 ham hocks</li><li>1/2 stick unsalted butter plus one more pad</li><li>1 tbsp avocado oil</li><li>32 oz low sodium chicken broth</li><li>1 red bell pepper</li><li>1 green bell pepper</li><li>1 yellow onion</li><li>2 tbsp fresh parsley</li><li>Tony&#x27;s seasoning (4 good back-and-forth shakes)</li><li>Garlic powder (4 good back-and-forth shakes)</li><li>Onion powder (4 good back-and-forth shakes)</li><li>Italian seasoning (2 good shakes)</li><li>Thyme (1 good shake)</li><li>5 bay leaves</li></ul>
+        <div class="scaler">
+          <button class="scale-btn" onclick="scaleRecipe(this, 0.5)">&#189;x</button>
+          <button class="scale-btn active" onclick="scaleRecipe(this, 1)">1x</button>
+          <button class="scale-btn" onclick="scaleRecipe(this, 2)">2x</button>
+          <button class="scale-btn" onclick="scaleRecipe(this, 3)">3x</button>
+        </div>
+        <ul class="ingredients"><li data-original="1 lb dry red kidney beans">1 lb dry red kidney beans</li><li data-original="1/2 lb andouille sausage">1/2 lb andouille sausage</li><li data-original="4 oz tasso">4 oz tasso</li><li data-original="2 ham hocks">2 ham hocks</li><li data-original="1/2 stick unsalted butter plus one more pad">1/2 stick unsalted butter plus one more pad</li><li data-original="1 tbsp avocado oil">1 tbsp avocado oil</li><li data-original="32 oz low sodium chicken broth">32 oz low sodium chicken broth</li><li data-original="1 red bell pepper">1 red bell pepper</li><li data-original="1 green bell pepper">1 green bell pepper</li><li data-original="1 yellow onion">1 yellow onion</li><li data-original="2 tbsp fresh parsley">2 tbsp fresh parsley</li><li data-original="Tony&#x27;s seasoning (4 good back-and-forth shakes)">Tony&#x27;s seasoning (4 good back-and-forth shakes)</li><li data-original="Garlic powder (4 good back-and-forth shakes)">Garlic powder (4 good back-and-forth shakes)</li><li data-original="Onion powder (4 good back-and-forth shakes)">Onion powder (4 good back-and-forth shakes)</li><li data-original="Italian seasoning (2 good shakes)">Italian seasoning (2 good shakes)</li><li data-original="Thyme (1 good shake)">Thyme (1 good shake)</li><li data-original="5 bay leaves">5 bay leaves</li></ul>
         <h3>Steps</h3>
         <ol class="steps"><li>Soak the beans in water overnight in the fridge.</li><li>Dice all produce — bell peppers, onion, and parsley.</li><li>Slice tasso and andouille into bite-size chunks.</li><li>Melt half a stick of butter and 1 tbsp avocado oil in a big pot.</li><li>Add sausage and tasso to the pot. Brown for a few minutes, stirring to get all sides.</li><li>After a few minutes, add all the diced produce.</li><li>Add 4 good back-and-forth shakes of Tony&#x27;s, garlic powder, and onion powder. Add 2 good shakes of Italian seasoning and 1 good shake of thyme. Add 5 bay leaves.</li><li>When produce is translucent, add soaked beans, 32 oz chicken broth, ham hocks, and enough water to fully cover and make it a bit soupy.</li><li>Bring to a boil, then slowly reduce to a simmer.</li><li>Simmer with the lid on but slightly cracked for ventilation. Stir every 20-30 minutes so it doesn&#x27;t stick.</li><li>After about 4-5 hours, remove ham hocks and mash some beans in the pot to thicken.</li><li>Add a pad of butter. Continue simmering for another hour or two.</li><li>After mashing and thickening, turn heat down to low (1-2). Beans can stick/burn easily once thick.</li><li>Serve over rice with green onion and any other fixings.</li></ol>
         <div class="notes"><strong>Notes:</strong> Low and slow — plan for 5-6 hours total cook time.</div>
+        
+        
+      </div>
+    </article>
+    
+
+    <article class="recipe-card" id="vodka-sauce-with-sausage" data-tags="dinner italian">
+      <div class="recipe-header" onclick="toggleRecipe(this)">
+        <h2>Vodka Sauce with Sausage</h2>
+        <div class="recipe-meta">
+          <span class="yield">Serves 4</span>
+          
+          <div class="tag-pills"><span class="tag-pill">dinner</span><span class="tag-pill">italian</span></div>
+        </div>
+        <span class="toggle-icon">+</span>
+      </div>
+      <div class="recipe-body">
+        <h3>Ingredients</h3>
+        <div class="scaler">
+          <button class="scale-btn" onclick="scaleRecipe(this, 0.5)">&#189;x</button>
+          <button class="scale-btn active" onclick="scaleRecipe(this, 1)">1x</button>
+          <button class="scale-btn" onclick="scaleRecipe(this, 2)">2x</button>
+          <button class="scale-btn" onclick="scaleRecipe(this, 3)">3x</button>
+        </div>
+        <ul class="ingredients"><li data-original="8 oz uncooked penne pasta">8 oz uncooked penne pasta</li><li data-original="1 tbsp butter">1 tbsp butter</li><li data-original="16 oz Italian sausage">16 oz Italian sausage</li><li data-original="1/2 small onion, chopped finely">1/2 small onion, chopped finely</li><li data-original="1 clove garlic, minced">1 clove garlic, minced</li><li data-original="1/3 cup vodka">1/3 cup vodka</li><li data-original="1/3 cup tomato paste">1/3 cup tomato paste</li><li data-original="1 cup heavy/whipping cream">1 cup heavy/whipping cream</li><li data-original="Salt and pepper to taste">Salt and pepper to taste</li><li data-original="Fresh basil, sliced thin (optional)">Fresh basil, sliced thin (optional)</li><li data-original="Freshly grated parmesan cheese (optional)">Freshly grated parmesan cheese (optional)</li></ul>
+        <h3>Steps</h3>
+        <ol class="steps"><li>Boil a generously salted pot of water and cook the penne al dente according to package directions.</li><li>Meanwhile, add butter, sausage meat, and onions to a skillet over medium-high heat. Cook 7-10 minutes until nicely browned, breaking the sausage up as you go. Drain excess fat.</li><li>Stir in the garlic and vodka. Let the sauce bubble for about 30 seconds.</li><li>Stir in the tomato paste and cream until you have a smooth mixture.</li><li>Reduce heat to medium-low. Let the sauce warm through and thicken to your liking.</li><li>Season with salt and pepper. Stir in fresh basil if using. Toss with drained pasta, thinning with a splash of pasta water if needed. Serve with freshly grated parmesan.</li></ol>
+        <div class="notes"><strong>Notes:</strong> Use double-concentrated tomato paste (Mutti or DeLallo). Don&#x27;t sub the heavy cream for milk or half-and-half — it&#x27;ll curdle. Buy bulk Italian sausage or remove from casings.</div>
         
         
       </div>
@@ -740,6 +839,67 @@
       const el = document.getElementById('status-msg');
       el.textContent = msg;
       el.className = 'status-msg ' + type;
+    }
+
+    // --- Recipe scaler ---
+    const FRACTION_MAP = {
+      '\u00bc': 0.25, '\u00bd': 0.5, '\u00be': 0.75,
+      '\u2153': 1/3, '\u2154': 2/3,
+      '\u2155': 0.2, '\u2156': 0.4, '\u2157': 0.6, '\u2158': 0.8,
+      '\u2159': 1/6, '\u215a': 5/6,
+      '\u215b': 0.125, '\u215c': 0.375, '\u215d': 0.625, '\u215e': 0.875
+    };
+
+    function parseQty(text) {
+      // Match leading quantity like "1 1/2", "1/3", "16", "1.5", or unicode fractions
+      const m = text.match(/^(\d+)?\s*(\d+\/\d+|[\u00bc-\u00be\u2150-\u215e])?\s*/);
+      if (!m || (!m[1] && !m[2])) return { qty: null, rest: text };
+      let qty = 0;
+      if (m[1]) qty += parseFloat(m[1]);
+      if (m[2]) {
+        if (m[2].includes('/')) {
+          const [n, d] = m[2].split('/');
+          qty += parseInt(n) / parseInt(d);
+        } else {
+          qty += FRACTION_MAP[m[2]] || 0;
+        }
+      }
+      return { qty, rest: text.slice(m[0].length) };
+    }
+
+    function formatQty(n) {
+      if (n === 0) return '0';
+      const whole = Math.floor(n);
+      const frac = n - whole;
+      const fracs = [
+        [0.25, '\u00bc'], [0.333, '\u2153'], [0.5, '\u00bd'],
+        [0.667, '\u2154'], [0.75, '\u00be'],
+        [0.125, '\u215b'], [0.375, '\u215c'], [0.625, '\u215d'], [0.875, '\u215e']
+      ];
+      if (frac < 0.05) return whole.toString();
+      for (const [val, sym] of fracs) {
+        if (Math.abs(frac - val) < 0.05) {
+          return whole ? `${whole} ${sym}` : sym;
+        }
+      }
+      // Fall back to decimal
+      const rounded = Math.round(n * 100) / 100;
+      return rounded % 1 === 0 ? rounded.toString() : rounded.toFixed(rounded < 10 ? 1 : 0);
+    }
+
+    function scaleRecipe(btn, multiplier) {
+      const scaler = btn.parentElement;
+      scaler.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const card = btn.closest('.recipe-card');
+      card.querySelectorAll('.ingredients li').forEach(li => {
+        const original = li.dataset.original;
+        const { qty, rest } = parseQty(original);
+        if (qty !== null) {
+          li.textContent = formatQty(qty * multiplier) + ' ' + rest;
+        }
+      });
     }
   </script>
 </body>

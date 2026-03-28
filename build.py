@@ -33,7 +33,10 @@ def collect_tags(recipes):
 
 
 def build_recipe_card(r):
-    ingredients_html = "".join(f"<li>{escape(i)}</li>" for i in r["recipe"]["ingredients"])
+    ingredients_html = "".join(
+        f'<li data-original="{escape(i)}">{escape(i)}</li>'
+        for i in r["recipe"]["ingredients"]
+    )
     steps_html = "".join(f"<li>{escape(s)}</li>" for s in r["recipe"]["steps"])
 
     tags = r.get("tags", {})
@@ -75,6 +78,12 @@ def build_recipe_card(r):
       </div>
       <div class="recipe-body">
         <h3>Ingredients</h3>
+        <div class="scaler">
+          <button class="scale-btn" onclick="scaleRecipe(this, 0.5)">&#189;x</button>
+          <button class="scale-btn active" onclick="scaleRecipe(this, 1)">1x</button>
+          <button class="scale-btn" onclick="scaleRecipe(this, 2)">2x</button>
+          <button class="scale-btn" onclick="scaleRecipe(this, 3)">3x</button>
+        </div>
         <ul class="ingredients">{ingredients_html}</ul>
         <h3>Steps</h3>
         <ol class="steps">{steps_html}</ol>
