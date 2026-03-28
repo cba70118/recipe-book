@@ -2,6 +2,10 @@
   "dish": "Classic Genovese Basil Pesto",
   "source": "Adapted from Serious Eats / J. Kenji López-Alt",
   "date_added": "2026-03-28",
+  "tags": {
+    "meal": ["dinner", "lunch"],
+    "cuisine": ["italian"]
+  },
   "notes": "Might benefit from a squeeze of lemon juice — try it next time.",
   "recipe": {
     "yield": "About 1 cup (enough for 1 lb pasta)",

@@ -3,8 +3,7 @@ Build script: reads recipes/*.json and generates a static site in docs/.
 Run: python build.py
 """
 import json
-import os
-import glob
+from html import escape
 from pathlib import Path
 
 ROOT = Path(__file__).parent
@@ -23,37 +22,54 @@ def load_recipes():
     return recipes
 
 
+def collect_tags(recipes):
+    meal_tags = set()
+    cuisine_tags = set()
+    for r in recipes:
+        tags = r.get("tags", {})
+        meal_tags.update(tags.get("meal", []))
+        cuisine_tags.update(tags.get("cuisine", []))
+    return sorted(meal_tags), sorted(cuisine_tags)
+
+
 def build_recipe_card(r):
-    ingredients_html = "".join(f"<li>{i}</li>" for i in r["recipe"]["ingredients"])
-    steps_html = "".join(f"<li>{s}</li>" for s in r["recipe"]["steps"])
+    ingredients_html = "".join(f"<li>{escape(i)}</li>" for i in r["recipe"]["ingredients"])
+    steps_html = "".join(f"<li>{escape(s)}</li>" for s in r["recipe"]["steps"])
+
+    tags = r.get("tags", {})
+    all_tags = tags.get("meal", []) + tags.get("cuisine", [])
+    data_tags = " ".join(all_tags)
+
+    tag_pills = "".join(f'<span class="tag-pill">{escape(t)}</span>' for t in all_tags)
 
     notes_html = ""
     if r.get("notes"):
-        notes_html = f'<div class="notes"><strong>Notes:</strong> {r["notes"]}</div>'
+        notes_html = f'<div class="notes"><strong>Notes:</strong> {escape(r["notes"])}</div>'
 
     serving_html = ""
     if r["recipe"].get("serving"):
-        serving_html = f'<div class="serving"><strong>Serving:</strong> {r["recipe"]["serving"]}</div>'
+        serving_html = f'<div class="serving"><strong>Serving:</strong> {escape(r["recipe"]["serving"])}</div>'
 
     storage_html = ""
     if r["recipe"].get("storage"):
-        storage_html = f'<div class="storage"><strong>Storage:</strong> {r["recipe"]["storage"]}</div>'
+        storage_html = f'<div class="storage"><strong>Storage:</strong> {escape(r["recipe"]["storage"])}</div>'
 
     source_html = ""
     if r.get("source"):
-        source_html = f'<div class="source">{r["source"]}</div>'
+        source_html = f'<div class="source">{escape(r["source"])}</div>'
 
     yield_html = ""
     if r["recipe"].get("yield"):
-        yield_html = f'<span class="yield">{r["recipe"]["yield"]}</span>'
+        yield_html = f'<span class="yield">{escape(r["recipe"]["yield"])}</span>'
 
     return f"""
-    <article class="recipe-card" id="{r['_slug']}">
+    <article class="recipe-card" id="{escape(r['_slug'])}" data-tags="{escape(data_tags)}">
       <div class="recipe-header" onclick="toggleRecipe(this)">
-        <h2>{r['dish']}</h2>
+        <h2>{escape(r['dish'])}</h2>
         <div class="recipe-meta">
           {yield_html}
           {source_html}
+          <div class="tag-pills">{tag_pills}</div>
         </div>
         <span class="toggle-icon">+</span>
       </div>
@@ -72,13 +88,32 @@ def build_recipe_card(r):
 
 def build_site():
     recipes = load_recipes()
+    meal_tags, cuisine_tags = collect_tags(recipes)
     cards_html = "\n".join(build_recipe_card(r) for r in recipes)
 
     with open(TEMPLATE_PATH, "r", encoding="utf-8") as f:
         template = f.read()
 
+    # Build tag filter buttons
+    meal_btns = "".join(f'<button class="filter-btn" data-tag="{escape(t)}">{escape(t)}</button>' for t in meal_tags)
+    cuisine_btns = "".join(f'<button class="filter-btn" data-tag="{escape(t)}">{escape(t)}</button>' for t in cuisine_tags)
+
+    # Build tag checkboxes for the add form
+    meal_checks = "".join(
+        f'<label class="check-label"><input type="checkbox" value="{escape(t)}"> {escape(t)}</label>'
+        for t in meal_tags
+    )
+    cuisine_checks = "".join(
+        f'<label class="check-label"><input type="checkbox" value="{escape(t)}"> {escape(t)}</label>'
+        for t in cuisine_tags
+    )
+
     html = template.replace("{{RECIPE_CARDS}}", cards_html)
     html = html.replace("{{RECIPE_COUNT}}", str(len(recipes)))
+    html = html.replace("{{MEAL_TAG_BUTTONS}}", meal_btns)
+    html = html.replace("{{CUISINE_TAG_BUTTONS}}", cuisine_btns)
+    html = html.replace("{{MEAL_TAG_CHECKS}}", meal_checks)
+    html = html.replace("{{CUISINE_TAG_CHECKS}}", cuisine_checks)
 
     DOCS_DIR.mkdir(exist_ok=True)
     with open(DOCS_DIR / "index.html", "w", encoding="utf-8") as f:

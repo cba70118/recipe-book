@@ -1,3 +1,4 @@
 resized_*.png
 __pycache__/
 *.pyc
+.github-token

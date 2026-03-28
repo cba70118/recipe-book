@@ -2,6 +2,10 @@
   "dish": "Cory's Fresh Salsa",
   "source": "Original / Cory",
   "date_added": "2026-03-28",
+  "tags": {
+    "meal": ["snack", "appetizer"],
+    "cuisine": ["mexican"]
+  },
   "notes": null,
   "recipe": {
     "yield": "About 3 cups",
