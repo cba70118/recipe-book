@@ -25,6 +25,7 @@
     }
   ],
   "tags": {
+    "who": ["both"],
     "meal": ["dinner"],
     "cuisine": ["cajun"],
     "protein": ["pork", "seafood"],

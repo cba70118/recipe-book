@@ -775,6 +775,10 @@
       </div>
 
       <div class="filter-section">
+        <div class="filter-label">Whose</div>
+        <div class="filter-row" id="who-filters">{{WHO_TAG_BUTTONS}}</div>
+      </div>
+      <div class="filter-section">
         <div class="filter-label">Meal</div>
         <div class="filter-row" id="meal-filters">{{MEAL_TAG_BUTTONS}}</div>
       </div>
@@ -824,7 +828,11 @@
         </div>
 
         <div class="import-pane" id="import-url">
-          <input type="text" id="import-url-input" placeholder="Paste a recipe URL...">
+          <input type="text" id="import-url-input" placeholder="Paste a recipe URL, YouTube link, TikTok, etc..." oninput="checkVideoUrl()">
+          <div id="video-help" style="display:none; margin-top: 10px;">
+            <div class="hint" style="margin-bottom: 6px; color: var(--stem); font-style: normal; font-weight: 500;">Video detected — describe what you see in the video so the recipe can be parsed:</div>
+            <textarea id="import-video-desc" placeholder="e.g. She browns the sausage first, then adds onions and garlic. Uses 1 lb Italian sausage, 1 can crushed tomatoes, basil, served over pasta..." style="width:100%; padding:12px 14px; border:1px solid var(--linen); border-radius:4px; font-size:0.9rem; font-family:inherit; background:var(--warm-white); color:var(--charcoal); outline:none; min-height:100px; resize:vertical;"></textarea>
+          </div>
         </div>
 
         <div class="import-pane" id="import-text">
@@ -875,6 +883,10 @@
         <input type="text" id="add-notes" placeholder="e.g. Great for weeknights">
       </div>
 
+      <div class="form-group">
+        <label>Whose</label>
+        <div class="check-group" id="who-checks">{{WHO_TAG_CHECKS}}</div>
+      </div>
       <div class="form-group">
         <label>Meal Type</label>
         <div class="check-group" id="meal-checks">{{MEAL_TAG_CHECKS}}</div>
@@ -1103,7 +1115,7 @@
       if (!ingredients.length) { showStatus('Please enter at least one ingredient.', 'error'); return; }
       if (!steps.length) { showStatus('Please enter at least one step.', 'error'); return; }
 
-      const tagCats = ['meal', 'cuisine', 'protein', 'style', 'occasion', 'tool'];
+      const tagCats = ['who', 'meal', 'cuisine', 'protein', 'style', 'occasion', 'tool'];
       const tags = {};
       tagCats.forEach(cat => {
         tags[cat] = [...document.querySelectorAll(`#${cat}-checks input:checked`)].map(cb => cb.value);
@@ -1426,6 +1438,12 @@ For you_might_also_like, suggest 3 real dishes from the culinary world that are 
       });
     }
 
+    function checkVideoUrl() {
+      const url = document.getElementById('import-url-input').value.trim().toLowerCase();
+      const isVideo = /youtube\.com|youtu\.be|tiktok\.com|instagram\.com\/reel|vimeo\.com|facebook\.com\/.*\/videos/.test(url);
+      document.getElementById('video-help').style.display = isVideo ? 'block' : 'none';
+    }
+
     function previewImage(input) {
       const img = document.getElementById('import-preview-img');
       if (input.files && input.files[0]) {
@@ -1449,6 +1467,7 @@ For you_might_also_like, suggest 3 real dishes from the culinary world that are 
 }
 
 For tags, use this system:
+- who: cory, kayla, both (whose favorite — default to "both" if unclear)
 - meal: breakfast, lunch, dinner, snack, appetizer, dessert, side
 - cuisine: american, italian, mexican, cajun, southern, asian, korean, japanese, chinese, thai, indian, mediterranean, french, greek
 - protein: chicken, beef, pork, lamb, seafood, fish, vegetarian, vegan
@@ -1495,9 +1514,21 @@ Clean up the ingredients and steps to be clear and concise. Standardize measurem
         } else if (activePane === 'import-url') {
           const url = document.getElementById('import-url-input').value.trim();
           if (!url) { throw new Error('Please paste a URL first.'); }
+          const videoDesc = document.getElementById('import-video-desc')?.value.trim() || '';
+          const isVideo = /youtube\.com|youtu\.be|tiktok\.com|instagram\.com\/reel|vimeo\.com|facebook\.com\/.*\/videos/i.test(url);
+
+          let urlPrompt;
+          if (isVideo && videoDesc) {
+            urlPrompt = `Here is a recipe from a video (${url}).\n\nThe user described what they saw:\n${videoDesc}\n\nBased on this description, extract and structure the recipe.\n\n${IMPORT_PROMPT}`;
+          } else if (isVideo && !videoDesc) {
+            throw new Error('This looks like a video link — please describe the recipe you see in the video so it can be parsed.');
+          } else {
+            urlPrompt = `Here is a recipe URL: ${url}\n\nPlease fetch/interpret the recipe from this URL based on common recipe formats.\n\n${IMPORT_PROMPT}`;
+          }
+
           messages = [{
             role: 'user',
-            content: `Here is a recipe URL: ${url}\n\nPlease fetch/interpret the recipe from this URL based on common recipe formats.\n\n${IMPORT_PROMPT}`
+            content: urlPrompt
           }];
         } else {
           const text = document.getElementById('import-text-input').value.trim();
@@ -1580,7 +1611,7 @@ Clean up the ingredients and steps to be clear and concise. Standardize measurem
 
       // Check matching tag checkboxes across all categories
       const tags = r.tags || {};
-      ['meal', 'cuisine', 'protein', 'style', 'occasion', 'tool'].forEach(cat => {
+      ['who', 'meal', 'cuisine', 'protein', 'style', 'occasion', 'tool'].forEach(cat => {
         (tags[cat] || []).forEach(tag => {
           const cb = document.querySelector(`#${cat}-checks input[value="${tag}"]`);
           if (cb) cb.checked = true;

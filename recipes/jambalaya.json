@@ -24,6 +24,7 @@
     }
   ],
   "tags": {
+    "who": ["both"],
     "meal": [
       "dinner"
     ],

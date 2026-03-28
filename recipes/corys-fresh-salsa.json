@@ -25,6 +25,7 @@
     }
   ],
   "tags": {
+    "who": ["both"],
     "meal": ["snack", "appetizer"],
     "cuisine": ["mexican"],
     "protein": ["vegetarian"],

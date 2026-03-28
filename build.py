@@ -11,7 +11,7 @@ RECIPES_DIR = ROOT / "recipes"
 DOCS_DIR = ROOT / "docs"
 TEMPLATE_PATH = ROOT / "template.html"
 
-TAG_CATEGORIES = ["meal", "cuisine", "protein", "style", "occasion", "tool"]
+TAG_CATEGORIES = ["who", "meal", "cuisine", "protein", "style", "occasion", "tool"]
 
 
 def load_recipes():
