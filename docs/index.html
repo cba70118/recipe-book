@@ -1005,6 +1005,24 @@
       </div>
 
       <div class="form-group">
+        <label>Difficulty</label>
+        <div class="check-group" id="difficulty-group">
+          <label class="check-label"><input type="radio" name="add-difficulty" value="Easy"> Easy</label>
+          <label class="check-label"><input type="radio" name="add-difficulty" value="Medium"> Medium</label>
+          <label class="check-label"><input type="radio" name="add-difficulty" value="Weekend Project"> Weekend Project</label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Time</label>
+        <div style="display:flex;gap:8px;">
+          <input type="text" id="add-time-prep" placeholder="Prep (e.g. 10 min)" style="flex:1;">
+          <input type="text" id="add-time-cook" placeholder="Cook (e.g. 30 min)" style="flex:1;">
+          <input type="text" id="add-time-total" placeholder="Total (e.g. 40 min)" style="flex:1;">
+        </div>
+      </div>
+
+      <div class="form-group">
         <label>Notes</label>
         <input type="text" id="add-notes" placeholder="e.g. Great for weeknights">
       </div>
@@ -1243,10 +1261,28 @@
         tags[cat] = [...document.querySelectorAll(`#${cat}-checks input:checked`)].map(cb => cb.value);
       });
 
+      // Gather difficulty and time
+      const difficultyEl = document.querySelector('input[name="add-difficulty"]:checked');
+      const difficulty = difficultyEl ? difficultyEl.value : null;
+      const timePrep = document.getElementById('add-time-prep').value.trim();
+      const timeCook = document.getElementById('add-time-cook').value.trim();
+      const timeTotal = document.getElementById('add-time-total').value.trim();
+      const timeObj = (timePrep || timeCook || timeTotal) ? {} : null;
+      if (timeObj) {
+        if (timePrep) timeObj.prep = timePrep;
+        if (timeCook) timeObj.cook = timeCook;
+        if (timeTotal) timeObj.total = timeTotal;
+      }
+
       const recipe = {
         dish: dish,
         source: document.getElementById('add-source').value.trim() || null,
         date_added: new Date().toISOString().split('T')[0],
+        why_this_works: null,
+        difficulty: difficulty,
+        time: timeObj,
+        family_notes: null,
+        you_might_also_like: null,
         tags: tags,
         notes: document.getElementById('add-notes').value.trim() || null,
         recipe: {
@@ -1262,13 +1298,76 @@
       if (recipe.source === null) delete recipe.source;
       if (recipe.notes === null) delete recipe.notes;
 
+      btn.disabled = true;
+      btn.textContent = 'Generating culinary details...';
+
+      // Auto-generate why_this_works and you_might_also_like via Claude
+      const chefKey = getChefKey();
+      if (chefKey) {
+        try {
+          const enrichResp = await fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-api-key': chefKey,
+              'anthropic-version': '2023-06-01',
+              'anthropic-dangerous-direct-browser-access': 'true'
+            },
+            body: JSON.stringify({
+              model: 'claude-sonnet-4-20250514',
+              max_tokens: 1024,
+              messages: [{
+                role: 'user',
+                content: `Given this recipe, generate two things. Return ONLY valid JSON, no other text.
+
+Recipe: ${dish}
+Ingredients: ${ingredients.join(', ')}
+Steps: ${steps.join(' ')}
+Tags: ${JSON.stringify(tags)}
+
+Return this JSON structure:
+{
+  "why_this_works": "2-3 sentences of culinary reasoning — why the technique and flavor pairings in this dish succeed. Be specific about the science or craft. Write in plain, confident English.",
+  "you_might_also_like": [
+    {"dish": "Related Dish Name", "url": "https://www.seriouseats.com/search?q=dish+name"},
+    {"dish": "Another Dish", "url": "https://cooking.nytimes.com/search?q=dish+name"},
+    {"dish": "Third Dish", "url": "https://www.bonappetit.com/search?q=dish+name"}
+  ]
+}
+
+For you_might_also_like, suggest 3 real dishes from the culinary world that are in the same flavor family or use similar techniques. Use search URLs from: seriouseats.com, cooking.nytimes.com, bonappetit.com, thewoksoflife.com, simplyrecipes.com, budgetbytes.com.`
+              }]
+            })
+          });
+
+          if (enrichResp.ok) {
+            const enrichData = await enrichResp.json();
+            const enrichText = enrichData.content[0].text;
+            const enrichMatch = enrichText.match(/\{[\s\S]*\}/);
+            if (enrichMatch) {
+              const enriched = JSON.parse(enrichMatch[0]);
+              if (enriched.why_this_works) recipe.why_this_works = enriched.why_this_works;
+              if (enriched.you_might_also_like) recipe.you_might_also_like = enriched.you_might_also_like;
+            }
+          }
+        } catch (e) {
+          // Non-fatal — save without enrichment
+          console.log('Enrichment failed:', e.message);
+        }
+      }
+
+      // Clean nulls
+      if (!recipe.why_this_works) delete recipe.why_this_works;
+      if (!recipe.difficulty) delete recipe.difficulty;
+      if (!recipe.time) delete recipe.time;
+      if (!recipe.you_might_also_like) delete recipe.you_might_also_like;
+
+      btn.textContent = 'Saving...';
+
       const slug = dish.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
       const filename = `recipes/${slug}.json`;
       const content = JSON.stringify(recipe, null, 2);
       const encoded = btoa(unescape(encodeURIComponent(content)));
-
-      btn.disabled = true;
-      btn.textContent = 'Saving...';
 
       try {
         const resp = await fetch(`https://api.github.com/repos/${REPO}/contents/${filename}`, {
@@ -1288,6 +1387,7 @@
         showStatus(`"${dish}" saved! The site will update in a minute or two.`, 'success');
         document.querySelectorAll('#add-view input[type="text"], #add-view textarea').forEach(el => el.value = '');
         document.querySelectorAll('#add-view input[type="checkbox"]').forEach(cb => cb.checked = false);
+        document.querySelectorAll('#add-view input[type="radio"]').forEach(r => r.checked = false);
       } catch (e) {
         showStatus(`Error: ${e.message}`, 'error');
       }
@@ -1507,8 +1607,11 @@ For tags, use this system:
 - style: weeknight, weekend-project, one-pan, make-ahead, batch-cooking, entertaining
 - occasion: family-dinner, date-night, summer, winter-warmer, holiday
 - tool: cast-iron, dutch-oven, sheet-pan, food-processor, blender, skillet, wok, air-fryer, grill, instant-pot
-Also include "why_this_works": 2-3 sentences of culinary reasoning — why the technique and flavor pairings succeed.
-And "difficulty": "Easy", "Medium", or "Weekend Project".
+Also include:
+- "why_this_works": 2-3 sentences of culinary reasoning — why the technique and flavor pairings succeed.
+- "difficulty": "Easy", "Medium", or "Weekend Project"
+- "time": {"prep": "X min", "cook": "X min", "total": "X min"}
+- "you_might_also_like": array of 3 objects with "dish" (name) and "url" (search URL on seriouseats.com, cooking.nytimes.com, bonappetit.com, etc.)
 Clean up the ingredients and steps to be clear and concise. Standardize measurements (e.g. "tablespoon" to "tbsp", "teaspoon" to "tsp", "ounces" to "oz").`;
 
     async function importRecipe() {
@@ -1613,6 +1716,19 @@ Clean up the ingredients and steps to be clear and concise. Standardize measurem
       document.getElementById('add-steps').value = (r.steps || []).join('\n');
       document.getElementById('add-serving').value = r.serving || '';
       document.getElementById('add-storage').value = r.storage || '';
+
+      // Difficulty
+      if (r.difficulty) {
+        const radio = document.querySelector(`input[name="add-difficulty"][value="${r.difficulty}"]`);
+        if (radio) radio.checked = true;
+      }
+
+      // Time
+      if (r.time) {
+        document.getElementById('add-time-prep').value = r.time.prep || r.time_prep || '';
+        document.getElementById('add-time-cook').value = r.time.cook || r.time_cook || '';
+        document.getElementById('add-time-total').value = r.time.total || r.time_total || '';
+      }
 
       // Check matching tag checkboxes across all categories
       const tags = r.tags || {};
