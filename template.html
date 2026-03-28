@@ -505,6 +505,122 @@
       font-style: italic;
       padding: 8px 0;
     }
+
+    /* --- Import Recipe --- */
+    .import-section {
+      background: var(--parchment);
+      padding: 20px;
+      margin-bottom: 24px;
+      border-left: 3px solid var(--bourbon);
+    }
+
+    .import-section h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 0.85rem; font-weight: 600;
+      color: var(--tobacco);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+    }
+
+    .import-tabs {
+      display: flex; gap: 0; margin-bottom: 14px;
+    }
+
+    .import-tab {
+      flex: 1; padding: 8px 6px; text-align: center;
+      font-size: 0.75rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      cursor: pointer; border: 1px solid var(--light-rule);
+      background: var(--warm-white); color: var(--warm-gray);
+      font-family: inherit; transition: all 0.15s;
+    }
+
+    .import-tab:first-child { border-radius: 3px 0 0 3px; }
+    .import-tab:last-child { border-radius: 0 3px 3px 0; }
+    .import-tab + .import-tab { border-left: none; }
+
+    .import-tab.active {
+      background: var(--ink); color: var(--cream);
+      border-color: var(--ink);
+    }
+
+    .import-pane { display: none; }
+    .import-pane.active { display: block; }
+
+    .import-pane textarea {
+      width: 100%; padding: 12px 14px;
+      border: 1px solid var(--light-rule);
+      border-radius: 3px;
+      font-size: 0.9rem; font-family: inherit;
+      background: var(--warm-white);
+      color: var(--charcoal);
+      outline: none; min-height: 100px;
+      resize: vertical;
+    }
+
+    .import-pane textarea:focus { border-color: var(--tobacco); }
+
+    .import-pane input[type="text"] {
+      width: 100%; padding: 12px 14px;
+      border: 1px solid var(--light-rule);
+      border-radius: 3px;
+      font-size: 0.9rem; font-family: inherit;
+      background: var(--warm-white);
+      color: var(--charcoal);
+      outline: none;
+    }
+
+    .import-pane input[type="text"]:focus { border-color: var(--tobacco); }
+
+    .import-pane input[type="file"] {
+      font-family: inherit;
+      font-size: 0.85rem;
+      color: var(--charcoal);
+    }
+
+    .import-preview {
+      margin-top: 10px;
+      max-width: 100%;
+      max-height: 200px;
+      border: 1px solid var(--light-rule);
+      display: none;
+    }
+
+    .import-btn {
+      margin-top: 12px;
+      padding: 10px 20px;
+      background: var(--tobacco); color: var(--cream);
+      border: none; border-radius: 3px;
+      font-size: 0.8rem; font-family: inherit;
+      font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer; width: 100%;
+    }
+
+    .import-btn:disabled { background: var(--warm-gray); cursor: not-allowed; }
+
+    .import-status {
+      margin-top: 10px;
+      font-size: 0.82rem;
+      color: var(--warm-gray);
+      font-style: italic;
+    }
+
+    .form-divider {
+      display: flex; align-items: center; gap: 14px;
+      margin: 24px 0;
+      color: var(--warm-gray);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .form-divider::before, .form-divider::after {
+      content: '';
+      flex: 1;
+      border-top: 1px solid var(--light-rule);
+    }
   </style>
 </head>
 <body>
@@ -550,9 +666,34 @@
 
     <!-- Add Recipe View -->
     <div id="add-view">
-      <div class="instructions">
-        Fill out the form below and hit <strong>Save Recipe</strong>. Your recipe will be added to the collection automatically.
+
+      <!-- Import Section -->
+      <div class="import-section">
+        <h3>Import a Recipe</h3>
+        <div class="import-tabs">
+          <div class="import-tab active" onclick="showImportPane('photo')">Photo</div>
+          <div class="import-tab" onclick="showImportPane('url')">URL</div>
+          <div class="import-tab" onclick="showImportPane('text')">Paste Text</div>
+        </div>
+
+        <div class="import-pane active" id="import-photo">
+          <input type="file" id="import-file" accept="image/*" capture="environment" onchange="previewImage(this)">
+          <img class="import-preview" id="import-preview-img">
+        </div>
+
+        <div class="import-pane" id="import-url">
+          <input type="text" id="import-url-input" placeholder="Paste a recipe URL...">
+        </div>
+
+        <div class="import-pane" id="import-text">
+          <textarea id="import-text-input" placeholder="Paste the recipe text here — ingredients, steps, whatever format..."></textarea>
+        </div>
+
+        <button class="import-btn" id="import-btn" onclick="importRecipe()">Parse Recipe</button>
+        <div class="import-status" id="import-status"></div>
       </div>
+
+      <div class="form-divider">or fill out manually</div>
 
       <div class="form-group">
         <label>Dish Name *</label>
@@ -871,6 +1012,170 @@
       // Fall back to decimal
       const rounded = Math.round(n * 100) / 100;
       return rounded % 1 === 0 ? rounded.toString() : rounded.toFixed(rounded < 10 ? 1 : 0);
+    }
+
+    // --- Import Recipe ---
+    function showImportPane(pane) {
+      document.querySelectorAll('.import-tab').forEach((t, i) => {
+        t.classList.toggle('active', t.textContent.toLowerCase().includes(pane));
+      });
+      ['photo', 'url', 'text'].forEach(p => {
+        document.getElementById('import-' + p).classList.toggle('active', p === pane);
+      });
+    }
+
+    function previewImage(input) {
+      const img = document.getElementById('import-preview-img');
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = e => { img.src = e.target.result; img.style.display = 'block'; };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    const IMPORT_PROMPT = `Extract the recipe from the content provided. Return ONLY valid JSON with this exact structure, no other text:
+{
+  "dish": "Name of the dish",
+  "source": "Source or null",
+  "tags": { "meal": ["dinner"], "cuisine": ["italian"] },
+  "notes": "Any useful notes or null",
+  "yield": "Serving size or null",
+  "ingredients": ["ingredient 1", "ingredient 2"],
+  "steps": ["Step 1.", "Step 2."],
+  "serving": "Serving suggestion or null",
+  "storage": "Storage info or null"
+}
+
+For tags, pick from these meal types: breakfast, lunch, dinner, snack, appetizer, dessert, side.
+For cuisine, pick the best match: american, italian, mexican, cajun, southern, asian, korean, japanese, chinese, thai, indian, mediterranean, french, greek, or add a new one if needed.
+Clean up the ingredients and steps to be clear and concise. Standardize measurements (e.g. "tablespoon" to "tbsp", "teaspoon" to "tsp", "ounces" to "oz").`;
+
+    async function importRecipe() {
+      const btn = document.getElementById('import-btn');
+      const status = document.getElementById('import-status');
+      const chefKey = getChefKey();
+
+      if (!chefKey) {
+        status.textContent = 'Please set up your API key first (use the Ask the Chef tab).';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Parsing...';
+      status.textContent = 'Claude is reading your recipe...';
+
+      try {
+        let messages;
+        const activePane = document.querySelector('.import-pane.active').id;
+
+        if (activePane === 'import-photo') {
+          const file = document.getElementById('import-file').files[0];
+          if (!file) { throw new Error('Please select a photo first.'); }
+          const base64 = await fileToBase64(file);
+          const mediaType = file.type || 'image/jpeg';
+          messages = [{
+            role: 'user',
+            content: [
+              { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
+              { type: 'text', text: IMPORT_PROMPT }
+            ]
+          }];
+        } else if (activePane === 'import-url') {
+          const url = document.getElementById('import-url-input').value.trim();
+          if (!url) { throw new Error('Please paste a URL first.'); }
+          messages = [{
+            role: 'user',
+            content: `Here is a recipe URL: ${url}\n\nPlease fetch/interpret the recipe from this URL based on common recipe formats.\n\n${IMPORT_PROMPT}`
+          }];
+        } else {
+          const text = document.getElementById('import-text-input').value.trim();
+          if (!text) { throw new Error('Please paste some recipe text first.'); }
+          messages = [{
+            role: 'user',
+            content: `Here is a recipe:\n\n${text}\n\n${IMPORT_PROMPT}`
+          }];
+        }
+
+        const resp = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': chefKey,
+            'anthropic-version': '2023-06-01',
+            'anthropic-dangerous-direct-browser-access': 'true'
+          },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-20250514',
+            max_tokens: 2048,
+            messages: messages
+          })
+        });
+
+        if (!resp.ok) {
+          const err = await resp.json();
+          throw new Error(err.error?.message || 'API error');
+        }
+
+        const data = await resp.json();
+        const text = data.content[0].text;
+
+        // Extract JSON from response (handle markdown code blocks)
+        const jsonMatch = text.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) throw new Error('Could not parse recipe from response.');
+
+        const recipe = JSON.parse(jsonMatch[0]);
+        fillFormFromImport(recipe);
+        status.textContent = 'Recipe parsed! Review the form below and hit Save.';
+      } catch (e) {
+        status.textContent = 'Error: ' + e.message;
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Parse Recipe';
+    }
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function fillFormFromImport(r) {
+      document.getElementById('add-dish').value = r.dish || '';
+      document.getElementById('add-source').value = r.source || '';
+      document.getElementById('add-yield').value = r.yield || '';
+      document.getElementById('add-notes').value = r.notes || '';
+      document.getElementById('add-ingredients').value = (r.ingredients || []).join('\n');
+      document.getElementById('add-steps').value = (r.steps || []).join('\n');
+      document.getElementById('add-serving').value = r.serving || '';
+      document.getElementById('add-storage').value = r.storage || '';
+
+      // Check matching tag checkboxes
+      const tags = r.tags || {};
+      (tags.meal || []).forEach(tag => {
+        const cb = document.querySelector(`#meal-checks input[value="${tag}"]`);
+        if (cb) cb.checked = true;
+        else addCustomTagFromImport('meal', tag);
+      });
+      (tags.cuisine || []).forEach(tag => {
+        const cb = document.querySelector(`#cuisine-checks input[value="${tag}"]`);
+        if (cb) cb.checked = true;
+        else addCustomTagFromImport('cuisine', tag);
+      });
+
+      // Scroll to form
+      document.getElementById('add-dish').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function addCustomTagFromImport(type, tag) {
+      const group = document.getElementById(type + '-checks');
+      const label = document.createElement('label');
+      label.className = 'check-label';
+      label.innerHTML = `<input type="checkbox" value="${tag}" checked> ${tag}`;
+      group.appendChild(label);
     }
 
     // --- Chef Chat ---
