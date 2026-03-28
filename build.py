@@ -34,7 +34,29 @@ def collect_all_tags(recipes):
     return {cat: sorted(vals) for cat, vals in tag_sets.items()}
 
 
-def build_recipe_card(r):
+def find_similar(recipe, all_recipes, max_results=3):
+    """Find similar recipes based on tag overlap, excluding exact match."""
+    tags = recipe.get("tags", {})
+    my_tags = set()
+    for cat in TAG_CATEGORIES:
+        my_tags.update(tags.get(cat, []))
+
+    scores = []
+    for other in all_recipes:
+        if other["_slug"] == recipe["_slug"]:
+            continue
+        other_tags = set()
+        for cat in TAG_CATEGORIES:
+            other_tags.update(other.get("tags", {}).get(cat, []))
+        overlap = len(my_tags & other_tags)
+        if overlap > 0:
+            scores.append((overlap, other))
+
+    scores.sort(key=lambda x: x[0], reverse=True)
+    return [r for _, r in scores[:max_results]]
+
+
+def build_recipe_card(r, all_recipes=None):
     ingredients_html = "".join(
         f'<li data-original="{escape(i)}">{escape(i)}</li>'
         for i in r["recipe"]["ingredients"]
@@ -50,10 +72,21 @@ def build_recipe_card(r):
 
     tag_pills = "".join(f'<span class="tag-pill">{escape(t)}</span>' for t in all_tags)
 
-    # Why This Works
+    # Why This Works + You Might Also Like
+    similar = find_similar(r, all_recipes or [])
+    similar_html = ""
+    if similar:
+        links = "".join(
+            f'<a href="#{escape(s["_slug"])}" class="similar-link" onclick="openRecipe(\'{escape(s["_slug"])}\')">{escape(s["dish"])}</a>'
+            for s in similar
+        )
+        similar_html = f'<div class="similar-recipes"><strong>You Might Also Like:</strong> {links}</div>'
+
     why_html = ""
     if r.get("why_this_works"):
-        why_html = f'<div class="why-this-works"><strong>Why This Works:</strong> {escape(r["why_this_works"])}</div>'
+        why_html = f'<div class="why-this-works"><strong>Why This Works:</strong> {escape(r["why_this_works"])}{similar_html}</div>'
+    elif similar_html:
+        why_html = similar_html
 
     # Difficulty + Time
     meta_bits = []
@@ -145,7 +178,7 @@ def build_recipe_summary(recipes):
 def build_site():
     recipes = load_recipes()
     all_tags = collect_all_tags(recipes)
-    cards_html = "\n".join(build_recipe_card(r) for r in recipes)
+    cards_html = "\n".join(build_recipe_card(r, recipes) for r in recipes)
     recipe_summary = build_recipe_summary(recipes)
 
     with open(TEMPLATE_PATH, "r", encoding="utf-8") as f:
