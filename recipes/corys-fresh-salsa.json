@@ -1,0 +1,31 @@
+{
+  "dish": "Cory's Fresh Salsa",
+  "source": "Original / Cory",
+  "date_added": "2026-03-28",
+  "notes": null,
+  "recipe": {
+    "yield": "About 3 cups",
+    "ingredients": [
+      "6-7 Roma tomatoes, seeded",
+      "2 jalapeños, seeded and chopped",
+      "1/2 cup chopped cilantro",
+      "~10 green onions",
+      "2 tbsp hot sauce",
+      "1 tsp garlic powder (or minced garlic)",
+      "1 tsp salt",
+      "1 tsp pepper",
+      "2 tbsp lime juice"
+    ],
+    "steps": [
+      "Seed and chop the Roma tomatoes.",
+      "Seed and chop the jalapeños.",
+      "Roughly chop the cilantro and green onions.",
+      "Combine tomatoes, jalapeños, cilantro, and green onions in a food processor or blender.",
+      "Blend to desired consistency.",
+      "Transfer to a bowl.",
+      "Mix in hot sauce, garlic powder, salt, pepper, and lime juice.",
+      "Taste and adjust seasoning as needed.",
+      "Chill before serving for best flavor."
+    ]
+  }
+}

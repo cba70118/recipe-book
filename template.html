@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Recipe Book</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: #faf8f5;
+      color: #2d2d2d;
+      line-height: 1.6;
+      padding: 0 0 80px 0;
+    }
+
+    header {
+      background: #3d5a3e;
+      color: white;
+      padding: 24px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    header p {
+      font-size: 0.85rem;
+      opacity: 0.8;
+      margin-top: 4px;
+    }
+
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    /* Search */
+    .search-bar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: #faf8f5;
+      padding: 12px 0;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e0dbd4;
+      border-radius: 12px;
+      font-size: 1rem;
+      background: white;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-bar input:focus {
+      border-color: #3d5a3e;
+    }
+
+    /* Nav tabs */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      border: 2px solid #e0dbd4;
+      border-radius: 10px;
+      background: white;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab.active {
+      background: #3d5a3e;
+      color: white;
+      border-color: #3d5a3e;
+    }
+
+    /* Recipe cards */
+    .recipe-card {
+      background: white;
+      border-radius: 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      overflow: hidden;
+    }
+
+    .recipe-header {
+      padding: 18px 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .recipe-header h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      flex: 1;
+    }
+
+    .recipe-meta {
+      display: none;
+    }
+
+    .toggle-icon {
+      font-size: 1.4rem;
+      font-weight: 300;
+      color: #999;
+      flex-shrink: 0;
+      width: 28px;
+      text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .recipe-body {
+      display: none;
+      padding: 0 20px 20px;
+    }
+
+    .recipe-card.open .recipe-body {
+      display: block;
+    }
+
+    .recipe-card.open .toggle-icon {
+      transform: rotate(45deg);
+    }
+
+    .recipe-card.open .recipe-meta {
+      display: block;
+    }
+
+    .yield {
+      display: inline-block;
+      background: #f0ebe4;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .source {
+      font-size: 0.8rem;
+      color: #888;
+      font-style: italic;
+      margin-bottom: 8px;
+    }
+
+    .recipe-body h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #3d5a3e;
+      margin: 16px 0 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .recipe-body h3:first-child {
+      margin-top: 4px;
+    }
+
+    .ingredients {
+      list-style: none;
+      padding: 0;
+    }
+
+    .ingredients li {
+      padding: 6px 0;
+      border-bottom: 1px solid #f5f2ee;
+      font-size: 0.95rem;
+    }
+
+    .ingredients li:last-child {
+      border-bottom: none;
+    }
+
+    .steps {
+      padding-left: 24px;
+    }
+
+    .steps li {
+      padding: 8px 0;
+      font-size: 0.95rem;
+    }
+
+    .notes, .serving, .storage {
+      margin-top: 14px;
+      padding: 12px 14px;
+      background: #f9f6f1;
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+
+    /* Add recipe view */
+    #add-view {
+      display: none;
+    }
+
+    #add-view.active {
+      display: block;
+    }
+
+    #recipes-view.hidden {
+      display: none;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 6px;
+      color: #3d5a3e;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid #e0dbd4;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      background: white;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: #3d5a3e;
+    }
+
+    .form-group textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .form-group .hint {
+      font-size: 0.8rem;
+      color: #999;
+      margin-top: 4px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #3d5a3e;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.2s;
+    }
+
+    .btn:active {
+      background: #2e4530;
+    }
+
+    #output-area {
+      display: none;
+      margin-top: 20px;
+    }
+
+    #output-area.visible {
+      display: block;
+    }
+
+    #output-area pre {
+      background: #2d2d2d;
+      color: #f0f0f0;
+      padding: 16px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .copy-btn {
+      margin-top: 8px;
+      padding: 10px;
+      background: #5a7d5c;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .copy-btn.copied {
+      background: #2e4530;
+    }
+
+    .instructions {
+      background: #f0ebe4;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Our Recipe Book</h1>
+    <p>{{RECIPE_COUNT}} recipes</p>
+  </header>
+
+  <div class="container">
+    <div class="tabs">
+      <div class="tab active" onclick="showView('recipes')">Recipes</div>
+      <div class="tab" onclick="showView('add')">+ Add New</div>
+    </div>
+
+    <!-- Recipes View -->
+    <div id="recipes-view">
+      <div class="search-bar">
+        <input type="text" id="search" placeholder="Search recipes..." oninput="filterRecipes()">
+      </div>
+      {{RECIPE_CARDS}}
+    </div>
+
+    <!-- Add Recipe View -->
+    <div id="add-view">
+      <div class="instructions">
+        Fill out the form below. Hit <strong>Generate</strong> to create a recipe file.
+        Save it as a <code>.json</code> file in the <code>recipes/</code> folder and rebuild the site.
+      </div>
+
+      <div class="form-group">
+        <label>Dish Name</label>
+        <input type="text" id="add-dish" placeholder="e.g. Mom's Chicken Soup">
+      </div>
+
+      <div class="form-group">
+        <label>Source (optional)</label>
+        <input type="text" id="add-source" placeholder="e.g. Original / Family recipe">
+      </div>
+
+      <div class="form-group">
+        <label>Yield (optional)</label>
+        <input type="text" id="add-yield" placeholder="e.g. Serves 4, About 2 cups">
+      </div>
+
+      <div class="form-group">
+        <label>Notes (optional)</label>
+        <input type="text" id="add-notes" placeholder="e.g. Great for weeknights">
+      </div>
+
+      <div class="form-group">
+        <label>Ingredients</label>
+        <textarea id="add-ingredients" placeholder="One ingredient per line, e.g.&#10;1 lb chicken thighs&#10;2 tbsp olive oil&#10;1 tsp salt"></textarea>
+        <div class="hint">One ingredient per line</div>
+      </div>
+
+      <div class="form-group">
+        <label>Steps</label>
+        <textarea id="add-steps" placeholder="One step per line, e.g.&#10;Season the chicken with salt and pepper.&#10;Heat olive oil in a skillet over medium-high.&#10;Sear chicken 4 min per side."></textarea>
+        <div class="hint">One step per line</div>
+      </div>
+
+      <button class="btn" onclick="generateRecipe()">Generate Recipe File</button>
+
+      <div id="output-area">
+        <h3 style="margin: 16px 0 8px; font-size: 0.95rem;">Your recipe file:</h3>
+        <pre id="output-json"></pre>
+        <button class="copy-btn" onclick="copyOutput(this)">Copy to clipboard</button>
+        <div class="hint" style="margin-top: 8px;">Save this as a <code>.json</code> file in the <code>recipes/</code> folder, then run <code>python build.py</code> and push to GitHub.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleRecipe(header) {
+      header.closest('.recipe-card').classList.toggle('open');
+    }
+
+    function filterRecipes() {
+      const q = document.getElementById('search').value.toLowerCase();
+      document.querySelectorAll('.recipe-card').forEach(card => {
+        const text = card.textContent.toLowerCase();
+        card.style.display = text.includes(q) ? '' : 'none';
+      });
+    }
+
+    function showView(view) {
+      const tabs = document.querySelectorAll('.tab');
+      tabs[0].classList.toggle('active', view === 'recipes');
+      tabs[1].classList.toggle('active', view === 'add');
+      document.getElementById('recipes-view').classList.toggle('hidden', view !== 'recipes');
+      document.getElementById('add-view').classList.toggle('active', view === 'add');
+    }
+
+    function generateRecipe() {
+      const dish = document.getElementById('add-dish').value.trim();
+      if (!dish) { alert('Please enter a dish name'); return; }
+
+      const ingredients = document.getElementById('add-ingredients').value
+        .split('\n').map(s => s.trim()).filter(Boolean);
+      const steps = document.getElementById('add-steps').value
+        .split('\n').map(s => s.trim()).filter(Boolean);
+
+      if (!ingredients.length) { alert('Please enter at least one ingredient'); return; }
+      if (!steps.length) { alert('Please enter at least one step'); return; }
+
+      const recipe = {
+        dish: dish,
+        source: document.getElementById('add-source').value.trim() || null,
+        date_added: new Date().toISOString().split('T')[0],
+        notes: document.getElementById('add-notes').value.trim() || null,
+        recipe: {
+          yield: document.getElementById('add-yield').value.trim() || null,
+          ingredients: ingredients,
+          steps: steps
+        }
+      };
+
+      const json = JSON.stringify(recipe, null, 2);
+      document.getElementById('output-json').textContent = json;
+      document.getElementById('output-area').classList.add('visible');
+    }
+
+    function copyOutput(btn) {
+      const text = document.getElementById('output-json').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy to clipboard';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+{
+  "dish": "Classic Genovese Basil Pesto",
+  "source": "Adapted from Serious Eats / J. Kenji López-Alt",
+  "date_added": "2026-03-28",
+  "notes": "Might benefit from a squeeze of lemon juice — try it next time.",
+  "recipe": {
+    "yield": "About 1 cup (enough for 1 lb pasta)",
+    "ingredients": [
+      "3 packed cups fresh basil leaves (~3 oz / 85g)",
+      "1/3 cup pine nuts",
+      "2 medium cloves garlic, peeled",
+      "1/2 cup extra-virgin olive oil",
+      "1/2 cup finely grated Parmigiano-Reggiano",
+      "1/4 cup finely grated Pecorino Romano",
+      "1/2 tsp kosher salt, plus more to taste",
+      "Pinch of black pepper"
+    ],
+    "steps": [
+      "Toast pine nuts in a dry skillet over medium-low heat, stirring frequently, 3-4 minutes until golden and fragrant. Transfer to a plate to cool.",
+      "(Optional) Blanch basil in boiling water for 10 seconds, then transfer to ice water. Squeeze dry in a clean towel. This locks in vivid green color.",
+      "Add garlic and cooled pine nuts to the food processor. Pulse 8-10 times until coarsely chopped.",
+      "Add basil leaves and 1/2 tsp salt. Pulse 10-15 times until broken down but still slightly textured — don't purée.",
+      "With the motor running continuously, pour olive oil in a slow, steady stream through the feed tube. Process just until combined, about 15 seconds.",
+      "Transfer to a bowl. Fold in the parmigiano and pecorino by hand with a spatula. (Processing the cheese in the machine can make it gummy from the heat.)",
+      "Taste and adjust salt."
+    ],
+    "serving": "Cook 1 lb pasta (trofie, linguine, or gemelli are traditional). Reserve 1 cup pasta water before draining. Toss pasta with pesto, loosening with pasta water a few tablespoons at a time. Never heat the pesto directly in a pan — the basil will turn dark and bitter.",
+    "storage": "Fridge: press plastic wrap onto the surface, drizzle olive oil on top, keeps 4-5 days. Freezer: spoon into ice cube trays, freeze solid, transfer to a bag — keeps 3+ months."
+  }
+}
