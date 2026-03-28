@@ -6,30 +6,48 @@
   <title>Our Recipe Book</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --cream: #f5f0e8;
+      /* Spring Cookbook Palette */
+      --cream: #f0ebe0;
       --warm-white: #faf7f2;
-      --parchment: #ede7db;
-      --linen: #e6dfd3;
-      --charcoal: #2c2c2c;
-      --ink: #1a1a1a;
-      --tobacco: #5c4033;
-      --bourbon: #8b6914;
-      --sage: #6b7c5e;
-      --sage-dark: #4a5a3e;
-      --rust: #a0522d;
-      --muted-gold: #b8960c;
-      --warm-gray: #8c8279;
-      --light-rule: #d4cdc0;
+      --parchment: #f0ebe0;
+      --linen: #e0d8c8;
+      --charcoal: #5a4e38;
+      --ink: #2d2416;
+      --tobacco: #5a4e38;
+      --bourbon: #5a7a3a;
+      --sage: #8aaa62;
+      --sage-dark: #5a7a3a;
+      --rust: #e88050;
+      --muted-gold: #e8c840;
+      --warm-gray: #8a7a5a;
+      --light-rule: #e0d8c8;
+
+      /* Extended palette */
+      --peony: #d4789a;
+      --tulip: #e88050;
+      --lavender: #9a8ab8;
+      --stem: #5a7a3a;
+      --leaf: #8aaa62;
+      --pollen: #e8c840;
+    }
+
+    @keyframes card-enter {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--cream);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--warm-white);
       color: var(--charcoal);
       line-height: 1.6;
       padding: 0 0 80px 0;
@@ -39,32 +57,33 @@
     /* --- Header --- */
     header {
       background: var(--ink);
-      color: var(--cream);
+      color: #d8cdb8;
       padding: 40px 20px 36px;
       text-align: center;
-      border-bottom: 3px solid var(--bourbon);
+      border-bottom: 3px solid var(--stem);
     }
 
     header .rule {
       width: 60px;
       height: 1px;
-      background: var(--bourbon);
+      background: var(--stem);
       margin: 0 auto 14px;
     }
 
     header h1 {
-      font-family: 'Playfair Display', Georgia, serif;
+      font-family: 'Lora', Georgia, serif;
       font-size: 2rem;
-      font-weight: 700;
+      font-weight: 400;
       letter-spacing: 0.02em;
       margin-bottom: 6px;
+      color: #faf7f2;
     }
 
     header p {
       font-size: 0.8rem;
       text-transform: uppercase;
       letter-spacing: 0.15em;
-      color: var(--warm-gray);
+      color: var(--leaf);
     }
 
     .container { max-width: 640px; margin: 0 auto; padding: 20px 16px; }
@@ -89,7 +108,7 @@
 
     .tab.active {
       color: var(--ink);
-      border-bottom-color: var(--bourbon);
+      border-bottom-color: var(--stem);
     }
 
     /* --- Search --- */
@@ -115,8 +134,8 @@
     .filter-section { margin-bottom: 14px; }
 
     .filter-label {
-      font-size: 0.65rem; font-weight: 600;
-      text-transform: uppercase; letter-spacing: 0.12em;
+      font-size: 10px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.18em;
       color: var(--warm-gray); margin-bottom: 8px;
     }
 
@@ -137,9 +156,9 @@
     }
 
     .filter-btn.active {
-      background: var(--ink);
-      color: var(--cream);
-      border-color: var(--ink);
+      background: var(--stem);
+      color: #faf7f2;
+      border-color: var(--stem);
     }
 
     .filter-btn:active { transform: scale(0.97); }
@@ -153,15 +172,24 @@
 
     /* --- Recipe cards --- */
     .recipe-card {
-      background: var(--warm-white);
-      border: 1px solid var(--linen);
+      background: var(--cream);
+      border: 0.5px solid var(--linen);
+      border-radius: var(--radius-sm, 4px);
       margin-bottom: 10px;
       overflow: hidden;
-      transition: box-shadow 0.2s;
+      transition: transform 150ms ease-out;
+      animation: card-enter 400ms ease-out both;
     }
 
+    .recipe-card:nth-child(1) { animation-delay: 0ms; }
+    .recipe-card:nth-child(2) { animation-delay: 60ms; }
+    .recipe-card:nth-child(3) { animation-delay: 120ms; }
+    .recipe-card:nth-child(4) { animation-delay: 180ms; }
+    .recipe-card:nth-child(5) { animation-delay: 240ms; }
+    .recipe-card:nth-child(6) { animation-delay: 300ms; }
+
     .recipe-card.open {
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      transform: translateY(-2px);
     }
 
     .recipe-header {
@@ -173,7 +201,7 @@
     }
 
     .recipe-header h2 {
-      font-family: 'Playfair Display', Georgia, serif;
+      font-family: 'Lora', Georgia, serif;
       font-size: 1.15rem; font-weight: 600;
       flex: 1; color: var(--ink);
     }
@@ -199,8 +227,9 @@
 
     .difficulty-time {
       display: inline-block;
-      font-size: 0.78rem;
-      color: var(--tobacco);
+      font-family: system-ui, sans-serif;
+      font-size: 12px;
+      color: var(--stem);
       font-weight: 500;
       margin-bottom: 4px;
     }
@@ -224,20 +253,21 @@
     .why-this-works {
       margin: 16px 0;
       padding: 14px 16px;
-      background: var(--parchment);
-      border-left: 3px solid var(--sage-dark);
+      background: var(--warm-white);
+      border-left: 3px solid var(--stem);
+      font-family: 'Lora', Georgia, serif;
       font-size: 0.88rem;
-      line-height: 1.6;
+      line-height: 1.75;
       color: var(--charcoal);
     }
 
     .why-this-works strong {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-weight: 600;
+      font-family: system-ui, sans-serif;
+      font-weight: 500;
       text-transform: uppercase;
-      font-size: 0.75rem;
-      letter-spacing: 0.06em;
-      color: var(--sage-dark);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      color: var(--stem);
       display: block;
       margin-bottom: 6px;
     }
@@ -280,7 +310,7 @@
     }
 
     .family-notes strong {
-      font-family: 'Playfair Display', Georgia, serif;
+      font-family: 'Lora', Georgia, serif;
       font-weight: 600;
       text-transform: uppercase;
       font-size: 0.75rem;
@@ -293,25 +323,24 @@
 
     .tag-pill {
       display: inline-block;
-      background: none;
-      color: var(--sage-dark);
-      padding: 1px 0;
-      font-size: 0.7rem;
+      background: #eef5e6;
+      color: #3a5a22;
+      padding: 3px 10px;
+      border-radius: 3px;
+      font-size: 10px;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.12em;
       font-weight: 500;
+      font-family: system-ui, sans-serif;
     }
 
-    .tag-pill::after { content: ' \00b7'; color: var(--light-rule); }
-    .tag-pill:last-child::after { content: ''; }
-
     .recipe-body h3 {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 0.85rem; font-weight: 600;
-      color: var(--tobacco);
+      font-family: system-ui, sans-serif;
+      font-size: 11px; font-weight: 500;
+      color: var(--stem);
       margin: 20px 0 10px;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.18em;
     }
 
     .recipe-body h3:first-child { margin-top: 16px; }
@@ -337,8 +366,8 @@
     .scale-btn + .scale-btn { border-left: none; }
 
     .scale-btn.active {
-      background: var(--ink); color: var(--cream);
-      border-color: var(--ink);
+      background: var(--stem); color: #faf7f2;
+      border-color: var(--stem);
     }
 
     .ingredients { list-style: none; padding: 0; }
@@ -360,7 +389,9 @@
 
     .steps li {
       padding: 8px 0;
+      font-family: 'Lora', Georgia, serif;
       font-size: 0.9rem;
+      line-height: 1.75;
       color: var(--charcoal);
       counter-increment: step;
       position: relative;
@@ -370,26 +401,26 @@
       content: counter(step);
       position: absolute;
       left: -22px;
-      font-family: 'Playfair Display', Georgia, serif;
+      font-family: 'Lora', Georgia, serif;
       font-weight: 600;
       font-size: 0.85rem;
-      color: var(--bourbon);
+      color: var(--stem);
     }
 
     .notes, .serving, .storage {
       margin-top: 16px; padding: 14px 16px;
-      background: var(--parchment);
+      background: var(--warm-white);
       font-size: 0.85rem;
-      border-left: 3px solid var(--bourbon);
+      border-left: 3px solid var(--leaf);
     }
 
     .notes strong, .serving strong, .storage strong {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-weight: 600;
+      font-family: system-ui, sans-serif;
+      font-weight: 500;
       text-transform: uppercase;
-      font-size: 0.75rem;
-      letter-spacing: 0.06em;
-      color: var(--tobacco);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      color: var(--stem);
     }
 
     /* --- Add Recipe View --- */
@@ -402,11 +433,11 @@
 
     .form-group label {
       display: block;
-      font-size: 0.7rem; font-weight: 600;
+      font-size: 10px; font-weight: 500;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.18em;
       margin-bottom: 6px;
-      color: var(--tobacco);
+      color: var(--stem);
     }
 
     .form-group input, .form-group textarea {
@@ -445,9 +476,9 @@
 
     .custom-tag-row button {
       padding: 8px 18px;
-      background: var(--tobacco);
-      color: var(--cream);
-      border: none; border-radius: 3px;
+      background: var(--leaf);
+      color: #faf7f2;
+      border: none; border-radius: 4px;
       font-size: 0.8rem; font-family: inherit;
       cursor: pointer; white-space: nowrap;
       text-transform: uppercase;
@@ -457,18 +488,18 @@
     .btn {
       display: block; width: 100%;
       padding: 14px 24px;
-      background: var(--ink);
-      color: var(--cream);
-      border: none; border-radius: 3px;
+      background: var(--stem);
+      color: #faf7f2;
+      border: none; border-radius: 4px;
       font-size: 0.85rem; font-weight: 600;
       font-family: inherit;
       text-transform: uppercase;
       letter-spacing: 0.12em;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: transform 150ms ease-out;
     }
 
-    .btn:active { background: var(--tobacco); }
+    .btn:active { transform: translateY(-2px); }
     .btn:disabled { background: var(--warm-gray); cursor: not-allowed; }
 
     .status-msg {
@@ -478,24 +509,25 @@
 
     .status-msg.success {
       display: block;
-      background: #e8f0e8; color: #2e5a30;
-      border-left: 3px solid var(--sage-dark);
+      background: #eef5e6; color: #3a5a22;
+      border-left: 3px solid var(--stem);
     }
 
     .status-msg.error {
       display: block;
-      background: #f5ebe8; color: #8b3a2a;
-      border-left: 3px solid var(--rust);
+      background: #fef3ee; color: #8a3818;
+      border-left: 3px solid var(--tulip);
     }
 
     .instructions {
-      background: var(--parchment);
+      background: var(--cream);
       padding: 16px;
       font-size: 0.82rem;
       margin-bottom: 24px;
       line-height: 1.6;
-      border-left: 3px solid var(--bourbon);
-      color: var(--tobacco);
+      border-left: 3px solid var(--stem);
+      border-radius: 4px;
+      color: var(--charcoal);
     }
 
     .instructions strong {
@@ -526,19 +558,19 @@
 
     .chat-msg.assistant {
       align-self: flex-start;
-      background: var(--warm-white);
-      border: 1px solid var(--linen);
-      border-left: 3px solid var(--bourbon);
+      background: var(--cream);
+      border: 0.5px solid var(--linen);
+      border-left: 3px solid var(--stem);
     }
 
     .chat-msg.user {
       align-self: flex-end;
       background: var(--ink);
-      color: var(--cream);
+      color: #d8cdb8;
     }
 
-    .chat-msg strong { color: var(--tobacco); }
-    .chat-msg.user strong { color: var(--parchment); }
+    .chat-msg strong { color: var(--ink); }
+    .chat-msg.user strong { color: #faf7f2; }
 
     .chat-msg p { margin: 6px 0; }
     .chat-msg p:first-child { margin-top: 0; }
@@ -564,7 +596,7 @@
 
     .chat-action-btn:active { background: var(--parchment); }
     .chat-action-btn.saving { color: var(--warm-gray); cursor: not-allowed; }
-    .chat-action-btn.saved { background: var(--sage-dark); color: var(--cream); border-color: var(--sage-dark); }
+    .chat-action-btn.saved { background: var(--stem); color: #faf7f2; border-color: var(--stem); }
 
     .chat-input-row {
       display: flex; gap: 8px;
@@ -586,7 +618,7 @@
 
     .chat-input-row button {
       padding: 12px 20px;
-      background: var(--ink); color: var(--cream);
+      background: var(--stem); color: #faf7f2;
       border: none; border-radius: 4px;
       font-size: 0.8rem; font-family: inherit;
       font-weight: 600; text-transform: uppercase;
@@ -606,18 +638,19 @@
 
     /* --- Import Recipe --- */
     .import-section {
-      background: var(--parchment);
+      background: var(--cream);
       padding: 20px;
       margin-bottom: 24px;
-      border-left: 3px solid var(--bourbon);
+      border-left: 3px solid var(--stem);
+      border-radius: 4px;
     }
 
     .import-section h3 {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 0.85rem; font-weight: 600;
-      color: var(--tobacco);
+      font-family: system-ui, sans-serif;
+      font-size: 11px; font-weight: 500;
+      color: var(--stem);
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.18em;
       margin-bottom: 12px;
     }
 
@@ -639,8 +672,8 @@
     .import-tab + .import-tab { border-left: none; }
 
     .import-tab.active {
-      background: var(--ink); color: var(--cream);
-      border-color: var(--ink);
+      background: var(--stem); color: #faf7f2;
+      border-color: var(--stem);
     }
 
     .import-pane { display: none; }
@@ -688,8 +721,8 @@
     .import-btn {
       margin-top: 12px;
       padding: 10px 20px;
-      background: var(--tobacco); color: var(--cream);
-      border: none; border-radius: 3px;
+      background: var(--stem); color: #faf7f2;
+      border: none; border-radius: 4px;
       font-size: 0.8rem; font-family: inherit;
       font-weight: 600; text-transform: uppercase;
       letter-spacing: 0.08em;
@@ -1941,7 +1974,7 @@ Use **markdown** for formatting. Be generous with detail but not verbose — eve
 
     function formatChat(text) {
       return text
-        .replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener" style="color:var(--bourbon);text-decoration:underline;">$1</a>')
+        .replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener" style="color:var(--stem);text-decoration:underline;">$1</a>')
         .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
         .replace(/\*(.+?)\*/g, '<em>$1</em>')
         .replace(/\n\n/g, '</p><p>')
