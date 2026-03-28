@@ -1,0 +1,35 @@
+{
+  "dish": "Taco Meat with Corn Tortillas",
+  "source": null,
+  "date_added": "2026-03-28",
+  "tags": {
+    "meal": ["dinner"],
+    "cuisine": ["mexican"]
+  },
+  "notes": "Use 70-80% lean ground beef for best flavor. Mexican oregano is key — it's different from Italian oregano.",
+  "recipe": {
+    "yield": "Serves 4 (8 tacos)",
+    "ingredients": [
+      "1 lb ground beef (70-80% lean)",
+      "1 tbsp chili powder",
+      "1/2 tsp salt",
+      "3/4 tsp cumin",
+      "1/2 tsp dried Mexican oregano",
+      "1/4 tsp granulated garlic",
+      "1/4 tsp granulated onion",
+      "1/2 cup tomato sauce",
+      "8 white corn tortillas",
+      "1/2 cup avocado or vegetable oil"
+    ],
+    "steps": [
+      "Heat a large skillet over medium heat. Add the ground beef, breaking it up with a wooden spoon. Cook fully until browned and no longer pink.",
+      "Drain any excess grease from the skillet. Return to stove and reduce heat to low.",
+      "Add the tomato sauce, chili powder, salt, cumin, oregano, granulated garlic, and granulated onion. Stir until the meat is coated in the sauce.",
+      "Simmer for 5 minutes.",
+      "Pour 1/2 cup oil in a medium skillet and heat over medium-high. Test by dipping a tortilla edge — if it sizzles and bubbles, it's ready.",
+      "Gently lay a tortilla in the oil and fry each side for about 30 seconds, just enough to add color and crispness.",
+      "Remove to a paper towel and carefully fold the tortilla over into a taco shape using tongs or two forks. Repeat with remaining tortillas.",
+      "Fill tortillas with taco meat and add desired toppings."
+    ]
+  }
+}
