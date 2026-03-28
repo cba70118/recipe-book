@@ -1,0 +1,81 @@
+{
+  "dish": "Jambalaya",
+  "date_added": "2026-03-28",
+  "why_this_works": "This jambalaya succeeds through the building of layers of flavor, starting with browning the sausage to create fond, then sautéing the aromatic vegetables to build a flavor base. The one-pot rice technique allows the grains to absorb all the seasoned liquid and rendered fats, while the final low simmer ensures the rice cooks evenly without burning.",
+  "difficulty": "Easy",
+  "time": {
+    "prep": "30",
+    "cook": "45",
+    "total": "75"
+  },
+  "family_notes": null,
+  "you_might_also_like": [
+    {
+      "dish": "Red Beans and Rice",
+      "url": "https://www.seriouseats.com/search?q=red+beans+and+rice"
+    },
+    {
+      "dish": "Chicken and Sausage Gumbo",
+      "url": "https://cooking.nytimes.com/search?q=chicken+sausage+gumbo"
+    },
+    {
+      "dish": "Spanish Paella",
+      "url": "https://www.bonappetit.com/search?q=spanish+paella"
+    }
+  ],
+  "tags": {
+    "meal": [
+      "dinner"
+    ],
+    "cuisine": [
+      "cajun",
+      "southern"
+    ],
+    "protein": [
+      "pork",
+      "chicken"
+    ],
+    "style": [
+      "batch-cooking",
+      "one-pan",
+      "weeknight"
+    ],
+    "occasion": [],
+    "tool": [
+      "dutch-oven"
+    ]
+  },
+  "notes": "Use Tony Chachere's seasoning specifically - no substitutes according to recipe",
+  "recipe": {
+    "ingredients": [
+      "1 lb boneless skinless chicken breast, cubed",
+      "1 (14 oz) package andouille sausage, sliced",
+      "1 green bell pepper, diced",
+      "1 yellow onion, chopped",
+      "3 large celery ribs, chopped",
+      "3 garlic cloves, minced",
+      "1 bunch scallions, chopped",
+      "1 (28 oz) can diced tomatoes, with juices",
+      "2 cups chicken broth",
+      "1¼ cups long grain rice",
+      "1 tbsp Worcestershire sauce",
+      "2 bay leaves",
+      "1 tsp dried basil",
+      "1 tsp dried oregano",
+      "1 tsp dried sage",
+      "1 tsp paprika",
+      "1 tbsp Tony Chachere's seasoning",
+      "1 tsp salt",
+      "Cracked black pepper to taste"
+    ],
+    "steps": [
+      "Cook sliced sausage over medium-high heat in a 6-quart stock pot until slightly browned, about 5 minutes.",
+      "Add bell pepper, onion, celery, garlic and scallions. Cook until softened but not translucent, about 4 minutes.",
+      "Add cubed chicken breast and Worcestershire sauce. Cook just until chicken is no longer pink.",
+      "Add bay leaves, basil, oregano, sage, paprika, Tony Chachere's, salt, black pepper, tomatoes and chicken broth.",
+      "Bring to a boil over medium-high heat.",
+      "Add rice and bring back to a boil. Boil for 1 minute.",
+      "Cover, reduce heat to low, and simmer for at least 30 minutes. The jambalaya should be wet but not soupy."
+    ]
+  }
+}
