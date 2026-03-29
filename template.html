@@ -957,6 +957,30 @@
     </div>
   </div>
 
+  <script>
+    const AUTH_KEY = 'recipe_book_auth';
+    function checkAuth() {
+      const input = document.getElementById('auth-input');
+      if (input.value === 'yumma') {
+        localStorage.setItem(AUTH_KEY, 'true');
+        unlockApp();
+      } else {
+        document.getElementById('auth-error').textContent = 'Wrong password';
+        input.value = '';
+        input.focus();
+      }
+    }
+    function unlockApp() {
+      document.getElementById('auth-gate').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+    }
+    if (localStorage.getItem(AUTH_KEY) === 'true') {
+      unlockApp();
+    } else {
+      setTimeout(() => document.getElementById('auth-input').focus(), 100);
+    }
+  </script>
+
   <div id="app" style="display:none;">
   <header>
     <div class="rule"></div>
@@ -2217,32 +2241,5 @@ Use **markdown** for formatting. Be generous with detail but not verbose — eve
     }
   </script>
   </div><!-- end #app -->
-
-  <script>
-    // --- Auth ---
-    const AUTH_HASH = '5f4dcc3b5aa765d61d8327deb882cf99'; // not used, simple compare
-    const AUTH_KEY = 'recipe_book_auth';
-
-    function checkAuth() {
-      const input = document.getElementById('auth-input');
-      if (input.value === 'yumma') {
-        localStorage.setItem(AUTH_KEY, 'true');
-        document.getElementById('auth-gate').style.display = 'none';
-        document.getElementById('app').style.display = 'block';
-      } else {
-        document.getElementById('auth-error').textContent = 'Wrong password';
-        input.value = '';
-        input.focus();
-      }
-    }
-
-    // Auto-unlock if previously authenticated
-    if (localStorage.getItem(AUTH_KEY) === 'true') {
-      document.getElementById('auth-gate').style.display = 'none';
-      document.getElementById('app').style.display = 'block';
-    } else {
-      setTimeout(() => document.getElementById('auth-input').focus(), 100);
-    }
-  </script>
 </body>
 </html>
