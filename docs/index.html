@@ -1011,11 +1011,6 @@
       document.getElementById('auth-gate').style.display = 'none';
       document.getElementById('app').style.display = 'block';
     }
-    if (localStorage.getItem(AUTH_KEY) === 'true') {
-      unlockApp();
-    } else {
-      setTimeout(() => document.getElementById('auth-input').focus(), 100);
-    }
   </script>
 
   <div id="app" style="display:none;">
@@ -2851,5 +2846,14 @@ Use **markdown** for formatting. Be generous with detail but not verbose — eve
     }
   </script>
   </div><!-- end #app -->
+
+  <script>
+    // Auto-unlock — runs after #app exists in DOM
+    if (localStorage.getItem(AUTH_KEY) === 'true') {
+      unlockApp();
+    } else {
+      setTimeout(() => document.getElementById('auth-input').focus(), 100);
+    }
+  </script>
 </body>
 </html>
