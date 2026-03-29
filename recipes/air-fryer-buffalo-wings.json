@@ -1,0 +1,52 @@
+{
+  "dish": "Air Fryer Buffalo Wings",
+  "date_added": "2026-03-29",
+  "tags": {
+    "who": [
+      "cory"
+    ],
+    "meal": [
+      "dinner",
+      "snack"
+    ],
+    "cuisine": [
+      "american"
+    ],
+    "protein": [
+      "chicken"
+    ],
+    "style": [
+      "weeknight",
+      "easy"
+    ],
+    "occasion": [
+      "family-dinner",
+      "game-day"
+    ],
+    "tool": [
+      "air-fryer"
+    ]
+  },
+  "notes": "Pat wings completely dry before seasoning. No salt with the baking powder initially - salt draws out moisture. Toss wings with buffalo sauce immediately while screaming hot so it partially cooks onto the skin.",
+  "recipe": {
+    "yield": "Serves 2-4",
+    "ingredients": [
+      "2 lbs chicken wings",
+      "1 tsp baking powder",
+      "1/4 cup Crystal Hot Sauce",
+      "4 tbsp butter",
+      "Salt and pepper to taste"
+    ],
+    "steps": [
+      "Pat wings completely dry with paper towels.",
+      "Season wings with baking powder (no salt yet) and let sit to draw out moisture.",
+      "Preheat air fryer to 380°F.",
+      "Cook wings for 25-30 minutes, flipping once halfway through.",
+      "While wings cook, melt butter and mix with Crystal Hot Sauce.",
+      "Immediately toss screaming hot wings with buffalo sauce so it partially cooks onto the skin.",
+      "Season with salt and pepper to taste."
+    ],
+    "serving": "Serve immediately while hot and crispy",
+    "storage": "Best eaten fresh, but leftovers can be reheated in air fryer for 2-3 minutes"
+  }
+}
