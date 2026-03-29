@@ -34,6 +34,75 @@
       --pollen: #e8c840;
     }
 
+    /* --- Auth Gate --- */
+    #auth-gate {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: var(--ink);
+    }
+
+    .auth-box {
+      text-align: center;
+      padding: 40px 32px;
+      max-width: 340px;
+      width: 100%;
+    }
+
+    .auth-title {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 1.8rem;
+      font-weight: 400;
+      color: #faf7f2;
+      margin-bottom: 8px;
+    }
+
+    .auth-sub {
+      font-size: 0.82rem;
+      color: var(--warm-gray);
+      margin-bottom: 24px;
+      letter-spacing: 0.04em;
+    }
+
+    #auth-input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 4px;
+      background: rgba(255,255,255,0.06);
+      color: #faf7f2;
+      font-size: 1rem;
+      font-family: inherit;
+      text-align: center;
+      outline: none;
+      margin-bottom: 12px;
+    }
+
+    #auth-input::placeholder { color: rgba(255,255,255,0.3); }
+    #auth-input:focus { border-color: var(--stem); }
+
+    .auth-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--stem);
+      color: #faf7f2;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-family: inherit;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      cursor: pointer;
+    }
+
+    .auth-error {
+      margin-top: 12px;
+      font-size: 0.82rem;
+      color: var(--tulip);
+    }
+
     @keyframes card-enter {
       from { opacity: 0; transform: translateY(12px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -804,6 +873,18 @@
   </style>
 </head>
 <body>
+  <!-- Auth Gate -->
+  <div id="auth-gate">
+    <div class="auth-box">
+      <h1 class="auth-title">Our Recipe Book</h1>
+      <p class="auth-sub">Enter the password to continue</p>
+      <input type="password" id="auth-input" placeholder="Password" onkeydown="if(event.key==='Enter')checkAuth()">
+      <button class="auth-btn" onclick="checkAuth()">Enter</button>
+      <div class="auth-error" id="auth-error"></div>
+    </div>
+  </div>
+
+  <div id="app" style="display:none;">
   <header>
     <div class="rule"></div>
     <h1>Our Recipe Book</h1>
@@ -2019,6 +2100,34 @@ Use **markdown** for formatting. Be generous with detail but not verbose — eve
           li.textContent = formatQty(qty * multiplier) + ' ' + rest;
         }
       });
+    }
+  </script>
+  </div><!-- end #app -->
+
+  <script>
+    // --- Auth ---
+    const AUTH_HASH = '5f4dcc3b5aa765d61d8327deb882cf99'; // not used, simple compare
+    const AUTH_KEY = 'recipe_book_auth';
+
+    function checkAuth() {
+      const input = document.getElementById('auth-input');
+      if (input.value === 'yumma') {
+        localStorage.setItem(AUTH_KEY, 'true');
+        document.getElementById('auth-gate').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+      } else {
+        document.getElementById('auth-error').textContent = 'Wrong password';
+        input.value = '';
+        input.focus();
+      }
+    }
+
+    // Auto-unlock if previously authenticated
+    if (localStorage.getItem(AUTH_KEY) === 'true') {
+      document.getElementById('auth-gate').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+    } else {
+      setTimeout(() => document.getElementById('auth-input').focus(), 100);
     }
   </script>
 </body>
