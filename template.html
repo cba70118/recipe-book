@@ -830,8 +830,8 @@
         <div class="import-pane" id="import-url">
           <input type="text" id="import-url-input" placeholder="Paste a recipe URL, YouTube link, TikTok, etc..." oninput="checkVideoUrl()">
           <div id="video-help" style="display:none; margin-top: 10px;">
-            <div class="hint" style="margin-bottom: 6px; color: var(--stem); font-style: normal; font-weight: 500;">Video detected — describe what you see in the video so the recipe can be parsed:</div>
-            <textarea id="import-video-desc" placeholder="e.g. She browns the sausage first, then adds onions and garlic. Uses 1 lb Italian sausage, 1 can crushed tomatoes, basil, served over pasta..." style="width:100%; padding:12px 14px; border:1px solid var(--linen); border-radius:4px; font-size:0.9rem; font-family:inherit; background:var(--warm-white); color:var(--charcoal); outline:none; min-height:100px; resize:vertical;"></textarea>
+            <div class="hint" style="margin-bottom: 6px; color: var(--stem); font-style: normal; font-weight: 500;" id="video-help-label">Video detected — we'll try to pull the transcript automatically.</div>
+            <textarea id="import-video-desc" placeholder="(Optional) Add any extra details you noticed — ingredients, quantities, techniques..." style="width:100%; padding:12px 14px; border:1px solid var(--linen); border-radius:4px; font-size:0.9rem; font-family:inherit; background:var(--warm-white); color:var(--charcoal); outline:none; min-height:80px; resize:vertical;"></textarea>
           </div>
         </div>
 
@@ -1442,6 +1442,63 @@ For you_might_also_like, suggest 3 real dishes from the culinary world that are 
       const url = document.getElementById('import-url-input').value.trim().toLowerCase();
       const isVideo = /youtube\.com|youtu\.be|tiktok\.com|instagram\.com\/reel|vimeo\.com|facebook\.com\/.*\/videos/.test(url);
       document.getElementById('video-help').style.display = isVideo ? 'block' : 'none';
+      const isYoutube = /youtube\.com|youtu\.be/.test(url);
+      const label = document.getElementById('video-help-label');
+      if (isYoutube) {
+        label.textContent = 'YouTube detected — we\'ll pull the transcript automatically.';
+      } else if (isVideo) {
+        label.textContent = 'Video detected — we\'ll grab what metadata we can. Add details below if you have them.';
+      }
+    }
+
+    function extractYoutubeId(url) {
+      const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/);
+      return m ? m[1] : null;
+    }
+
+    async function fetchYoutubeTranscript(videoId) {
+      try {
+        // Fetch the YouTube page via a CORS proxy to extract caption data
+        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://www.youtube.com/watch?v=${videoId}`)}`;
+        const resp = await fetch(proxyUrl);
+        if (!resp.ok) return null;
+        const html = await resp.text();
+
+        // Extract captions URL from the page data
+        const captionMatch = html.match(/"captionTracks":\[.*?"baseUrl":"(.*?)"/);
+        if (!captionMatch) return null;
+
+        let captionUrl = captionMatch[1].replace(/\\u0026/g, '&');
+        // Fetch the caption XML
+        const capResp = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(captionUrl)}`);
+        if (!capResp.ok) return null;
+        const capXml = await capResp.text();
+
+        // Parse caption text from XML
+        const texts = [...capXml.matchAll(/<text[^>]*>(.*?)<\/text>/gs)]
+          .map(m => m[1].replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#39;/g, "'").replace(/&quot;/g, '"').replace(/\n/g, ' '))
+          .join(' ');
+
+        return texts || null;
+      } catch (e) {
+        console.log('Transcript fetch failed:', e.message);
+        return null;
+      }
+    }
+
+    async function fetchVideoMetadata(url) {
+      try {
+        const resp = await fetch(`https://noembed.com/embed?url=${encodeURIComponent(url)}`);
+        if (!resp.ok) return null;
+        const data = await resp.json();
+        return {
+          title: data.title || '',
+          author: data.author_name || '',
+          provider: data.provider_name || ''
+        };
+      } catch (e) {
+        return null;
+      }
     }
 
     function previewImage(input) {
@@ -1516,12 +1573,42 @@ Clean up the ingredients and steps to be clear and concise. Standardize measurem
           if (!url) { throw new Error('Please paste a URL first.'); }
           const videoDesc = document.getElementById('import-video-desc')?.value.trim() || '';
           const isVideo = /youtube\.com|youtu\.be|tiktok\.com|instagram\.com\/reel|vimeo\.com|facebook\.com\/.*\/videos/i.test(url);
+          const isYoutube = /youtube\.com|youtu\.be/i.test(url);
 
           let urlPrompt;
-          if (isVideo && videoDesc) {
-            urlPrompt = `Here is a recipe from a video (${url}).\n\nThe user described what they saw:\n${videoDesc}\n\nBased on this description, extract and structure the recipe.\n\n${IMPORT_PROMPT}`;
-          } else if (isVideo && !videoDesc) {
-            throw new Error('This looks like a video link — please describe the recipe you see in the video so it can be parsed.');
+          if (isVideo) {
+            status.textContent = 'Fetching video data...';
+            let videoContext = '';
+
+            // Try to get metadata for any video
+            const meta = await fetchVideoMetadata(url);
+            if (meta) {
+              videoContext += `Video title: "${meta.title}" by ${meta.author} (${meta.provider})\n\n`;
+            }
+
+            // For YouTube, try to get transcript
+            if (isYoutube) {
+              const videoId = extractYoutubeId(url);
+              if (videoId) {
+                status.textContent = 'Pulling YouTube transcript...';
+                const transcript = await fetchYoutubeTranscript(videoId);
+                if (transcript) {
+                  videoContext += `Video transcript:\n${transcript}\n\n`;
+                } else {
+                  videoContext += 'Transcript not available for this video.\n\n';
+                }
+              }
+            }
+
+            if (videoDesc) {
+              videoContext += `User's notes on what they saw:\n${videoDesc}\n\n`;
+            }
+
+            if (!videoContext.includes('transcript') && !videoDesc) {
+              videoContext += 'No transcript or description available — use the video title and your culinary knowledge to construct a likely recipe.\n\n';
+            }
+
+            urlPrompt = `Here is a recipe from a video (${url}).\n\n${videoContext}Based on all available information, extract and structure the recipe.\n\n${IMPORT_PROMPT}`;
           } else {
             urlPrompt = `Here is a recipe URL: ${url}\n\nPlease fetch/interpret the recipe from this URL based on common recipe formats.\n\n${IMPORT_PROMPT}`;
           }
