@@ -1,0 +1,69 @@
+{
+  "dish": "Creamy Italian Sausage Bow Tie Pasta",
+  "date_added": "2026-03-29",
+  "why_this_works": "The rich pork fat from the Italian sausage creates a flavorful base that gets deglazed by the acidic tomatoes, while the heavy cream emulsifies with the rendered fat to form a silky sauce. The bow tie pasta's ridged surface and pockets perfectly capture the chunky sausage and creamy sauce, ensuring every bite delivers balanced flavor and texture.",
+  "difficulty": "Easy",
+  "time": {
+    "prep": "10 min",
+    "cook": "25 min",
+    "total": "35 min"
+  },
+  "family_notes": null,
+  "you_might_also_like": [
+    {
+      "dish": "Penne alla Vodka",
+      "url": "https://www.seriouseats.com/search?q=penne+alla+vodka"
+    },
+    {
+      "dish": "Rigatoni with Spicy Sausage and Tomato Cream Sauce",
+      "url": "https://cooking.nytimes.com/search?q=rigatoni+sausage+tomato+cream"
+    },
+    {
+      "dish": "Creamy Tuscan Chicken Pasta",
+      "url": "https://www.bonappetit.com/search?q=creamy+tuscan+chicken+pasta"
+    }
+  ],
+  "tags": {
+    "who": [],
+    "meal": [
+      "dinner"
+    ],
+    "cuisine": [
+      "italian"
+    ],
+    "protein": [
+      "pork"
+    ],
+    "style": [
+      "weeknight"
+    ],
+    "occasion": [
+      "family-dinner"
+    ],
+    "tool": [
+      "skillet"
+    ]
+  },
+  "recipe": {
+    "yield": "6 servings",
+    "ingredients": [
+      "1 (12 oz) package bow tie pasta",
+      "2 tbsp olive oil",
+      "1 lb sweet Italian sausage, casings removed and crumbled",
+      "1/2 tsp red pepper flakes",
+      "1/2 cup diced onion",
+      "3 cloves garlic, minced",
+      "1 (28 oz) can Italian-style plum tomatoes, drained and coarsely chopped",
+      "1 1/2 cups heavy cream",
+      "1/2 tsp salt",
+      "3 tbsp minced fresh parsley"
+    ],
+    "steps": [
+      "Bring a large pot of lightly salted water to a boil. Cook pasta until al dente, 8 to 10 minutes; drain.",
+      "Heat oil in a large, deep skillet over medium heat. Cook sausage and pepper flakes until sausage is evenly browned.",
+      "Stir in onion and garlic, and cook until onion is tender.",
+      "Stir in tomatoes, cream, and salt. Simmer until mixture thickens, 8 to 10 minutes.",
+      "Stir cooked pasta into sauce and heat through. Sprinkle with parsley and serve."
+    ]
+  }
+}
