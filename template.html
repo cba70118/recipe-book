@@ -1428,7 +1428,7 @@
 
     function editRecipe(slug) {
       const card = document.getElementById(slug);
-      const recipe = JSON.parse(card.dataset.recipe);
+      const recipe = JSON.parse(atob(card.dataset.recipeB64));
       editingSlug = slug;
 
       // Switch to Add view

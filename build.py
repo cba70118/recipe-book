@@ -98,12 +98,13 @@ def build_recipe_card(r, all_recipes=None):
     if r["recipe"].get("yield"):
         yield_html = f'<span class="yield">{escape(r["recipe"]["yield"])}</span>'
 
-    # Embed recipe JSON for edit functionality (strip internal _slug)
+    # Base64-encode recipe JSON to avoid HTML attribute escaping issues
+    import base64
     recipe_json = json.dumps({k: v for k, v in r.items() if k != '_slug'})
-    recipe_json_escaped = escape(recipe_json)
+    recipe_b64 = base64.b64encode(recipe_json.encode('utf-8')).decode('ascii')
 
     return f"""
-    <article class="recipe-card" id="{escape(r['_slug'])}" data-tags="{escape(data_tags)}" data-slug="{escape(r['_slug'])}" data-recipe="{recipe_json_escaped}">
+    <article class="recipe-card" id="{escape(r['_slug'])}" data-tags="{escape(data_tags)}" data-slug="{escape(r['_slug'])}" data-recipe-b64="{recipe_b64}">
       <div class="recipe-header" onclick="toggleRecipe(this)">
         <h2>{escape(r['dish'])}</h2>
         <div class="recipe-meta">
