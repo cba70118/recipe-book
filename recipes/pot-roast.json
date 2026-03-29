@@ -1,0 +1,77 @@
+{
+  "dish": "Pot Roast",
+  "date_added": "2026-03-29",
+  "why_this_works": "The initial searing creates a flavorful fond that becomes the base for the braising liquid, while the long, low-heat cooking breaks down the chuck roast's tough connective tissues into tender gelatin. The combination of tangy pepperoncini, umami-rich seasoning packets, and acidic tomato sauce creates a complex braising environment that penetrates the meat while the vegetables cook down into a rich, cohesive sauce.",
+  "difficulty": "Easy",
+  "time": {
+    "prep": "15 min",
+    "cook": "8 hours",
+    "total": "8 hours 15 min"
+  },
+  "family_notes": null,
+  "you_might_also_like": [
+    {
+      "dish": "Mississippi Pot Roast",
+      "url": "https://www.seriouseats.com/search?q=mississippi+pot+roast"
+    },
+    {
+      "dish": "Classic Beef Bourguignon",
+      "url": "https://cooking.nytimes.com/search?q=beef+bourguignon"
+    },
+    {
+      "dish": "Italian Braised Short Ribs",
+      "url": "https://www.bonappetit.com/search?q=braised+short+ribs"
+    }
+  ],
+  "tags": {
+    "who": [
+      "both"
+    ],
+    "meal": [
+      "dinner"
+    ],
+    "cuisine": [
+      "american"
+    ],
+    "protein": [
+      "beef"
+    ],
+    "style": [
+      "make-ahead",
+      "family-dinner"
+    ],
+    "occasion": [
+      "family-dinner",
+      "winter-warmer"
+    ],
+    "tool": [
+      "cast-iron",
+      "slow-cooker"
+    ]
+  },
+  "notes": "The pepperoncini adds a tangy brightness that cuts through the rich beef",
+  "recipe": {
+    "ingredients": [
+      "1 chuck roast",
+      "Oil for searing",
+      "4 tbsp butter",
+      "1 large onion, chopped",
+      "3 cups carrots",
+      "16 oz jar pepperoncini peppers with juice",
+      "1 packet beef stew seasoning",
+      "1 packet au jus gravy mix",
+      "1 packet ranch seasoning",
+      "15 oz can tomato sauce",
+      "1/2 can water"
+    ],
+    "steps": [
+      "Heat oil in a cast iron skillet and sear chuck roast on both sides. Remove roast.",
+      "Add butter and chopped onion to skillet.",
+      "Add carrots, pepperoncini with juice, beef stew packet, au jus packet, ranch packet, and tomato sauce.",
+      "Fill tomato sauce can halfway with water and add to mixture.",
+      "Stir everything together and simmer for 5 minutes.",
+      "Place roast in crock pot and pour gravy mixture over top.",
+      "Cook on high for 8 hours with lid on."
+    ]
+  }
+}
