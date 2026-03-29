@@ -1243,6 +1243,10 @@
       if (recipe.source === null) delete recipe.source;
       if (recipe.notes === null) delete recipe.notes;
 
+      // Confirm whose favorite
+      const whoLabel = tags.who[0] === 'cory' ? "Cory's" : tags.who[0] === 'kayla' ? "Kayla's" : "Both (shared)";
+      if (!confirm(`Save "${dish}" as ${whoLabel} recipe?`)) return;
+
       btn.disabled = true;
       btn.textContent = 'Generating culinary details...';
 
