@@ -310,42 +310,76 @@
       cursor: pointer; font-weight: 600;
     }
 
+    #ideas-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    @media (max-width: 420px) {
+      #ideas-list { grid-template-columns: 1fr; }
+    }
+
     .idea-card {
       background: var(--cream);
       border: 0.5px solid var(--linen);
-      border-left: 3px solid var(--pollen);
-      border-radius: 4px;
-      padding: 14px 16px;
-      margin-bottom: 10px;
+      border-radius: 6px;
+      padding: 14px 14px 10px;
       position: relative;
       animation: card-enter 300ms ease-out both;
+      overflow: hidden;
+      transition: transform 150ms ease-out;
     }
 
-    .idea-card .idea-text {
+    .idea-card:active { transform: translateY(-2px); }
+
+    .idea-accent {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+
+    .idea-card .idea-title {
       font-family: 'Lora', Georgia, serif;
       font-size: 0.95rem;
-      line-height: 1.6;
-      color: var(--charcoal);
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .idea-card .idea-snippet {
+      font-family: system-ui, sans-serif;
+      font-size: 0.78rem;
+      line-height: 1.45;
+      color: var(--warm-gray);
       margin-bottom: 8px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     .idea-card .idea-meta {
       font-family: system-ui, sans-serif;
-      font-size: 10px;
+      font-size: 9px;
       color: var(--warm-gray);
       text-transform: uppercase;
       letter-spacing: 0.1em;
+      opacity: 0.7;
     }
 
     .idea-actions {
-      display: flex; gap: 6px;
-      margin-top: 10px;
+      display: flex; gap: 0;
+      margin-top: 8px;
+      border-top: 0.5px solid var(--linen);
+      padding-top: 8px;
     }
 
     .idea-action {
-      padding: 4px 12px;
-      border: 1px solid var(--linen);
-      border-radius: 3px;
+      flex: 1;
+      padding: 5px 4px;
+      border: none;
       background: none;
       font-family: system-ui, sans-serif;
       font-size: 10px;
@@ -353,14 +387,14 @@
       text-transform: uppercase;
       letter-spacing: 0.06em;
       cursor: pointer;
+      text-align: center;
     }
 
     .idea-action.promote { color: var(--stem); }
-    .idea-action.promote:active { background: #eef5e6; }
     .idea-action.remove { color: var(--tulip); }
-    .idea-action.remove:active { background: #fef3ee; }
 
     .ideas-empty {
+      grid-column: 1 / -1;
       text-align: center;
       padding: 40px 20px;
       color: var(--warm-gray);
@@ -1855,6 +1889,12 @@
     // --- Ideas Board ---
     const IDEAS_KEY = 'recipe_book_ideas';
 
+    // Accent colors for idea cards — rotates through botanical palette
+    const IDEA_ACCENTS = [
+      '#5a7a3a', '#d4789a', '#e88050', '#9a8ab8', '#e8c840', '#8aaa62',
+      '#6b8f3a', '#c4688a', '#d87040', '#8a7aa8', '#d8b830', '#7a9a52'
+    ];
+
     function loadIdeas() {
       try { return JSON.parse(localStorage.getItem(IDEAS_KEY) || '[]'); }
       catch (e) { return []; }
@@ -1862,6 +1902,34 @@
 
     function saveIdeas(ideas) {
       localStorage.setItem(IDEAS_KEY, JSON.stringify(ideas));
+    }
+
+    function extractTitle(text) {
+      // Try to pull a dish name from bold markdown like **Dish Name**
+      const boldMatch = text.match(/\*\*([^*]{3,50})\*\*/);
+      if (boldMatch) {
+        // Clean up — remove emoji, "Option N:", difficulty/time suffixes
+        return boldMatch[1]
+          .replace(/^[^\w]*Option\s*\d+:\s*/i, '')
+          .replace(/\s*[\(\[].*$/, '')
+          .replace(/^[\W]+/, '')
+          .trim();
+      }
+      // Fall back to first line, truncated
+      const firstLine = text.split('\n')[0].replace(/\*\*/g, '').replace(/^[#\-*\s]+/, '').trim();
+      return firstLine.length > 50 ? firstLine.slice(0, 47) + '...' : firstLine;
+    }
+
+    function extractSnippet(text) {
+      // Get a clean preview — skip the title line, strip markdown
+      const lines = text.split('\n').filter(l => l.trim());
+      const cleaned = lines.slice(0, 4).join(' ')
+        .replace(/\*\*([^*]+)\*\*/g, '$1')
+        .replace(/\*([^*]+)\*/g, '$1')
+        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+        .replace(/[#\-]+/g, '')
+        .trim();
+      return cleaned.length > 120 ? cleaned.slice(0, 117) + '...' : cleaned;
     }
 
     function renderIdeas() {
@@ -1872,13 +1940,18 @@
       empty.style.display = ideas.length ? 'none' : 'block';
 
       ideas.forEach((idea, idx) => {
+        const title = idea.title || extractTitle(idea.text);
+        const snippet = extractSnippet(idea.text);
+        const accent = IDEA_ACCENTS[idx % IDEA_ACCENTS.length];
         const card = document.createElement('div');
         card.className = 'idea-card';
         card.innerHTML = `
-          <div class="idea-text">${formatChat(idea.text)}</div>
-          <div class="idea-meta">${idea.date}${idea.source ? ' · from ' + idea.source : ''}</div>
+          <div class="idea-accent" style="background:${accent};"></div>
+          <div class="idea-title">${title}</div>
+          <div class="idea-snippet">${snippet}</div>
+          <div class="idea-meta">${idea.date}${idea.source ? ' · ' + idea.source : ''}</div>
           <div class="idea-actions">
-            <button class="idea-action promote" onclick="promoteIdea(${idx})">Make This</button>
+            <button class="idea-action promote" onclick="promoteIdea(${idx})">Make</button>
             <button class="idea-action remove" onclick="removeIdea(${idx})">Remove</button>
           </div>
         `;
@@ -1892,13 +1965,16 @@
         text = input.value.trim();
         if (!text) return;
         input.value = '';
-        source = 'manual';
+        source = null;
       }
+      // Try to extract a clean title
+      const title = extractTitle(text);
       const ideas = loadIdeas();
       ideas.unshift({
+        title: title,
         text: text,
         date: new Date().toISOString().split('T')[0],
-        source: source || 'manual'
+        source: source || null
       });
       saveIdeas(ideas);
       renderIdeas();
@@ -1914,12 +1990,10 @@
     function promoteIdea(idx) {
       const ideas = loadIdeas();
       const idea = ideas[idx];
-      // Switch to Add view and paste the idea text into the import text field
       showView('add');
       document.getElementById('import-text-input').value = idea.text;
-      // Show the text import pane
       showImportPane('text');
-      document.getElementById('import-status').textContent = 'Idea loaded — hit Parse Recipe to structure it, or fill out the form manually.';
+      document.getElementById('import-status').textContent = 'Idea loaded — hit Parse Recipe to structure it.';
     }
 
     // --- Who filter ---
