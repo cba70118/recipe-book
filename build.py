@@ -162,11 +162,45 @@ def build_recipe_summary(recipes):
     return "\\n".join(lines)
 
 
+def build_preferences_summary():
+    """Build a text summary of family preferences for the chef chat context."""
+    prefs_path = ROOT / "preferences.json"
+    if not prefs_path.exists():
+        return ""
+    with open(prefs_path, "r", encoding="utf-8") as f:
+        prefs = json.load(f)
+
+    lines = []
+    for person in ["cory", "kayla", "shared"]:
+        p = prefs.get(person, {})
+        if person == "shared":
+            label = "Shared/household"
+        else:
+            label = person.capitalize()
+
+        parts = []
+        if p.get("dislikes"):
+            parts.append(f"DISLIKES: {', '.join(p['dislikes'])}")
+        if p.get("favorites"):
+            parts.append(f"Favorites: {', '.join(p['favorites'])}")
+        if p.get("pantry_staples"):
+            parts.append(f"Pantry staples: {', '.join(p['pantry_staples'])}")
+        if p.get("equipment"):
+            parts.append(f"Equipment: {', '.join(p['equipment'])}")
+        if p.get("notes"):
+            parts.append(p["notes"])
+        if parts:
+            lines.append(f"{label}: {'. '.join(parts)}")
+
+    return "\\n".join(lines)
+
+
 def build_site():
     recipes = load_recipes()
     all_tags = collect_all_tags(recipes)
     cards_html = "\n".join(build_recipe_card(r) for r in recipes)
     recipe_summary = build_recipe_summary(recipes)
+    preferences_summary = build_preferences_summary()
 
     with open(TEMPLATE_PATH, "r", encoding="utf-8") as f:
         template = f.read()
@@ -187,6 +221,7 @@ def build_site():
     html = template.replace("{{RECIPE_CARDS}}", cards_html)
     html = html.replace("{{RECIPE_COUNT}}", str(len(recipes)))
     html = html.replace("{{RECIPE_SUMMARY}}", recipe_summary)
+    html = html.replace("{{PREFERENCES_SUMMARY}}", preferences_summary)
 
     # Replace tag placeholders for each category
     for cat in TAG_CATEGORIES:

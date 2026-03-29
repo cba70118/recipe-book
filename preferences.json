@@ -1,0 +1,18 @@
+{
+  "cory": {
+    "dislikes": ["mushrooms"],
+    "favorites": [],
+    "notes": "Enjoys southern/cajun, Mexican, Italian. Likes bold flavors, not afraid of heat."
+  },
+  "kayla": {
+    "dislikes": [],
+    "favorites": [],
+    "notes": ""
+  },
+  "shared": {
+    "dislikes": [],
+    "pantry_staples": [],
+    "equipment": ["food processor", "cast iron skillet", "dutch oven"],
+    "notes": "Family of two building a cookbook together. Prefer weeknight-friendly recipes."
+  }
+}
