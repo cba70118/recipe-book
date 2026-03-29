@@ -2266,9 +2266,31 @@ Structure every suggestion like this:
 
 Use **markdown** for formatting. Be generous with detail but not verbose — every sentence should earn its place.`;
 
+    const CHAT_STORAGE_KEY = 'recipe_book_chat';
+    const CHAT_MAX_MESSAGES = 20;
     let chatHistory = [];
 
-    function addChatMsg(role, text) {
+    // Restore chat from localStorage on load
+    function restoreChat() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(CHAT_STORAGE_KEY) || '[]');
+        if (saved.length) {
+          chatHistory = saved;
+          const container = document.getElementById('chat-messages');
+          // Clear the default welcome message
+          container.innerHTML = '';
+          saved.forEach(msg => addChatMsg(msg.role, msg.content, true));
+        }
+      } catch (e) {}
+    }
+
+    function persistChat() {
+      // Keep only last N messages
+      const toSave = chatHistory.slice(-CHAT_MAX_MESSAGES);
+      localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(toSave));
+    }
+
+    function addChatMsg(role, text, skipPersist) {
       const container = document.getElementById('chat-messages');
       const div = document.createElement('div');
       div.className = 'chat-msg ' + role;
@@ -2324,6 +2346,7 @@ Use **markdown** for formatting. Be generous with detail but not verbose — eve
       btn.disabled = true;
 
       chatHistory.push({ role: 'user', content: msg });
+      persistChat();
 
       // Show typing indicator
       const container = document.getElementById('chat-messages');
@@ -2358,6 +2381,7 @@ Use **markdown** for formatting. Be generous with detail but not verbose — eve
         const data = await resp.json();
         const reply = data.content[0].text;
         chatHistory.push({ role: 'assistant', content: reply });
+        persistChat();
         typing.remove();
         addChatMsg('assistant', reply);
       } catch (e) {
@@ -2393,6 +2417,8 @@ Use **markdown** for formatting. Be generous with detail but not verbose — eve
     } else {
       setTimeout(() => document.getElementById('auth-input').focus(), 100);
     }
+    // Restore chat history
+    restoreChat();
   </script>
 </body>
 </html>
