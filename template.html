@@ -281,6 +281,93 @@
       color: #faf7f2;
     }
 
+    /* --- Ideas Board --- */
+    #ideas-view { display: none; }
+    #ideas-view.active { display: block; }
+
+    .ideas-header { margin-bottom: 16px; }
+
+    .ideas-add-row {
+      display: flex; gap: 8px;
+    }
+
+    .ideas-add-row input {
+      flex: 1; padding: 12px 14px;
+      border: 1px solid var(--linen);
+      border-radius: 4px;
+      font-size: 0.9rem; font-family: inherit;
+      background: var(--cream); color: var(--charcoal);
+      outline: none;
+    }
+
+    .ideas-add-row input:focus { border-color: var(--stem); }
+
+    .idea-add-btn {
+      padding: 12px 18px;
+      background: var(--stem); color: #faf7f2;
+      border: none; border-radius: 4px;
+      font-size: 1.1rem; font-family: inherit;
+      cursor: pointer; font-weight: 600;
+    }
+
+    .idea-card {
+      background: var(--cream);
+      border: 0.5px solid var(--linen);
+      border-left: 3px solid var(--pollen);
+      border-radius: 4px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      position: relative;
+      animation: card-enter 300ms ease-out both;
+    }
+
+    .idea-card .idea-text {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--charcoal);
+      margin-bottom: 8px;
+    }
+
+    .idea-card .idea-meta {
+      font-family: system-ui, sans-serif;
+      font-size: 10px;
+      color: var(--warm-gray);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .idea-actions {
+      display: flex; gap: 6px;
+      margin-top: 10px;
+    }
+
+    .idea-action {
+      padding: 4px 12px;
+      border: 1px solid var(--linen);
+      border-radius: 3px;
+      background: none;
+      font-family: system-ui, sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+    }
+
+    .idea-action.promote { color: var(--stem); }
+    .idea-action.promote:active { background: #eef5e6; }
+    .idea-action.remove { color: var(--tulip); }
+    .idea-action.remove:active { background: #fef3ee; }
+
+    .ideas-empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--warm-gray);
+      font-size: 0.9rem;
+      font-style: italic;
+    }
+
     /* --- Filter Drawer --- */
     .filter-toggle-row {
       display: flex;
@@ -1061,6 +1148,7 @@
   <div class="container">
     <div class="tabs">
       <div class="tab active" onclick="showView('recipes')">Recipes</div>
+      <div class="tab" onclick="showView('ideas')">Ideas</div>
       <div class="tab" onclick="showView('chef')">Ask the Chef</div>
       <div class="tab" onclick="showView('add')">Add New</div>
     </div>
@@ -1119,6 +1207,18 @@
       <div id="recipe-list">
         {{RECIPE_CARDS}}
       </div>
+    </div>
+
+    <!-- Ideas Board -->
+    <div id="ideas-view">
+      <div class="ideas-header">
+        <div class="ideas-add-row">
+          <input type="text" id="idea-input" placeholder="Jot down a meal idea..." onkeydown="if(event.key==='Enter')addIdea()">
+          <button class="idea-add-btn" onclick="addIdea()">+</button>
+        </div>
+      </div>
+      <div id="ideas-list"></div>
+      <div class="ideas-empty" id="ideas-empty">No ideas yet — save one from Ask the Chef, or jot one down above.</div>
     </div>
 
     <!-- Add Recipe View -->
@@ -1298,6 +1398,76 @@
 
 
 
+    // --- Ideas Board ---
+    const IDEAS_KEY = 'recipe_book_ideas';
+
+    function loadIdeas() {
+      try { return JSON.parse(localStorage.getItem(IDEAS_KEY) || '[]'); }
+      catch (e) { return []; }
+    }
+
+    function saveIdeas(ideas) {
+      localStorage.setItem(IDEAS_KEY, JSON.stringify(ideas));
+    }
+
+    function renderIdeas() {
+      const ideas = loadIdeas();
+      const list = document.getElementById('ideas-list');
+      const empty = document.getElementById('ideas-empty');
+      list.innerHTML = '';
+      empty.style.display = ideas.length ? 'none' : 'block';
+
+      ideas.forEach((idea, idx) => {
+        const card = document.createElement('div');
+        card.className = 'idea-card';
+        card.innerHTML = `
+          <div class="idea-text">${formatChat(idea.text)}</div>
+          <div class="idea-meta">${idea.date}${idea.source ? ' · from ' + idea.source : ''}</div>
+          <div class="idea-actions">
+            <button class="idea-action promote" onclick="promoteIdea(${idx})">Make This</button>
+            <button class="idea-action remove" onclick="removeIdea(${idx})">Remove</button>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    function addIdea(text, source) {
+      if (!text) {
+        const input = document.getElementById('idea-input');
+        text = input.value.trim();
+        if (!text) return;
+        input.value = '';
+        source = 'manual';
+      }
+      const ideas = loadIdeas();
+      ideas.unshift({
+        text: text,
+        date: new Date().toISOString().split('T')[0],
+        source: source || 'manual'
+      });
+      saveIdeas(ideas);
+      renderIdeas();
+    }
+
+    function removeIdea(idx) {
+      const ideas = loadIdeas();
+      ideas.splice(idx, 1);
+      saveIdeas(ideas);
+      renderIdeas();
+    }
+
+    function promoteIdea(idx) {
+      const ideas = loadIdeas();
+      const idea = ideas[idx];
+      // Switch to Add view and paste the idea text into the import text field
+      showView('add');
+      document.getElementById('import-text-input').value = idea.text;
+      // Show the text import pane
+      showImportPane('text');
+      document.getElementById('import-status').textContent = 'Idea loaded — hit Parse Recipe to structure it, or fill out the form manually.';
+    }
+
     // --- Who filter ---
     let activeWho = 'all';
 
@@ -1388,7 +1558,7 @@
     }
 
     function showView(view) {
-      const views = ['recipes', 'add', 'chef'];
+      const views = ['recipes', 'ideas', 'add', 'chef'];
       views.forEach(v => {
         const el = document.getElementById(v + '-view');
         if (!el) return;
@@ -1397,8 +1567,9 @@
       });
       const tabs = document.querySelectorAll('.tab');
       tabs[0].classList.toggle('active', view === 'recipes');
-      tabs[1].classList.toggle('active', view === 'chef');
-      tabs[2].classList.toggle('active', view === 'add');
+      tabs[1].classList.toggle('active', view === 'ideas');
+      tabs[2].classList.toggle('active', view === 'chef');
+      tabs[3].classList.toggle('active', view === 'add');
 
       if (view === 'chef') {
         setTimeout(() => document.getElementById('chat-input').focus(), 100);
@@ -2311,12 +2482,22 @@ Use **markdown** for formatting. Be generous with detail but not verbose — eve
           });
         };
 
+        const ideaBtn = document.createElement('button');
+        ideaBtn.className = 'chat-action-btn';
+        ideaBtn.textContent = 'Save as Idea';
+        ideaBtn.onclick = () => {
+          addIdea(text, 'Ask the Chef');
+          ideaBtn.textContent = 'Saved!';
+          ideaBtn.classList.add('saved');
+        };
+
         const saveBtn = document.createElement('button');
         saveBtn.className = 'chat-action-btn';
         saveBtn.textContent = 'Save as Recipe';
         saveBtn.onclick = () => saveFromChat(text, saveBtn);
 
         actions.appendChild(copyBtn);
+        actions.appendChild(ideaBtn);
         actions.appendChild(saveBtn);
         div.appendChild(actions);
       }
@@ -2417,8 +2598,9 @@ Use **markdown** for formatting. Be generous with detail but not verbose — eve
     } else {
       setTimeout(() => document.getElementById('auth-input').focus(), 100);
     }
-    // Restore chat history
+    // Restore chat history and ideas
     restoreChat();
+    renderIdeas();
   </script>
 </body>
 </html>
