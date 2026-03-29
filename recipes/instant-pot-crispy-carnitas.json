@@ -1,0 +1,85 @@
+{
+  "dish": "Instant Pot Crispy Carnitas",
+  "date_added": "2026-03-29",
+  "why_this_works": "The Instant Pot's high pressure breaks down the tough connective tissue in pork shoulder into succulent gelatin while the citrus acids tenderize the meat and brighten the rich fat. The final broiling step creates textural contrast by crisping the edges while keeping the interior moist, mimicking the traditional carnitas technique of slow-cooking then frying.",
+  "difficulty": "Easy",
+  "time": {
+    "prep": "15 min",
+    "cook": "90 min",
+    "total": "105 min"
+  },
+  "family_notes": null,
+  "you_might_also_like": [
+    {
+      "dish": "Pernil",
+      "url": "https://www.seriouseats.com/search?q=pernil"
+    },
+    {
+      "dish": "Cochinita Pibil",
+      "url": "https://www.bonappetit.com/search?q=cochinita+pibil"
+    },
+    {
+      "dish": "Cuban Mojo Pork",
+      "url": "https://www.simplyrecipes.com/search?q=cuban+mojo+pork"
+    }
+  ],
+  "tags": {
+    "who": [
+      "both"
+    ],
+    "meal": [
+      "dinner"
+    ],
+    "cuisine": [
+      "mexican"
+    ],
+    "protein": [
+      "pork"
+    ],
+    "style": [
+      "batch-cooking",
+      "weeknight"
+    ],
+    "occasion": [
+      "family-dinner"
+    ],
+    "tool": [
+      "instant-pot"
+    ]
+  },
+  "notes": "For extra crispy carnitas, spread the shredded meat on a sheet pan and broil for 3-5 minutes. Save the cooking liquid - it makes an excellent base for soups or can be reduced into a flavorful sauce.",
+  "recipe": {
+    "yield": "8 servings",
+    "ingredients": [
+      "3-4 lbs pork shoulder, cut into 3-inch chunks",
+      "1 tbsp olive oil",
+      "1 large onion, diced",
+      "4 cloves garlic, minced",
+      "2 tsp ground cumin",
+      "2 tsp chili powder",
+      "1 tsp dried oregano",
+      "1 tsp smoked paprika",
+      "1 tsp salt",
+      "1/2 tsp black pepper",
+      "1/4 tsp cayenne pepper",
+      "1 orange, juiced",
+      "2 limes, juiced",
+      "1/2 cup chicken broth",
+      "2 bay leaves"
+    ],
+    "steps": [
+      "Season pork chunks with salt and pepper on all sides.",
+      "Set Instant Pot to sauté mode. Add olive oil and brown pork chunks on all sides, about 6-8 minutes total. Remove pork and set aside.",
+      "Add diced onion to the pot and sauté for 3-4 minutes until softened. Add garlic and cook for 1 minute more.",
+      "Stir in cumin, chili powder, oregano, smoked paprika, salt, pepper, and cayenne. Cook for 30 seconds until fragrant.",
+      "Add orange juice, lime juice, and chicken broth. Stir to scrape up any browned bits from bottom of pot.",
+      "Return pork to the pot along with bay leaves. Close lid and set valve to sealing position.",
+      "Pressure cook on high for 60 minutes, then allow natural pressure release for 15 minutes before quick releasing remaining pressure.",
+      "Remove bay leaves and transfer pork to a large bowl. Shred using two forks.",
+      "Strain cooking liquid and skim fat. Pour 1/2 cup of the liquid over shredded pork and toss to combine.",
+      "For crispy carnitas: spread shredded pork on a sheet pan and broil for 3-5 minutes until edges are crispy and golden."
+    ],
+    "serving": "Serve in warm tortillas with diced onion, cilantro, lime wedges, and your favorite salsa. Also excellent in burrito bowls, quesadillas, or over rice.",
+    "storage": "Refrigerate for up to 4 days or freeze for up to 3 months. Reheat in a skillet with a splash of the reserved cooking liquid."
+  }
+}
