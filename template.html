@@ -500,6 +500,43 @@
       color: var(--warm-gray);
     }
 
+    /* --- Recipe Edit/Delete --- */
+    .recipe-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid var(--linen);
+    }
+
+    .recipe-action-btn {
+      padding: 6px 16px;
+      border-radius: 4px;
+      font-family: system-ui, sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: all 150ms ease-out;
+    }
+
+    .edit-btn {
+      background: none;
+      border: 1px solid var(--linen);
+      color: var(--stem);
+    }
+
+    .edit-btn:active { background: var(--cream); }
+
+    .delete-btn {
+      background: none;
+      border: 1px solid var(--linen);
+      color: var(--tulip);
+    }
+
+    .delete-btn:active { background: #fef3ee; }
+
     .family-notes strong {
       font-family: 'Lora', Georgia, serif;
       font-weight: 600;
@@ -1386,6 +1423,103 @@
       }
     }
 
+    // --- Edit & Delete ---
+    let editingSlug = null;
+
+    function editRecipe(slug) {
+      const card = document.getElementById(slug);
+      const recipe = JSON.parse(card.dataset.recipe);
+      editingSlug = slug;
+
+      // Switch to Add view
+      showView('add');
+
+      // Fill the form
+      document.getElementById('add-dish').value = recipe.dish || '';
+      document.getElementById('add-source').value = recipe.source || '';
+      document.getElementById('add-yield').value = recipe.recipe?.yield || '';
+      document.getElementById('add-notes').value = recipe.notes || '';
+      document.getElementById('add-ingredients').value = (recipe.recipe?.ingredients || []).join('\n');
+      document.getElementById('add-steps').value = (recipe.recipe?.steps || []).join('\n');
+      document.getElementById('add-serving').value = recipe.recipe?.serving || '';
+      document.getElementById('add-storage').value = recipe.recipe?.storage || '';
+
+      // Difficulty
+      if (recipe.difficulty) {
+        const radio = document.querySelector(`input[name="add-difficulty"][value="${recipe.difficulty}"]`);
+        if (radio) radio.checked = true;
+      }
+
+      // Time
+      if (recipe.time) {
+        document.getElementById('add-time-prep').value = recipe.time.prep || '';
+        document.getElementById('add-time-cook').value = recipe.time.cook || '';
+        document.getElementById('add-time-total').value = recipe.time.total || '';
+      }
+
+      // Who bar
+      const whoVal = (recipe.tags?.who || ['both'])[0];
+      document.querySelectorAll('#who-form-bar .who-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.who === whoVal);
+      });
+
+      // Tag checkboxes — clear all first
+      document.querySelectorAll('#add-view .check-group input[type="checkbox"]').forEach(cb => cb.checked = false);
+      ['meal', 'cuisine', 'protein', 'style', 'occasion', 'tool'].forEach(cat => {
+        (recipe.tags?.[cat] || []).forEach(tag => {
+          const cb = document.querySelector(`#${cat}-checks input[value="${tag}"]`);
+          if (cb) cb.checked = true;
+          else addCustomTagFromImport(cat, tag);
+        });
+      });
+
+      // Update save button text
+      document.getElementById('save-btn').textContent = 'Update Recipe';
+      document.getElementById('add-dish').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    async function deleteRecipe(slug, dishName) {
+      if (!confirm(`Delete "${dishName}"? This cannot be undone.`)) return;
+
+      const ghToken = getToken();
+      if (!ghToken) {
+        alert('GitHub token not set up. Go to Add New tab first.');
+        return;
+      }
+
+      const filename = `recipes/${slug}.json`;
+
+      try {
+        // Get the file's SHA (required for deletion)
+        const getResp = await fetch(`https://api.github.com/repos/${REPO}/contents/${filename}`, {
+          headers: { 'Authorization': `token ${ghToken}` }
+        });
+        if (!getResp.ok) throw new Error('Could not find recipe file');
+        const fileData = await getResp.json();
+
+        // Delete the file
+        const delResp = await fetch(`https://api.github.com/repos/${REPO}/contents/${filename}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `token ${ghToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: `Delete recipe: ${dishName}`,
+            sha: fileData.sha
+          })
+        });
+
+        if (!delResp.ok) throw new Error('Delete failed');
+
+        // Remove from page
+        document.getElementById(slug).remove();
+        alert(`"${dishName}" deleted. Site will rebuild in a minute.`);
+      } catch (e) {
+        alert('Error: ' + e.message);
+      }
+    }
+
     function selectWhoForm(btn) {
       btn.parentElement.querySelectorAll('.who-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
@@ -1532,19 +1666,37 @@ For you_might_also_like, suggest 3 real dishes from the culinary world that are 
 
       btn.textContent = 'Saving...';
 
-      const slug = dish.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      // Use editing slug if updating, otherwise generate new slug
+      const slug = editingSlug || dish.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
       const filename = `recipes/${slug}.json`;
       const content = JSON.stringify(recipe, null, 2);
       const encoded = btoa(unescape(encodeURIComponent(content)));
+      const isEdit = !!editingSlug;
+      const commitMsg = isEdit ? `Update recipe: ${dish}` : `Add recipe: ${dish}`;
 
       try {
+        // If editing, we need the file's SHA for the update
+        let sha = undefined;
+        if (isEdit) {
+          const getResp = await fetch(`https://api.github.com/repos/${REPO}/contents/${filename}`, {
+            headers: { 'Authorization': `token ${getToken()}` }
+          });
+          if (getResp.ok) {
+            const fileData = await getResp.json();
+            sha = fileData.sha;
+          }
+        }
+
+        const body = { message: commitMsg, content: encoded };
+        if (sha) body.sha = sha;
+
         const resp = await fetch(`https://api.github.com/repos/${REPO}/contents/${filename}`, {
           method: 'PUT',
           headers: {
             'Authorization': `token ${getToken()}`,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ message: `Add recipe: ${dish}`, content: encoded }),
+          body: JSON.stringify(body),
         });
 
         if (!resp.ok) {
@@ -1552,11 +1704,15 @@ For you_might_also_like, suggest 3 real dishes from the culinary world that are 
           throw new Error(err.message || 'Failed to save');
         }
 
-        showStatus(`"${dish}" saved! The site will update in a minute or two.`, 'success');
+        const action = isEdit ? 'updated' : 'saved';
+        showStatus(`"${dish}" ${action}! The site will update in a minute or two.`, 'success');
+
+        // Reset form
         document.querySelectorAll('#add-view input[type="text"], #add-view textarea').forEach(el => el.value = '');
         document.querySelectorAll('#add-view input[type="checkbox"]').forEach(cb => cb.checked = false);
         document.querySelectorAll('#add-view input[type="radio"]').forEach(r => r.checked = false);
         document.querySelectorAll('#who-form-bar .who-btn').forEach(b => b.classList.toggle('active', b.dataset.who === 'both'));
+        editingSlug = null;
       } catch (e) {
         showStatus(`Error: ${e.message}`, 'error');
       }

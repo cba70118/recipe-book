@@ -500,6 +500,43 @@
       color: var(--warm-gray);
     }
 
+    /* --- Recipe Edit/Delete --- */
+    .recipe-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid var(--linen);
+    }
+
+    .recipe-action-btn {
+      padding: 6px 16px;
+      border-radius: 4px;
+      font-family: system-ui, sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: all 150ms ease-out;
+    }
+
+    .edit-btn {
+      background: none;
+      border: 1px solid var(--linen);
+      color: var(--stem);
+    }
+
+    .edit-btn:active { background: var(--cream); }
+
+    .delete-btn {
+      background: none;
+      border: 1px solid var(--linen);
+      color: var(--tulip);
+    }
+
+    .delete-btn:active { background: #fef3ee; }
+
     .family-notes strong {
       font-family: 'Lora', Georgia, serif;
       font-weight: 600;
@@ -1048,7 +1085,7 @@
 
       <div id="recipe-list">
         
-    <article class="recipe-card" id="cheap-paella" data-tags="cory dinner cajun pork seafood weeknight one-pan family-dinner skillet dutch-oven">
+    <article class="recipe-card" id="cheap-paella" data-tags="cory dinner cajun pork seafood weeknight one-pan family-dinner skillet dutch-oven" data-slug="cheap-paella" data-recipe="{&quot;dish&quot;: &quot;Cheap \&quot;Paella\&quot;&quot;, &quot;source&quot;: &quot;Zatarain&#x27;s&quot;, &quot;date_added&quot;: &quot;2026-03-28&quot;, &quot;why_this_works&quot;: &quot;Browning the sausage first renders fat that you then use to saute the onion, building a fond that adds depth to what is essentially a box rice mix. Adding the shrimp and peas at the very end keeps the shrimp from turning rubbery and the peas from going army-green. The Zatarain&#x27;s yellow rice handles the saffron-turmeric flavor so you get paella vibes without the price tag.&quot;, &quot;difficulty&quot;: &quot;Easy&quot;, &quot;time&quot;: {&quot;prep&quot;: &quot;10 min&quot;, &quot;cook&quot;: &quot;30 min&quot;, &quot;total&quot;: &quot;40 min&quot;}, &quot;family_notes&quot;: null, &quot;you_might_also_like&quot;: [{&quot;dish&quot;: &quot;Jambalaya&quot;, &quot;url&quot;: &quot;https://www.seriouseats.com/search?q=jambalaya&quot;}, {&quot;dish&quot;: &quot;Arroz con Pollo&quot;, &quot;url&quot;: &quot;https://cooking.nytimes.com/search?q=arroz+con+pollo&quot;}, {&quot;dish&quot;: &quot;Shrimp and Grits&quot;, &quot;url&quot;: &quot;https://www.bonappetit.com/search?q=shrimp+and+grits&quot;}], &quot;tags&quot;: {&quot;who&quot;: [&quot;cory&quot;], &quot;meal&quot;: [&quot;dinner&quot;], &quot;cuisine&quot;: [&quot;cajun&quot;], &quot;protein&quot;: [&quot;pork&quot;, &quot;seafood&quot;], &quot;style&quot;: [&quot;weeknight&quot;, &quot;one-pan&quot;], &quot;occasion&quot;: [&quot;family-dinner&quot;], &quot;tool&quot;: [&quot;skillet&quot;, &quot;dutch-oven&quot;]}, &quot;notes&quot;: &quot;Prep: 10 min, Cook: 30 min. Serves 8. Quick weeknight crowd-feeder.&quot;, &quot;recipe&quot;: {&quot;yield&quot;: &quot;Serves 8&quot;, &quot;ingredients&quot;: [&quot;2 cups water&quot;, &quot;1/2 package Cajun style smoked sausage, halved lengthwise and sliced 1/4-inch thick&quot;, &quot;1 can (14.5 oz) diced tomatoes, undrained&quot;, &quot;1/2 cup chopped onion&quot;, &quot;1 tsp parsley flakes&quot;, &quot;1 package Zatarain&#x27;s Yellow Rice Mix&quot;, &quot;1 lb large shrimp, peeled and deveined&quot;, &quot;1 cup frozen peas&quot;], &quot;steps&quot;: [&quot;Brown the sliced sausage in a large skillet or Dutch oven over medium-high heat. Remove and set aside.&quot;, &quot;Saut\u00e9 the onion in the same pan using the rendered sausage fat until softened, about 3-5 minutes.&quot;, &quot;Add water and diced tomatoes (undrained). Bring to a boil.&quot;, &quot;Stir in the Zatarain&#x27;s Yellow Rice Mix. Return the sausage to the pan.&quot;, &quot;Reduce heat to low, cover, and simmer for about 20 minutes until rice is nearly tender.&quot;, &quot;Stir in shrimp and frozen peas. Cover and cook 5-7 minutes until shrimp are pink and cooked through.&quot;, &quot;Remove from heat, sprinkle with parsley flakes, fluff with a fork, and serve.&quot;]}}">
       <div class="recipe-header" onclick="toggleRecipe(this)">
         <h2>Cheap &quot;Paella&quot;</h2>
         <div class="recipe-meta">
@@ -1075,11 +1112,15 @@
         
         
         
+        <div class="recipe-actions">
+          <button class="recipe-action-btn edit-btn" onclick="editRecipe('cheap-paella')">Edit</button>
+          <button class="recipe-action-btn delete-btn" onclick="deleteRecipe('cheap-paella', 'Cheap &quot;Paella&quot;')">Delete</button>
+        </div>
       </div>
     </article>
     
 
-    <article class="recipe-card" id="chicken-shawarma" data-tags="both dinner lunch middle-eastern lebanese chicken make-ahead weeknight meal-prep 30-minute family-dinner sheet-pan oven">
+    <article class="recipe-card" id="chicken-shawarma" data-tags="both dinner lunch middle-eastern lebanese chicken make-ahead weeknight meal-prep 30-minute family-dinner sheet-pan oven" data-slug="chicken-shawarma" data-recipe="{&quot;dish&quot;: &quot;Chicken Shawarma&quot;, &quot;source&quot;: &quot;Feel Good Foodie&quot;, &quot;date_added&quot;: &quot;2026-03-29&quot;, &quot;why_this_works&quot;: &quot;The long marinade allows acidic lemon juice to tenderize the chicken thighs while the warm spice blend creates complex layers of flavor that bloom during high-heat roasting. Sheet pan cooking at 425\u00b0F mimics the concentrated heat and slight char of traditional rotisserie shawarma, while the onions caramelize and add sweetness to balance the bold spices.&quot;, &quot;difficulty&quot;: &quot;Easy&quot;, &quot;time&quot;: {&quot;prep&quot;: &quot;15 min&quot;, &quot;cook&quot;: &quot;25 min&quot;, &quot;total&quot;: &quot;40 min&quot;}, &quot;family_notes&quot;: null, &quot;you_might_also_like&quot;: [{&quot;dish&quot;: &quot;Greek Chicken Gyros&quot;, &quot;url&quot;: &quot;https://www.seriouseats.com/search?q=greek+chicken+gyros&quot;}, {&quot;dish&quot;: &quot;Turkish Chicken Doner&quot;, &quot;url&quot;: &quot;https://cooking.nytimes.com/search?q=turkish+chicken+doner&quot;}, {&quot;dish&quot;: &quot;Moroccan Chicken Tagine&quot;, &quot;url&quot;: &quot;https://www.bonappetit.com/search?q=moroccan+chicken+tagine&quot;}], &quot;tags&quot;: {&quot;who&quot;: [&quot;both&quot;], &quot;meal&quot;: [&quot;dinner&quot;, &quot;lunch&quot;], &quot;cuisine&quot;: [&quot;middle-eastern&quot;, &quot;lebanese&quot;], &quot;protein&quot;: [&quot;chicken&quot;], &quot;style&quot;: [&quot;make-ahead&quot;, &quot;weeknight&quot;, &quot;meal-prep&quot;, &quot;30-minute&quot;], &quot;occasion&quot;: [&quot;family-dinner&quot;], &quot;tool&quot;: [&quot;sheet-pan&quot;, &quot;oven&quot;]}, &quot;notes&quot;: &quot;Marinate chicken for at least 30 minutes or up to 24 hours for best flavor. Can substitute chicken thighs for breasts.&quot;, &quot;recipe&quot;: {&quot;yield&quot;: &quot;4 servings&quot;, &quot;ingredients&quot;: [&quot;2 lbs boneless skinless chicken thighs, cut into strips&quot;, &quot;2 tbsp olive oil&quot;, &quot;2 tbsp lemon juice&quot;, &quot;3 cloves garlic, minced&quot;, &quot;1 tsp ground cumin&quot;, &quot;1 tsp paprika&quot;, &quot;1 tsp ground coriander&quot;, &quot;1/2 tsp turmeric&quot;, &quot;1/2 tsp cinnamon&quot;, &quot;1/2 tsp cayenne pepper&quot;, &quot;1 tsp salt&quot;, &quot;1/2 tsp black pepper&quot;, &quot;1 large onion, sliced&quot;, &quot;Pita bread for serving&quot;, &quot;Tahini sauce or garlic sauce for serving&quot;, &quot;Cucumber, tomatoes, and red onion for serving&quot;], &quot;steps&quot;: [&quot;In a large bowl, whisk together olive oil, lemon juice, garlic, cumin, paprika, coriander, turmeric, cinnamon, cayenne, salt, and pepper.&quot;, &quot;Add chicken strips to marinade and toss to coat. Marinate for at least 30 minutes or up to 24 hours.&quot;, &quot;Preheat oven to 425\u00b0F. Line a sheet pan with parchment paper.&quot;, &quot;Spread marinated chicken and sliced onions on the prepared sheet pan.&quot;, &quot;Roast for 20-25 minutes until chicken is cooked through and slightly charred on edges.&quot;, &quot;Let rest for 5 minutes, then slice or chop into smaller pieces.&quot;, &quot;Serve in pita bread with tahini sauce, cucumber, tomatoes, and red onion.&quot;], &quot;serving&quot;: &quot;Serve in warm pita bread with tahini or garlic sauce, diced cucumber, tomatoes, and thinly sliced red onion&quot;, &quot;storage&quot;: &quot;Store cooked chicken in refrigerator for up to 4 days. Reheat in oven or skillet before serving.&quot;}}">
       <div class="recipe-header" onclick="toggleRecipe(this)">
         <h2>Chicken Shawarma</h2>
         <div class="recipe-meta">
@@ -1106,11 +1147,15 @@
         <div class="serving"><strong>Serving:</strong> Serve in warm pita bread with tahini or garlic sauce, diced cucumber, tomatoes, and thinly sliced red onion</div>
         <div class="storage"><strong>Storage:</strong> Store cooked chicken in refrigerator for up to 4 days. Reheat in oven or skillet before serving.</div>
         
+        <div class="recipe-actions">
+          <button class="recipe-action-btn edit-btn" onclick="editRecipe('chicken-shawarma')">Edit</button>
+          <button class="recipe-action-btn delete-btn" onclick="deleteRecipe('chicken-shawarma', 'Chicken Shawarma')">Delete</button>
+        </div>
       </div>
     </article>
     
 
-    <article class="recipe-card" id="classic-genovese-basil-pesto" data-tags="both dinner lunch italian vegetarian weeknight make-ahead batch-cooking summer date-night food-processor skillet">
+    <article class="recipe-card" id="classic-genovese-basil-pesto" data-tags="both dinner lunch italian vegetarian weeknight make-ahead batch-cooking summer date-night food-processor skillet" data-slug="classic-genovese-basil-pesto" data-recipe="{&quot;dish&quot;: &quot;Classic Genovese Basil Pesto&quot;, &quot;source&quot;: &quot;Adapted from Serious Eats / J. Kenji L\u00f3pez-Alt&quot;, &quot;date_added&quot;: &quot;2026-03-28&quot;, &quot;why_this_works&quot;: &quot;Toasting the pine nuts deepens their flavor and drives off moisture so the pesto stays thick. Folding the cheese in by hand instead of processing it avoids the heat and friction that would turn the Parmesan gummy. The optional blanch step kills the enzymes that cause basil to oxidize and turn brown, locking in a vivid green for days.&quot;, &quot;difficulty&quot;: &quot;Easy&quot;, &quot;time&quot;: {&quot;prep&quot;: &quot;15 min&quot;, &quot;cook&quot;: &quot;5 min&quot;, &quot;total&quot;: &quot;20 min&quot;}, &quot;family_notes&quot;: null, &quot;you_might_also_like&quot;: [{&quot;dish&quot;: &quot;Chimichurri&quot;, &quot;url&quot;: &quot;https://www.seriouseats.com/search?q=chimichurri&quot;}, {&quot;dish&quot;: &quot;Romesco Sauce&quot;, &quot;url&quot;: &quot;https://www.bonappetit.com/search?q=romesco+sauce&quot;}, {&quot;dish&quot;: &quot;Pistachio Pesto&quot;, &quot;url&quot;: &quot;https://cooking.nytimes.com/search?q=pistachio+pesto&quot;}], &quot;tags&quot;: {&quot;who&quot;: [&quot;both&quot;], &quot;meal&quot;: [&quot;dinner&quot;, &quot;lunch&quot;], &quot;cuisine&quot;: [&quot;italian&quot;], &quot;protein&quot;: [&quot;vegetarian&quot;], &quot;style&quot;: [&quot;weeknight&quot;, &quot;make-ahead&quot;, &quot;batch-cooking&quot;], &quot;occasion&quot;: [&quot;summer&quot;, &quot;date-night&quot;], &quot;tool&quot;: [&quot;food-processor&quot;, &quot;skillet&quot;]}, &quot;notes&quot;: &quot;Might benefit from a squeeze of lemon juice \u2014 try it next time.&quot;, &quot;recipe&quot;: {&quot;yield&quot;: &quot;About 1 cup (enough for 1 lb pasta)&quot;, &quot;ingredients&quot;: [&quot;3 packed cups fresh basil leaves (~3 oz / 85g)&quot;, &quot;1/3 cup pine nuts&quot;, &quot;2 medium cloves garlic, peeled&quot;, &quot;1/2 cup extra-virgin olive oil&quot;, &quot;1/2 cup finely grated Parmigiano-Reggiano&quot;, &quot;1/4 cup finely grated Pecorino Romano&quot;, &quot;1/2 tsp kosher salt, plus more to taste&quot;, &quot;Pinch of black pepper&quot;], &quot;steps&quot;: [&quot;Toast pine nuts in a dry skillet over medium-low heat, stirring frequently, 3-4 minutes until golden and fragrant. Transfer to a plate to cool.&quot;, &quot;(Optional) Blanch basil in boiling water for 10 seconds, then transfer to ice water. Squeeze dry in a clean towel. This locks in vivid green color.&quot;, &quot;Add garlic and cooled pine nuts to the food processor. Pulse 8-10 times until coarsely chopped.&quot;, &quot;Add basil leaves and 1/2 tsp salt. Pulse 10-15 times until broken down but still slightly textured \u2014 don&#x27;t pur\u00e9e.&quot;, &quot;With the motor running continuously, pour olive oil in a slow, steady stream through the feed tube. Process just until combined, about 15 seconds.&quot;, &quot;Transfer to a bowl. Fold in the parmigiano and pecorino by hand with a spatula. (Processing the cheese in the machine can make it gummy from the heat.)&quot;, &quot;Taste and adjust salt.&quot;], &quot;serving&quot;: &quot;Cook 1 lb pasta (trofie, linguine, or gemelli are traditional). Reserve 1 cup pasta water before draining. Toss pasta with pesto, loosening with pasta water a few tablespoons at a time. Never heat the pesto directly in a pan \u2014 the basil will turn dark and bitter.&quot;, &quot;storage&quot;: &quot;Fridge: press plastic wrap onto the surface, drizzle olive oil on top, keeps 4-5 days. Freezer: spoon into ice cube trays, freeze solid, transfer to a bag \u2014 keeps 3+ months.&quot;}}">
       <div class="recipe-header" onclick="toggleRecipe(this)">
         <h2>Classic Genovese Basil Pesto</h2>
         <div class="recipe-meta">
@@ -1137,11 +1182,15 @@
         <div class="serving"><strong>Serving:</strong> Cook 1 lb pasta (trofie, linguine, or gemelli are traditional). Reserve 1 cup pasta water before draining. Toss pasta with pesto, loosening with pasta water a few tablespoons at a time. Never heat the pesto directly in a pan — the basil will turn dark and bitter.</div>
         <div class="storage"><strong>Storage:</strong> Fridge: press plastic wrap onto the surface, drizzle olive oil on top, keeps 4-5 days. Freezer: spoon into ice cube trays, freeze solid, transfer to a bag — keeps 3+ months.</div>
         
+        <div class="recipe-actions">
+          <button class="recipe-action-btn edit-btn" onclick="editRecipe('classic-genovese-basil-pesto')">Edit</button>
+          <button class="recipe-action-btn delete-btn" onclick="deleteRecipe('classic-genovese-basil-pesto', 'Classic Genovese Basil Pesto')">Delete</button>
+        </div>
       </div>
     </article>
     
 
-    <article class="recipe-card" id="corys-fresh-salsa" data-tags="both snack appetizer mexican vegetarian weeknight make-ahead batch-cooking summer family-dinner food-processor">
+    <article class="recipe-card" id="corys-fresh-salsa" data-tags="both snack appetizer mexican vegetarian weeknight make-ahead batch-cooking summer family-dinner food-processor" data-slug="corys-fresh-salsa" data-recipe="{&quot;dish&quot;: &quot;Cory&#x27;s Fresh Salsa&quot;, &quot;source&quot;: &quot;Original / Cory&quot;, &quot;date_added&quot;: &quot;2026-03-28&quot;, &quot;why_this_works&quot;: &quot;Seeding the Romas removes excess water so you get a thick, chunky salsa instead of soup. The lime juice and hot sauce deliver both acid and heat, which brightens the raw tomatoes and balances the cilantro&#x27;s sharpness. Blending to your preferred consistency means you control the texture \u2014 chunky or smooth.&quot;, &quot;difficulty&quot;: &quot;Easy&quot;, &quot;time&quot;: {&quot;prep&quot;: &quot;15 min&quot;, &quot;cook&quot;: &quot;0 min&quot;, &quot;total&quot;: &quot;15 min&quot;}, &quot;family_notes&quot;: null, &quot;you_might_also_like&quot;: [{&quot;dish&quot;: &quot;Salsa Verde&quot;, &quot;url&quot;: &quot;https://www.seriouseats.com/search?q=salsa+verde&quot;}, {&quot;dish&quot;: &quot;Mango Salsa&quot;, &quot;url&quot;: &quot;https://www.simplyrecipes.com/?s=mango+salsa&quot;}, {&quot;dish&quot;: &quot;Guacamole&quot;, &quot;url&quot;: &quot;https://www.bonappetit.com/search?q=guacamole&quot;}], &quot;tags&quot;: {&quot;who&quot;: [&quot;both&quot;], &quot;meal&quot;: [&quot;snack&quot;, &quot;appetizer&quot;], &quot;cuisine&quot;: [&quot;mexican&quot;], &quot;protein&quot;: [&quot;vegetarian&quot;], &quot;style&quot;: [&quot;weeknight&quot;, &quot;make-ahead&quot;, &quot;batch-cooking&quot;], &quot;occasion&quot;: [&quot;summer&quot;, &quot;family-dinner&quot;], &quot;tool&quot;: [&quot;food-processor&quot;]}, &quot;notes&quot;: null, &quot;recipe&quot;: {&quot;yield&quot;: &quot;About 3 cups&quot;, &quot;ingredients&quot;: [&quot;6-7 Roma tomatoes, seeded&quot;, &quot;2 jalape\u00f1os, seeded and chopped&quot;, &quot;1/2 cup chopped cilantro&quot;, &quot;~10 green onions&quot;, &quot;2 tbsp hot sauce&quot;, &quot;1 tsp garlic powder (or minced garlic)&quot;, &quot;1 tsp salt&quot;, &quot;1 tsp pepper&quot;, &quot;2 tbsp lime juice&quot;], &quot;steps&quot;: [&quot;Seed and chop the Roma tomatoes.&quot;, &quot;Seed and chop the jalape\u00f1os.&quot;, &quot;Roughly chop the cilantro and green onions.&quot;, &quot;Combine tomatoes, jalape\u00f1os, cilantro, and green onions in a food processor or blender.&quot;, &quot;Blend to desired consistency.&quot;, &quot;Transfer to a bowl.&quot;, &quot;Mix in hot sauce, garlic powder, salt, pepper, and lime juice.&quot;, &quot;Taste and adjust seasoning as needed.&quot;, &quot;Chill before serving for best flavor.&quot;]}}">
       <div class="recipe-header" onclick="toggleRecipe(this)">
         <h2>Cory&#x27;s Fresh Salsa</h2>
         <div class="recipe-meta">
@@ -1168,11 +1217,15 @@
         
         
         
+        <div class="recipe-actions">
+          <button class="recipe-action-btn edit-btn" onclick="editRecipe('corys-fresh-salsa')">Edit</button>
+          <button class="recipe-action-btn delete-btn" onclick="deleteRecipe('corys-fresh-salsa', 'Cory&#x27;s Fresh Salsa')">Delete</button>
+        </div>
       </div>
     </article>
     
 
-    <article class="recipe-card" id="creamy-italian-sausage-bow-tie-pasta" data-tags="dinner italian pork weeknight family-dinner skillet">
+    <article class="recipe-card" id="creamy-italian-sausage-bow-tie-pasta" data-tags="dinner italian pork weeknight family-dinner skillet" data-slug="creamy-italian-sausage-bow-tie-pasta" data-recipe="{&quot;dish&quot;: &quot;Creamy Italian Sausage Bow Tie Pasta&quot;, &quot;date_added&quot;: &quot;2026-03-29&quot;, &quot;why_this_works&quot;: &quot;The rich pork fat from the Italian sausage creates a flavorful base that gets deglazed by the acidic tomatoes, while the heavy cream emulsifies with the rendered fat to form a silky sauce. The bow tie pasta&#x27;s ridged surface and pockets perfectly capture the chunky sausage and creamy sauce, ensuring every bite delivers balanced flavor and texture.&quot;, &quot;difficulty&quot;: &quot;Easy&quot;, &quot;time&quot;: {&quot;prep&quot;: &quot;10 min&quot;, &quot;cook&quot;: &quot;25 min&quot;, &quot;total&quot;: &quot;35 min&quot;}, &quot;family_notes&quot;: null, &quot;you_might_also_like&quot;: [{&quot;dish&quot;: &quot;Penne alla Vodka&quot;, &quot;url&quot;: &quot;https://www.seriouseats.com/search?q=penne+alla+vodka&quot;}, {&quot;dish&quot;: &quot;Rigatoni with Spicy Sausage and Tomato Cream Sauce&quot;, &quot;url&quot;: &quot;https://cooking.nytimes.com/search?q=rigatoni+sausage+tomato+cream&quot;}, {&quot;dish&quot;: &quot;Creamy Tuscan Chicken Pasta&quot;, &quot;url&quot;: &quot;https://www.bonappetit.com/search?q=creamy+tuscan+chicken+pasta&quot;}], &quot;tags&quot;: {&quot;who&quot;: [], &quot;meal&quot;: [&quot;dinner&quot;], &quot;cuisine&quot;: [&quot;italian&quot;], &quot;protein&quot;: [&quot;pork&quot;], &quot;style&quot;: [&quot;weeknight&quot;], &quot;occasion&quot;: [&quot;family-dinner&quot;], &quot;tool&quot;: [&quot;skillet&quot;]}, &quot;recipe&quot;: {&quot;yield&quot;: &quot;6 servings&quot;, &quot;ingredients&quot;: [&quot;1 (12 oz) package bow tie pasta&quot;, &quot;2 tbsp olive oil&quot;, &quot;1 lb sweet Italian sausage, casings removed and crumbled&quot;, &quot;1/2 tsp red pepper flakes&quot;, &quot;1/2 cup diced onion&quot;, &quot;3 cloves garlic, minced&quot;, &quot;1 (28 oz) can Italian-style plum tomatoes, drained and coarsely chopped&quot;, &quot;1 1/2 cups heavy cream&quot;, &quot;1/2 tsp salt&quot;, &quot;3 tbsp minced fresh parsley&quot;], &quot;steps&quot;: [&quot;Bring a large pot of lightly salted water to a boil. Cook pasta until al dente, 8 to 10 minutes; drain.&quot;, &quot;Heat oil in a large, deep skillet over medium heat. Cook sausage and pepper flakes until sausage is evenly browned.&quot;, &quot;Stir in onion and garlic, and cook until onion is tender.&quot;, &quot;Stir in tomatoes, cream, and salt. Simmer until mixture thickens, 8 to 10 minutes.&quot;, &quot;Stir cooked pasta into sauce and heat through. Sprinkle with parsley and serve.&quot;]}}">
       <div class="recipe-header" onclick="toggleRecipe(this)">
         <h2>Creamy Italian Sausage Bow Tie Pasta</h2>
         <div class="recipe-meta">
@@ -1199,11 +1252,15 @@
         
         
         
+        <div class="recipe-actions">
+          <button class="recipe-action-btn edit-btn" onclick="editRecipe('creamy-italian-sausage-bow-tie-pasta')">Edit</button>
+          <button class="recipe-action-btn delete-btn" onclick="deleteRecipe('creamy-italian-sausage-bow-tie-pasta', 'Creamy Italian Sausage Bow Tie Pasta')">Delete</button>
+        </div>
       </div>
     </article>
     
 
-    <article class="recipe-card" id="instant-pot-crispy-carnitas" data-tags="both dinner mexican pork batch-cooking weeknight family-dinner instant-pot">
+    <article class="recipe-card" id="instant-pot-crispy-carnitas" data-tags="both dinner mexican pork batch-cooking weeknight family-dinner instant-pot" data-slug="instant-pot-crispy-carnitas" data-recipe="{&quot;dish&quot;: &quot;Instant Pot Crispy Carnitas&quot;, &quot;date_added&quot;: &quot;2026-03-29&quot;, &quot;why_this_works&quot;: &quot;The Instant Pot&#x27;s high pressure breaks down the tough connective tissue in pork shoulder into succulent gelatin while the citrus acids tenderize the meat and brighten the rich fat. The final broiling step creates textural contrast by crisping the edges while keeping the interior moist, mimicking the traditional carnitas technique of slow-cooking then frying.&quot;, &quot;difficulty&quot;: &quot;Easy&quot;, &quot;time&quot;: {&quot;prep&quot;: &quot;15 min&quot;, &quot;cook&quot;: &quot;90 min&quot;, &quot;total&quot;: &quot;105 min&quot;}, &quot;family_notes&quot;: null, &quot;you_might_also_like&quot;: [{&quot;dish&quot;: &quot;Pernil&quot;, &quot;url&quot;: &quot;https://www.seriouseats.com/search?q=pernil&quot;}, {&quot;dish&quot;: &quot;Cochinita Pibil&quot;, &quot;url&quot;: &quot;https://www.bonappetit.com/search?q=cochinita+pibil&quot;}, {&quot;dish&quot;: &quot;Cuban Mojo Pork&quot;, &quot;url&quot;: &quot;https://www.simplyrecipes.com/search?q=cuban+mojo+pork&quot;}], &quot;tags&quot;: {&quot;who&quot;: [&quot;both&quot;], &quot;meal&quot;: [&quot;dinner&quot;], &quot;cuisine&quot;: [&quot;mexican&quot;], &quot;protein&quot;: [&quot;pork&quot;], &quot;style&quot;: [&quot;batch-cooking&quot;, &quot;weeknight&quot;], &quot;occasion&quot;: [&quot;family-dinner&quot;], &quot;tool&quot;: [&quot;instant-pot&quot;]}, &quot;notes&quot;: &quot;For extra crispy carnitas, spread the shredded meat on a sheet pan and broil for 3-5 minutes. Save the cooking liquid - it makes an excellent base for soups or can be reduced into a flavorful sauce.&quot;, &quot;recipe&quot;: {&quot;yield&quot;: &quot;8 servings&quot;, &quot;ingredients&quot;: [&quot;3-4 lbs pork shoulder, cut into 3-inch chunks&quot;, &quot;1 tbsp olive oil&quot;, &quot;1 large onion, diced&quot;, &quot;4 cloves garlic, minced&quot;, &quot;2 tsp ground cumin&quot;, &quot;2 tsp chili powder&quot;, &quot;1 tsp dried oregano&quot;, &quot;1 tsp smoked paprika&quot;, &quot;1 tsp salt&quot;, &quot;1/2 tsp black pepper&quot;, &quot;1/4 tsp cayenne pepper&quot;, &quot;1 orange, juiced&quot;, &quot;2 limes, juiced&quot;, &quot;1/2 cup chicken broth&quot;, &quot;2 bay leaves&quot;], &quot;steps&quot;: [&quot;Season pork chunks with salt and pepper on all sides.&quot;, &quot;Set Instant Pot to saut\u00e9 mode. Add olive oil and brown pork chunks on all sides, about 6-8 minutes total. Remove pork and set aside.&quot;, &quot;Add diced onion to the pot and saut\u00e9 for 3-4 minutes until softened. Add garlic and cook for 1 minute more.&quot;, &quot;Stir in cumin, chili powder, oregano, smoked paprika, salt, pepper, and cayenne. Cook for 30 seconds until fragrant.&quot;, &quot;Add orange juice, lime juice, and chicken broth. Stir to scrape up any browned bits from bottom of pot.&quot;, &quot;Return pork to the pot along with bay leaves. Close lid and set valve to sealing position.&quot;, &quot;Pressure cook on high for 60 minutes, then allow natural pressure release for 15 minutes before quick releasing remaining pressure.&quot;, &quot;Remove bay leaves and transfer pork to a large bowl. Shred using two forks.&quot;, &quot;Strain cooking liquid and skim fat. Pour 1/2 cup of the liquid over shredded pork and toss to combine.&quot;, &quot;For crispy carnitas: spread shredded pork on a sheet pan and broil for 3-5 minutes until edges are crispy and golden.&quot;], &quot;serving&quot;: &quot;Serve in warm tortillas with diced onion, cilantro, lime wedges, and your favorite salsa. Also excellent in burrito bowls, quesadillas, or over rice.&quot;, &quot;storage&quot;: &quot;Refrigerate for up to 4 days or freeze for up to 3 months. Reheat in a skillet with a splash of the reserved cooking liquid.&quot;}}">
       <div class="recipe-header" onclick="toggleRecipe(this)">
         <h2>Instant Pot Crispy Carnitas</h2>
         <div class="recipe-meta">
@@ -1230,11 +1287,15 @@
         <div class="serving"><strong>Serving:</strong> Serve in warm tortillas with diced onion, cilantro, lime wedges, and your favorite salsa. Also excellent in burrito bowls, quesadillas, or over rice.</div>
         <div class="storage"><strong>Storage:</strong> Refrigerate for up to 4 days or freeze for up to 3 months. Reheat in a skillet with a splash of the reserved cooking liquid.</div>
         
+        <div class="recipe-actions">
+          <button class="recipe-action-btn edit-btn" onclick="editRecipe('instant-pot-crispy-carnitas')">Edit</button>
+          <button class="recipe-action-btn delete-btn" onclick="deleteRecipe('instant-pot-crispy-carnitas', 'Instant Pot Crispy Carnitas')">Delete</button>
+        </div>
       </div>
     </article>
     
 
-    <article class="recipe-card" id="jambalaya" data-tags="both dinner cajun southern pork chicken batch-cooking one-pan weeknight dutch-oven">
+    <article class="recipe-card" id="jambalaya" data-tags="both dinner cajun southern pork chicken batch-cooking one-pan weeknight dutch-oven" data-slug="jambalaya" data-recipe="{&quot;dish&quot;: &quot;Jambalaya&quot;, &quot;date_added&quot;: &quot;2026-03-28&quot;, &quot;why_this_works&quot;: &quot;This jambalaya succeeds through the building of layers of flavor, starting with browning the sausage to create fond, then saut\u00e9ing the aromatic vegetables to build a flavor base. The one-pot rice technique allows the grains to absorb all the seasoned liquid and rendered fats, while the final low simmer ensures the rice cooks evenly without burning.&quot;, &quot;difficulty&quot;: &quot;Easy&quot;, &quot;time&quot;: {&quot;prep&quot;: &quot;30&quot;, &quot;cook&quot;: &quot;45&quot;, &quot;total&quot;: &quot;75&quot;}, &quot;family_notes&quot;: null, &quot;you_might_also_like&quot;: [{&quot;dish&quot;: &quot;Red Beans and Rice&quot;, &quot;url&quot;: &quot;https://www.seriouseats.com/search?q=red+beans+and+rice&quot;}, {&quot;dish&quot;: &quot;Chicken and Sausage Gumbo&quot;, &quot;url&quot;: &quot;https://cooking.nytimes.com/search?q=chicken+sausage+gumbo&quot;}, {&quot;dish&quot;: &quot;Spanish Paella&quot;, &quot;url&quot;: &quot;https://www.bonappetit.com/search?q=spanish+paella&quot;}], &quot;tags&quot;: {&quot;who&quot;: [&quot;both&quot;], &quot;meal&quot;: [&quot;dinner&quot;], &quot;cuisine&quot;: [&quot;cajun&quot;, &quot;southern&quot;], &quot;protein&quot;: [&quot;pork&quot;, &quot;chicken&quot;], &quot;style&quot;: [&quot;batch-cooking&quot;, &quot;one-pan&quot;, &quot;weeknight&quot;], &quot;occasion&quot;: [], &quot;tool&quot;: [&quot;dutch-oven&quot;]}, &quot;notes&quot;: &quot;Use Tony Chachere&#x27;s seasoning specifically - no substitutes according to recipe&quot;, &quot;recipe&quot;: {&quot;ingredients&quot;: [&quot;1 lb boneless skinless chicken breast, cubed&quot;, &quot;1 (14 oz) package andouille sausage, sliced&quot;, &quot;1 green bell pepper, diced&quot;, &quot;1 yellow onion, chopped&quot;, &quot;3 large celery ribs, chopped&quot;, &quot;3 garlic cloves, minced&quot;, &quot;1 bunch scallions, chopped&quot;, &quot;1 (28 oz) can diced tomatoes, with juices&quot;, &quot;2 cups chicken broth&quot;, &quot;1\u00bc cups long grain rice&quot;, &quot;1 tbsp Worcestershire sauce&quot;, &quot;2 bay leaves&quot;, &quot;1 tsp dried basil&quot;, &quot;1 tsp dried oregano&quot;, &quot;1 tsp dried sage&quot;, &quot;1 tsp paprika&quot;, &quot;1 tbsp Tony Chachere&#x27;s seasoning&quot;, &quot;1 tsp salt&quot;, &quot;Cracked black pepper to taste&quot;], &quot;steps&quot;: [&quot;Cook sliced sausage over medium-high heat in a 6-quart stock pot until slightly browned, about 5 minutes.&quot;, &quot;Add bell pepper, onion, celery, garlic and scallions. Cook until softened but not translucent, about 4 minutes.&quot;, &quot;Add cubed chicken breast and Worcestershire sauce. Cook just until chicken is no longer pink.&quot;, &quot;Add bay leaves, basil, oregano, sage, paprika, Tony Chachere&#x27;s, salt, black pepper, tomatoes and chicken broth.&quot;, &quot;Bring to a boil over medium-high heat.&quot;, &quot;Add rice and bring back to a boil. Boil for 1 minute.&quot;, &quot;Cover, reduce heat to low, and simmer for at least 30 minutes. The jambalaya should be wet but not soupy.&quot;]}}">
       <div class="recipe-header" onclick="toggleRecipe(this)">
         <h2>Jambalaya</h2>
         <div class="recipe-meta">
@@ -1261,11 +1322,15 @@
         
         
         
+        <div class="recipe-actions">
+          <button class="recipe-action-btn edit-btn" onclick="editRecipe('jambalaya')">Edit</button>
+          <button class="recipe-action-btn delete-btn" onclick="deleteRecipe('jambalaya', 'Jambalaya')">Delete</button>
+        </div>
       </div>
     </article>
     
 
-    <article class="recipe-card" id="laab-moo-thai-larb-with-pork" data-tags="both dinner lunch thai pork batch-cooking make-ahead weeknight family-dinner skillet">
+    <article class="recipe-card" id="laab-moo-thai-larb-with-pork" data-tags="both dinner lunch thai pork batch-cooking make-ahead weeknight family-dinner skillet" data-slug="laab-moo-thai-larb-with-pork" data-recipe="{&quot;dish&quot;: &quot;Laab Moo (Thai Larb with Pork)&quot;, &quot;source&quot;: &quot;Hot Thai Kitchen&quot;, &quot;date_added&quot;: &quot;2026-03-28&quot;, &quot;why_this_works&quot;: &quot;The toasted rice powder adds essential texture and nutty depth while absorbing excess moisture from the meat. The balance of lime&#x27;s acidity, fish sauce&#x27;s umami, and fresh herbs creates the signature bright, funky flavor profile that defines Thai larb, while cooking the pork just until done keeps it tender and prevents dryness.&quot;, &quot;difficulty&quot;: &quot;Easy&quot;, &quot;time&quot;: {&quot;prep&quot;: &quot;15 min&quot;, &quot;cook&quot;: &quot;10 min&quot;, &quot;total&quot;: &quot;25 min&quot;}, &quot;family_notes&quot;: null, &quot;you_might_also_like&quot;: [{&quot;dish&quot;: &quot;Vietnamese Bun Cha&quot;, &quot;url&quot;: &quot;https://www.seriouseats.com/search?q=vietnamese+bun+cha&quot;}, {&quot;dish&quot;: &quot;Korean Lettuce Wraps with Bulgogi&quot;, &quot;url&quot;: &quot;https://cooking.nytimes.com/search?q=korean+lettuce+wraps+bulgogi&quot;}, {&quot;dish&quot;: &quot;Thai Nam Tok Beef Salad&quot;, &quot;url&quot;: &quot;https://www.bonappetit.com/search?q=thai+nam+tok+beef&quot;}], &quot;tags&quot;: {&quot;who&quot;: [&quot;both&quot;], &quot;meal&quot;: [&quot;dinner&quot;, &quot;lunch&quot;], &quot;cuisine&quot;: [&quot;thai&quot;], &quot;protein&quot;: [&quot;pork&quot;], &quot;style&quot;: [&quot;batch-cooking&quot;, &quot;make-ahead&quot;, &quot;weeknight&quot;], &quot;occasion&quot;: [&quot;family-dinner&quot;], &quot;tool&quot;: [&quot;skillet&quot;]}, &quot;notes&quot;: &quot;Laab is a spicy meat salad from Northern Thailand and Laos. The key is to not overcook the pork and to balance the sour, salty, and spicy flavors.&quot;, &quot;recipe&quot;: {&quot;yield&quot;: &quot;4 servings&quot;, &quot;ingredients&quot;: [&quot;1 lb ground pork&quot;, &quot;2 tbsp water or chicken stock&quot;, &quot;3 tbsp lime juice (about 2 limes)&quot;, &quot;2 tbsp fish sauce&quot;, &quot;1 tsp sugar&quot;, &quot;1-2 tbsp chili flakes (adjust to taste)&quot;, &quot;2 tbsp toasted rice powder&quot;, &quot;3 shallots, thinly sliced&quot;, &quot;1/4 cup fresh mint leaves&quot;, &quot;1/4 cup fresh cilantro leaves&quot;, &quot;2-3 green onions, chopped&quot;, &quot;Lettuce cups for serving&quot;, &quot;Sticky rice for serving&quot;], &quot;steps&quot;: [&quot;Toast raw jasmine rice in a dry pan over medium heat until golden brown, then grind into powder using a spice grinder or mortar and pestle.&quot;, &quot;Heat a large skillet over medium-high heat. Add ground pork and water, breaking up the meat with a spoon.&quot;, &quot;Cook pork for 3-4 minutes until just cooked through but still tender. Do not overcook.&quot;, &quot;Remove from heat and let cool slightly.&quot;, &quot;In a large bowl, combine lime juice, fish sauce, sugar, and chili flakes. Stir until sugar dissolves.&quot;, &quot;Add the cooked pork to the dressing and mix well.&quot;, &quot;Add toasted rice powder, sliced shallots, mint leaves, cilantro, and green onions. Toss everything together.&quot;, &quot;Taste and adjust seasoning with more lime juice, fish sauce, or chili flakes as needed.&quot;, &quot;Serve immediately with lettuce cups and sticky rice.&quot;], &quot;serving&quot;: &quot;Serve with butter lettuce cups, sticky rice, and fresh vegetables like cucumber and cabbage&quot;, &quot;storage&quot;: &quot;Best eaten immediately. Can be refrigerated for up to 1 day but herbs will wilt.&quot;}}">
       <div class="recipe-header" onclick="toggleRecipe(this)">
         <h2>Laab Moo (Thai Larb with Pork)</h2>
         <div class="recipe-meta">
@@ -1292,11 +1357,15 @@
         <div class="serving"><strong>Serving:</strong> Serve with butter lettuce cups, sticky rice, and fresh vegetables like cucumber and cabbage</div>
         <div class="storage"><strong>Storage:</strong> Best eaten immediately. Can be refrigerated for up to 1 day but herbs will wilt.</div>
         
+        <div class="recipe-actions">
+          <button class="recipe-action-btn edit-btn" onclick="editRecipe('laab-moo-thai-larb-with-pork')">Edit</button>
+          <button class="recipe-action-btn delete-btn" onclick="deleteRecipe('laab-moo-thai-larb-with-pork', 'Laab Moo (Thai Larb with Pork)')">Delete</button>
+        </div>
       </div>
     </article>
     
 
-    <article class="recipe-card" id="mexican-white-cheese-dip" data-tags="both appetizer snack mexican tex-mex vegetarian 30-minute weeknight entertaining game-day family-dinner party game-day stovetop saucepan">
+    <article class="recipe-card" id="mexican-white-cheese-dip" data-tags="both appetizer snack mexican tex-mex vegetarian 30-minute weeknight entertaining game-day family-dinner party game-day stovetop saucepan" data-slug="mexican-white-cheese-dip" data-recipe="{&quot;dish&quot;: &quot;Mexican White Cheese Dip&quot;, &quot;source&quot;: &quot;Eating on a Dime&quot;, &quot;date_added&quot;: &quot;2026-03-29&quot;, &quot;why_this_works&quot;: &quot;American cheese&#x27;s high emulsifier content creates an impossibly smooth melt without breaking or becoming grainy, while the gradual heating and constant stirring prevents the proteins from seizing. The jalape\u00f1o&#x27;s heat is perfectly balanced by the cheese&#x27;s richness, and the warm spices create the signature Tex-Mex flavor profile that makes this dip irresistible.&quot;, &quot;difficulty&quot;: &quot;Easy&quot;, &quot;time&quot;: {&quot;prep&quot;: &quot;5 min&quot;, &quot;cook&quot;: &quot;10 min&quot;, &quot;total&quot;: &quot;15 min&quot;}, &quot;family_notes&quot;: null, &quot;you_might_also_like&quot;: [{&quot;dish&quot;: &quot;Queso Fundido&quot;, &quot;url&quot;: &quot;https://www.seriouseats.com/search?q=queso+fundido&quot;}, {&quot;dish&quot;: &quot;Beer Cheese Dip&quot;, &quot;url&quot;: &quot;https://www.budgetbytes.com/search?q=beer+cheese+dip&quot;}, {&quot;dish&quot;: &quot;Nacho Cheese Sauce&quot;, &quot;url&quot;: &quot;https://www.simplyrecipes.com/search?q=nacho+cheese+sauce&quot;}], &quot;tags&quot;: {&quot;who&quot;: [&quot;both&quot;], &quot;meal&quot;: [&quot;appetizer&quot;, &quot;snack&quot;], &quot;cuisine&quot;: [&quot;mexican&quot;, &quot;tex-mex&quot;], &quot;protein&quot;: [&quot;vegetarian&quot;], &quot;style&quot;: [&quot;30-minute&quot;, &quot;weeknight&quot;, &quot;entertaining&quot;, &quot;game-day&quot;], &quot;occasion&quot;: [&quot;family-dinner&quot;, &quot;party&quot;, &quot;game-day&quot;], &quot;tool&quot;: [&quot;stovetop&quot;, &quot;saucepan&quot;]}, &quot;notes&quot;: &quot;Can substitute different peppers for heat level preference. Keep warm in slow cooker for parties.&quot;, &quot;recipe&quot;: {&quot;yield&quot;: &quot;About 2 cups&quot;, &quot;ingredients&quot;: [&quot;1 lb white American cheese, cubed&quot;, &quot;1 cup whole milk&quot;, &quot;1 jalape\u00f1o pepper, seeded and diced&quot;, &quot;1 tsp garlic powder&quot;, &quot;1 tsp onion powder&quot;, &quot;1/2 tsp cumin&quot;, &quot;Salt to taste&quot;], &quot;steps&quot;: [&quot;Heat milk in a medium saucepan over medium-low heat until warm.&quot;, &quot;Add cubed cheese gradually, stirring constantly until melted and smooth.&quot;, &quot;Stir in diced jalape\u00f1o, garlic powder, onion powder, and cumin.&quot;, &quot;Season with salt to taste and continue stirring until well combined.&quot;, &quot;Serve immediately while warm with tortilla chips.&quot;], &quot;serving&quot;: &quot;Serve warm with tortilla chips, fresh vegetables, or drizzle over nachos&quot;, &quot;storage&quot;: &quot;Store in refrigerator up to 1 week. Reheat gently on stovetop, adding milk if needed to thin&quot;}}">
       <div class="recipe-header" onclick="toggleRecipe(this)">
         <h2>Mexican White Cheese Dip</h2>
         <div class="recipe-meta">
@@ -1323,11 +1392,15 @@
         <div class="serving"><strong>Serving:</strong> Serve warm with tortilla chips, fresh vegetables, or drizzle over nachos</div>
         <div class="storage"><strong>Storage:</strong> Store in refrigerator up to 1 week. Reheat gently on stovetop, adding milk if needed to thin</div>
         
+        <div class="recipe-actions">
+          <button class="recipe-action-btn edit-btn" onclick="editRecipe('mexican-white-cheese-dip')">Edit</button>
+          <button class="recipe-action-btn delete-btn" onclick="deleteRecipe('mexican-white-cheese-dip', 'Mexican White Cheese Dip')">Delete</button>
+        </div>
       </div>
     </article>
     
 
-    <article class="recipe-card" id="new-orleans-red-beans-and-rice" data-tags="both dinner southern cajun pork weekend-project batch-cooking make-ahead winter-warmer family-dinner dutch-oven">
+    <article class="recipe-card" id="new-orleans-red-beans-and-rice" data-tags="both dinner southern cajun pork weekend-project batch-cooking make-ahead winter-warmer family-dinner dutch-oven" data-slug="new-orleans-red-beans-and-rice" data-recipe="{&quot;dish&quot;: &quot;New Orleans Red Beans and Rice&quot;, &quot;source&quot;: &quot;Original / Cory&quot;, &quot;date_added&quot;: &quot;2026-03-28&quot;, &quot;why_this_works&quot;: &quot;Andouille, tasso, and ham hocks layer three different styles of pork smoke and salt into the broth, which the beans absorb over the long simmer. Mashing a portion of the beans partway through creates a creamy, gravy-like body without any added thickener. The butter stirred in at the end rounds out the richness and gives the pot liquor \u2014 the flavorful cooking liquid \u2014 a velvety finish.&quot;, &quot;difficulty&quot;: &quot;Weekend Project&quot;, &quot;time&quot;: {&quot;prep&quot;: &quot;30 min&quot;, &quot;cook&quot;: &quot;5-6 hours&quot;, &quot;total&quot;: &quot;6+ hours (plus overnight soak)&quot;}, &quot;family_notes&quot;: null, &quot;you_might_also_like&quot;: [{&quot;dish&quot;: &quot;Hoppin&#x27; John&quot;, &quot;url&quot;: &quot;https://www.seriouseats.com/search?q=hoppin+john&quot;}, {&quot;dish&quot;: &quot;Cajun White Bean Soup&quot;, &quot;url&quot;: &quot;https://www.budgetbytes.com/?s=white+bean+sausage+soup&quot;}, {&quot;dish&quot;: &quot;Chicken and Sausage Gumbo&quot;, &quot;url&quot;: &quot;https://cooking.nytimes.com/search?q=chicken+sausage+gumbo&quot;}], &quot;tags&quot;: {&quot;who&quot;: [&quot;both&quot;], &quot;meal&quot;: [&quot;dinner&quot;], &quot;cuisine&quot;: [&quot;southern&quot;, &quot;cajun&quot;], &quot;protein&quot;: [&quot;pork&quot;], &quot;style&quot;: [&quot;weekend-project&quot;, &quot;batch-cooking&quot;, &quot;make-ahead&quot;], &quot;occasion&quot;: [&quot;winter-warmer&quot;, &quot;family-dinner&quot;], &quot;tool&quot;: [&quot;dutch-oven&quot;]}, &quot;notes&quot;: &quot;Low and slow \u2014 plan for 5-6 hours total cook time.&quot;, &quot;recipe&quot;: {&quot;yield&quot;: &quot;Serves 6-8&quot;, &quot;ingredients&quot;: [&quot;1 lb dry red kidney beans&quot;, &quot;1/2 lb andouille sausage&quot;, &quot;4 oz tasso&quot;, &quot;2 ham hocks&quot;, &quot;1/2 stick unsalted butter plus one more pad&quot;, &quot;1 tbsp avocado oil&quot;, &quot;32 oz low sodium chicken broth&quot;, &quot;1 red bell pepper&quot;, &quot;1 green bell pepper&quot;, &quot;1 yellow onion&quot;, &quot;2 tbsp fresh parsley&quot;, &quot;Tony&#x27;s seasoning (4 good back-and-forth shakes)&quot;, &quot;Garlic powder (4 good back-and-forth shakes)&quot;, &quot;Onion powder (4 good back-and-forth shakes)&quot;, &quot;Italian seasoning (2 good shakes)&quot;, &quot;Thyme (1 good shake)&quot;, &quot;5 bay leaves&quot;], &quot;steps&quot;: [&quot;Soak the beans in water overnight in the fridge.&quot;, &quot;Dice all produce \u2014 bell peppers, onion, and parsley.&quot;, &quot;Slice tasso and andouille into bite-size chunks.&quot;, &quot;Melt half a stick of butter and 1 tbsp avocado oil in a big pot.&quot;, &quot;Add sausage and tasso to the pot. Brown for a few minutes, stirring to get all sides.&quot;, &quot;After a few minutes, add all the diced produce.&quot;, &quot;Add 4 good back-and-forth shakes of Tony&#x27;s, garlic powder, and onion powder. Add 2 good shakes of Italian seasoning and 1 good shake of thyme. Add 5 bay leaves.&quot;, &quot;When produce is translucent, add soaked beans, 32 oz chicken broth, ham hocks, and enough water to fully cover and make it a bit soupy.&quot;, &quot;Bring to a boil, then slowly reduce to a simmer.&quot;, &quot;Simmer with the lid on but slightly cracked for ventilation. Stir every 20-30 minutes so it doesn&#x27;t stick.&quot;, &quot;After about 4-5 hours, remove ham hocks and mash some beans in the pot to thicken.&quot;, &quot;Add a pad of butter. Continue simmering for another hour or two.&quot;, &quot;After mashing and thickening, turn heat down to low (1-2). Beans can stick/burn easily once thick.&quot;, &quot;Serve over rice with green onion and any other fixings.&quot;]}}">
       <div class="recipe-header" onclick="toggleRecipe(this)">
         <h2>New Orleans Red Beans and Rice</h2>
         <div class="recipe-meta">
@@ -1354,11 +1427,15 @@
         
         
         
+        <div class="recipe-actions">
+          <button class="recipe-action-btn edit-btn" onclick="editRecipe('new-orleans-red-beans-and-rice')">Edit</button>
+          <button class="recipe-action-btn delete-btn" onclick="deleteRecipe('new-orleans-red-beans-and-rice', 'New Orleans Red Beans and Rice')">Delete</button>
+        </div>
       </div>
     </article>
     
 
-    <article class="recipe-card" id="pot-roast" data-tags="both dinner american beef make-ahead family-dinner family-dinner winter-warmer cast-iron slow-cooker">
+    <article class="recipe-card" id="pot-roast" data-tags="both dinner american beef make-ahead family-dinner family-dinner winter-warmer cast-iron slow-cooker" data-slug="pot-roast" data-recipe="{&quot;dish&quot;: &quot;Pot Roast&quot;, &quot;date_added&quot;: &quot;2026-03-29&quot;, &quot;why_this_works&quot;: &quot;The initial searing creates a flavorful fond that becomes the base for the braising liquid, while the long, low-heat cooking breaks down the chuck roast&#x27;s tough connective tissues into tender gelatin. The combination of tangy pepperoncini, umami-rich seasoning packets, and acidic tomato sauce creates a complex braising environment that penetrates the meat while the vegetables cook down into a rich, cohesive sauce.&quot;, &quot;difficulty&quot;: &quot;Easy&quot;, &quot;time&quot;: {&quot;prep&quot;: &quot;15 min&quot;, &quot;cook&quot;: &quot;8 hours&quot;, &quot;total&quot;: &quot;8 hours 15 min&quot;}, &quot;family_notes&quot;: null, &quot;you_might_also_like&quot;: [{&quot;dish&quot;: &quot;Mississippi Pot Roast&quot;, &quot;url&quot;: &quot;https://www.seriouseats.com/search?q=mississippi+pot+roast&quot;}, {&quot;dish&quot;: &quot;Classic Beef Bourguignon&quot;, &quot;url&quot;: &quot;https://cooking.nytimes.com/search?q=beef+bourguignon&quot;}, {&quot;dish&quot;: &quot;Italian Braised Short Ribs&quot;, &quot;url&quot;: &quot;https://www.bonappetit.com/search?q=braised+short+ribs&quot;}], &quot;tags&quot;: {&quot;who&quot;: [&quot;both&quot;], &quot;meal&quot;: [&quot;dinner&quot;], &quot;cuisine&quot;: [&quot;american&quot;], &quot;protein&quot;: [&quot;beef&quot;], &quot;style&quot;: [&quot;make-ahead&quot;, &quot;family-dinner&quot;], &quot;occasion&quot;: [&quot;family-dinner&quot;, &quot;winter-warmer&quot;], &quot;tool&quot;: [&quot;cast-iron&quot;, &quot;slow-cooker&quot;]}, &quot;notes&quot;: &quot;The pepperoncini adds a tangy brightness that cuts through the rich beef&quot;, &quot;recipe&quot;: {&quot;ingredients&quot;: [&quot;1 chuck roast&quot;, &quot;Oil for searing&quot;, &quot;4 tbsp butter&quot;, &quot;1 large onion, chopped&quot;, &quot;3 cups carrots&quot;, &quot;16 oz jar pepperoncini peppers with juice&quot;, &quot;1 packet beef stew seasoning&quot;, &quot;1 packet au jus gravy mix&quot;, &quot;1 packet ranch seasoning&quot;, &quot;15 oz can tomato sauce&quot;, &quot;1/2 can water&quot;], &quot;steps&quot;: [&quot;Heat oil in a cast iron skillet and sear chuck roast on both sides. Remove roast.&quot;, &quot;Add butter and chopped onion to skillet.&quot;, &quot;Add carrots, pepperoncini with juice, beef stew packet, au jus packet, ranch packet, and tomato sauce.&quot;, &quot;Fill tomato sauce can halfway with water and add to mixture.&quot;, &quot;Stir everything together and simmer for 5 minutes.&quot;, &quot;Place roast in crock pot and pour gravy mixture over top.&quot;, &quot;Cook on high for 8 hours with lid on.&quot;]}}">
       <div class="recipe-header" onclick="toggleRecipe(this)">
         <h2>Pot Roast</h2>
         <div class="recipe-meta">
@@ -1385,11 +1462,15 @@
         
         
         
+        <div class="recipe-actions">
+          <button class="recipe-action-btn edit-btn" onclick="editRecipe('pot-roast')">Edit</button>
+          <button class="recipe-action-btn delete-btn" onclick="deleteRecipe('pot-roast', 'Pot Roast')">Delete</button>
+        </div>
       </div>
     </article>
     
 
-    <article class="recipe-card" id="taco-meat-with-corn-tortillas" data-tags="both dinner mexican beef weeknight family-dinner skillet">
+    <article class="recipe-card" id="taco-meat-with-corn-tortillas" data-tags="both dinner mexican beef weeknight family-dinner skillet" data-slug="taco-meat-with-corn-tortillas" data-recipe="{&quot;dish&quot;: &quot;Taco Meat with Corn Tortillas&quot;, &quot;source&quot;: null, &quot;date_added&quot;: &quot;2026-03-28&quot;, &quot;why_this_works&quot;: &quot;Using fattier ground beef (70-80% lean) keeps the meat juicy after draining and gives the spice blend something to cling to. The tomato sauce simmers into the meat and acts as a binder that holds the seasoning in a thin glaze rather than dusty dry spices. Shallow-frying the corn tortillas transforms them from floppy and bland into crisp, toasty shells that hold up under toppings.&quot;, &quot;difficulty&quot;: &quot;Easy&quot;, &quot;time&quot;: {&quot;prep&quot;: &quot;10 min&quot;, &quot;cook&quot;: &quot;20 min&quot;, &quot;total&quot;: &quot;30 min&quot;}, &quot;family_notes&quot;: null, &quot;you_might_also_like&quot;: [{&quot;dish&quot;: &quot;Birria Tacos&quot;, &quot;url&quot;: &quot;https://www.seriouseats.com/search?q=birria+tacos&quot;}, {&quot;dish&quot;: &quot;Carnitas&quot;, &quot;url&quot;: &quot;https://cooking.nytimes.com/search?q=carnitas&quot;}, {&quot;dish&quot;: &quot;Chicken Tinga&quot;, &quot;url&quot;: &quot;https://thewoksoflife.com/?s=chicken+tinga&quot;}], &quot;tags&quot;: {&quot;who&quot;: [&quot;both&quot;], &quot;meal&quot;: [&quot;dinner&quot;], &quot;cuisine&quot;: [&quot;mexican&quot;], &quot;protein&quot;: [&quot;beef&quot;], &quot;style&quot;: [&quot;weeknight&quot;], &quot;occasion&quot;: [&quot;family-dinner&quot;], &quot;tool&quot;: [&quot;skillet&quot;]}, &quot;notes&quot;: &quot;Use 70-80% lean ground beef for best flavor. Mexican oregano is key \u2014 it&#x27;s different from Italian oregano.&quot;, &quot;recipe&quot;: {&quot;yield&quot;: &quot;Serves 4 (8 tacos)&quot;, &quot;ingredients&quot;: [&quot;1 lb ground beef (70-80% lean)&quot;, &quot;1 tbsp chili powder&quot;, &quot;1/2 tsp salt&quot;, &quot;3/4 tsp cumin&quot;, &quot;1/2 tsp dried Mexican oregano&quot;, &quot;1/4 tsp granulated garlic&quot;, &quot;1/4 tsp granulated onion&quot;, &quot;1/2 cup tomato sauce&quot;, &quot;8 white corn tortillas&quot;, &quot;1/2 cup avocado or vegetable oil&quot;], &quot;steps&quot;: [&quot;Heat a large skillet over medium heat. Add the ground beef, breaking it up with a wooden spoon. Cook fully until browned and no longer pink.&quot;, &quot;Drain any excess grease from the skillet. Return to stove and reduce heat to low.&quot;, &quot;Add the tomato sauce, chili powder, salt, cumin, oregano, granulated garlic, and granulated onion. Stir until the meat is coated in the sauce.&quot;, &quot;Simmer for 5 minutes.&quot;, &quot;Pour 1/2 cup oil in a medium skillet and heat over medium-high. Test by dipping a tortilla edge \u2014 if it sizzles and bubbles, it&#x27;s ready.&quot;, &quot;Gently lay a tortilla in the oil and fry each side for about 30 seconds, just enough to add color and crispness.&quot;, &quot;Remove to a paper towel and carefully fold the tortilla over into a taco shape using tongs or two forks. Repeat with remaining tortillas.&quot;, &quot;Fill tortillas with taco meat and add desired toppings.&quot;]}}">
       <div class="recipe-header" onclick="toggleRecipe(this)">
         <h2>Taco Meat with Corn Tortillas</h2>
         <div class="recipe-meta">
@@ -1416,11 +1497,15 @@
         
         
         
+        <div class="recipe-actions">
+          <button class="recipe-action-btn edit-btn" onclick="editRecipe('taco-meat-with-corn-tortillas')">Edit</button>
+          <button class="recipe-action-btn delete-btn" onclick="deleteRecipe('taco-meat-with-corn-tortillas', 'Taco Meat with Corn Tortillas')">Delete</button>
+        </div>
       </div>
     </article>
     
 
-    <article class="recipe-card" id="vodka-sauce-with-sausage" data-tags="both dinner italian pork weeknight one-pan family-dinner date-night skillet">
+    <article class="recipe-card" id="vodka-sauce-with-sausage" data-tags="both dinner italian pork weeknight one-pan family-dinner date-night skillet" data-slug="vodka-sauce-with-sausage" data-recipe="{&quot;dish&quot;: &quot;Vodka Sauce with Sausage&quot;, &quot;source&quot;: null, &quot;date_added&quot;: &quot;2026-03-28&quot;, &quot;why_this_works&quot;: &quot;The vodka dissolves flavor compounds in the tomato paste that are alcohol-soluble but not water- or fat-soluble, unlocking a fuller tomato taste you can&#x27;t get otherwise. Browning the sausage hard before building the sauce creates a fond that deglazes into the vodka, adding meaty depth. The heavy cream emulsifies with the tomato paste to create a stable, silky sauce that clings to penne.&quot;, &quot;difficulty&quot;: &quot;Easy&quot;, &quot;time&quot;: {&quot;prep&quot;: &quot;10 min&quot;, &quot;cook&quot;: &quot;20 min&quot;, &quot;total&quot;: &quot;30 min&quot;}, &quot;family_notes&quot;: null, &quot;you_might_also_like&quot;: [{&quot;dish&quot;: &quot;Rigatoni alla Norma&quot;, &quot;url&quot;: &quot;https://www.seriouseats.com/search?q=rigatoni+alla+norma&quot;}, {&quot;dish&quot;: &quot;Bolognese&quot;, &quot;url&quot;: &quot;https://cooking.nytimes.com/search?q=bolognese&quot;}, {&quot;dish&quot;: &quot;Pasta al Forno&quot;, &quot;url&quot;: &quot;https://www.bonappetit.com/search?q=pasta+al+forno&quot;}], &quot;tags&quot;: {&quot;who&quot;: [&quot;both&quot;], &quot;meal&quot;: [&quot;dinner&quot;], &quot;cuisine&quot;: [&quot;italian&quot;], &quot;protein&quot;: [&quot;pork&quot;], &quot;style&quot;: [&quot;weeknight&quot;, &quot;one-pan&quot;], &quot;occasion&quot;: [&quot;family-dinner&quot;, &quot;date-night&quot;], &quot;tool&quot;: [&quot;skillet&quot;]}, &quot;notes&quot;: &quot;Use double-concentrated tomato paste (Mutti or DeLallo). Don&#x27;t sub the heavy cream for milk or half-and-half \u2014 it&#x27;ll curdle. Buy bulk Italian sausage or remove from casings.&quot;, &quot;recipe&quot;: {&quot;yield&quot;: &quot;Serves 4&quot;, &quot;ingredients&quot;: [&quot;8 oz uncooked penne pasta&quot;, &quot;1 tbsp butter&quot;, &quot;16 oz Italian sausage&quot;, &quot;1/2 small onion, chopped finely&quot;, &quot;1 clove garlic, minced&quot;, &quot;1/3 cup vodka&quot;, &quot;1/3 cup tomato paste&quot;, &quot;1 cup heavy/whipping cream&quot;, &quot;Salt and pepper to taste&quot;, &quot;Fresh basil, sliced thin (optional)&quot;, &quot;Freshly grated parmesan cheese (optional)&quot;], &quot;steps&quot;: [&quot;Boil a generously salted pot of water and cook the penne al dente according to package directions.&quot;, &quot;Meanwhile, add butter, sausage meat, and onions to a skillet over medium-high heat. Cook 7-10 minutes until nicely browned, breaking the sausage up as you go. Drain excess fat.&quot;, &quot;Stir in the garlic and vodka. Let the sauce bubble for about 30 seconds.&quot;, &quot;Stir in the tomato paste and cream until you have a smooth mixture.&quot;, &quot;Reduce heat to medium-low. Let the sauce warm through and thicken to your liking.&quot;, &quot;Season with salt and pepper. Stir in fresh basil if using. Toss with drained pasta, thinning with a splash of pasta water if needed. Serve with freshly grated parmesan.&quot;]}}">
       <div class="recipe-header" onclick="toggleRecipe(this)">
         <h2>Vodka Sauce with Sausage</h2>
         <div class="recipe-meta">
@@ -1447,6 +1532,10 @@
         
         
         
+        <div class="recipe-actions">
+          <button class="recipe-action-btn edit-btn" onclick="editRecipe('vodka-sauce-with-sausage')">Edit</button>
+          <button class="recipe-action-btn delete-btn" onclick="deleteRecipe('vodka-sauce-with-sausage', 'Vodka Sauce with Sausage')">Delete</button>
+        </div>
       </div>
     </article>
     
@@ -1788,6 +1877,103 @@
       }
     }
 
+    // --- Edit & Delete ---
+    let editingSlug = null;
+
+    function editRecipe(slug) {
+      const card = document.getElementById(slug);
+      const recipe = JSON.parse(card.dataset.recipe);
+      editingSlug = slug;
+
+      // Switch to Add view
+      showView('add');
+
+      // Fill the form
+      document.getElementById('add-dish').value = recipe.dish || '';
+      document.getElementById('add-source').value = recipe.source || '';
+      document.getElementById('add-yield').value = recipe.recipe?.yield || '';
+      document.getElementById('add-notes').value = recipe.notes || '';
+      document.getElementById('add-ingredients').value = (recipe.recipe?.ingredients || []).join('\n');
+      document.getElementById('add-steps').value = (recipe.recipe?.steps || []).join('\n');
+      document.getElementById('add-serving').value = recipe.recipe?.serving || '';
+      document.getElementById('add-storage').value = recipe.recipe?.storage || '';
+
+      // Difficulty
+      if (recipe.difficulty) {
+        const radio = document.querySelector(`input[name="add-difficulty"][value="${recipe.difficulty}"]`);
+        if (radio) radio.checked = true;
+      }
+
+      // Time
+      if (recipe.time) {
+        document.getElementById('add-time-prep').value = recipe.time.prep || '';
+        document.getElementById('add-time-cook').value = recipe.time.cook || '';
+        document.getElementById('add-time-total').value = recipe.time.total || '';
+      }
+
+      // Who bar
+      const whoVal = (recipe.tags?.who || ['both'])[0];
+      document.querySelectorAll('#who-form-bar .who-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.who === whoVal);
+      });
+
+      // Tag checkboxes — clear all first
+      document.querySelectorAll('#add-view .check-group input[type="checkbox"]').forEach(cb => cb.checked = false);
+      ['meal', 'cuisine', 'protein', 'style', 'occasion', 'tool'].forEach(cat => {
+        (recipe.tags?.[cat] || []).forEach(tag => {
+          const cb = document.querySelector(`#${cat}-checks input[value="${tag}"]`);
+          if (cb) cb.checked = true;
+          else addCustomTagFromImport(cat, tag);
+        });
+      });
+
+      // Update save button text
+      document.getElementById('save-btn').textContent = 'Update Recipe';
+      document.getElementById('add-dish').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    async function deleteRecipe(slug, dishName) {
+      if (!confirm(`Delete "${dishName}"? This cannot be undone.`)) return;
+
+      const ghToken = getToken();
+      if (!ghToken) {
+        alert('GitHub token not set up. Go to Add New tab first.');
+        return;
+      }
+
+      const filename = `recipes/${slug}.json`;
+
+      try {
+        // Get the file's SHA (required for deletion)
+        const getResp = await fetch(`https://api.github.com/repos/${REPO}/contents/${filename}`, {
+          headers: { 'Authorization': `token ${ghToken}` }
+        });
+        if (!getResp.ok) throw new Error('Could not find recipe file');
+        const fileData = await getResp.json();
+
+        // Delete the file
+        const delResp = await fetch(`https://api.github.com/repos/${REPO}/contents/${filename}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `token ${ghToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: `Delete recipe: ${dishName}`,
+            sha: fileData.sha
+          })
+        });
+
+        if (!delResp.ok) throw new Error('Delete failed');
+
+        // Remove from page
+        document.getElementById(slug).remove();
+        alert(`"${dishName}" deleted. Site will rebuild in a minute.`);
+      } catch (e) {
+        alert('Error: ' + e.message);
+      }
+    }
+
     function selectWhoForm(btn) {
       btn.parentElement.querySelectorAll('.who-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
@@ -1934,19 +2120,37 @@ For you_might_also_like, suggest 3 real dishes from the culinary world that are 
 
       btn.textContent = 'Saving...';
 
-      const slug = dish.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      // Use editing slug if updating, otherwise generate new slug
+      const slug = editingSlug || dish.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
       const filename = `recipes/${slug}.json`;
       const content = JSON.stringify(recipe, null, 2);
       const encoded = btoa(unescape(encodeURIComponent(content)));
+      const isEdit = !!editingSlug;
+      const commitMsg = isEdit ? `Update recipe: ${dish}` : `Add recipe: ${dish}`;
 
       try {
+        // If editing, we need the file's SHA for the update
+        let sha = undefined;
+        if (isEdit) {
+          const getResp = await fetch(`https://api.github.com/repos/${REPO}/contents/${filename}`, {
+            headers: { 'Authorization': `token ${getToken()}` }
+          });
+          if (getResp.ok) {
+            const fileData = await getResp.json();
+            sha = fileData.sha;
+          }
+        }
+
+        const body = { message: commitMsg, content: encoded };
+        if (sha) body.sha = sha;
+
         const resp = await fetch(`https://api.github.com/repos/${REPO}/contents/${filename}`, {
           method: 'PUT',
           headers: {
             'Authorization': `token ${getToken()}`,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ message: `Add recipe: ${dish}`, content: encoded }),
+          body: JSON.stringify(body),
         });
 
         if (!resp.ok) {
@@ -1954,11 +2158,15 @@ For you_might_also_like, suggest 3 real dishes from the culinary world that are 
           throw new Error(err.message || 'Failed to save');
         }
 
-        showStatus(`"${dish}" saved! The site will update in a minute or two.`, 'success');
+        const action = isEdit ? 'updated' : 'saved';
+        showStatus(`"${dish}" ${action}! The site will update in a minute or two.`, 'success');
+
+        // Reset form
         document.querySelectorAll('#add-view input[type="text"], #add-view textarea').forEach(el => el.value = '');
         document.querySelectorAll('#add-view input[type="checkbox"]').forEach(cb => cb.checked = false);
         document.querySelectorAll('#add-view input[type="radio"]').forEach(r => r.checked = false);
         document.querySelectorAll('#who-form-bar .who-btn').forEach(b => b.classList.toggle('active', b.dataset.who === 'both'));
+        editingSlug = null;
       } catch (e) {
         showStatus(`Error: ${e.message}`, 'error');
       }

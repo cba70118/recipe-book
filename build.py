@@ -98,8 +98,12 @@ def build_recipe_card(r, all_recipes=None):
     if r["recipe"].get("yield"):
         yield_html = f'<span class="yield">{escape(r["recipe"]["yield"])}</span>'
 
+    # Embed recipe JSON for edit functionality (strip internal _slug)
+    recipe_json = json.dumps({k: v for k, v in r.items() if k != '_slug'})
+    recipe_json_escaped = escape(recipe_json)
+
     return f"""
-    <article class="recipe-card" id="{escape(r['_slug'])}" data-tags="{escape(data_tags)}">
+    <article class="recipe-card" id="{escape(r['_slug'])}" data-tags="{escape(data_tags)}" data-slug="{escape(r['_slug'])}" data-recipe="{recipe_json_escaped}">
       <div class="recipe-header" onclick="toggleRecipe(this)">
         <h2>{escape(r['dish'])}</h2>
         <div class="recipe-meta">
@@ -126,6 +130,10 @@ def build_recipe_card(r, all_recipes=None):
         {serving_html}
         {storage_html}
         {family_notes_html}
+        <div class="recipe-actions">
+          <button class="recipe-action-btn edit-btn" onclick="editRecipe('{escape(r['_slug'])}')">Edit</button>
+          <button class="recipe-action-btn delete-btn" onclick="deleteRecipe('{escape(r['_slug'])}', '{escape(r['dish'])}')">Delete</button>
+        </div>
       </div>
     </article>
     """
