@@ -345,17 +345,38 @@
       font-weight: 600;
       line-height: 1.3;
       color: var(--ink);
-      margin-bottom: 4px;
+      margin-bottom: 6px;
+      cursor: pointer;
     }
 
-    .idea-card .idea-snippet {
+    .idea-card .idea-tags {
+      display: flex; flex-wrap: wrap; gap: 3px;
+      margin-bottom: 6px;
+    }
+
+    .idea-tag {
+      font-family: system-ui, sans-serif;
+      font-size: 9px;
+      padding: 2px 7px;
+      border-radius: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 500;
+    }
+
+    .idea-tag.cuisine { background: #eef5e6; color: #3a5a22; }
+    .idea-tag.difficulty { background: #fff8e0; color: #7a5808; }
+    .idea-tag.time { background: #f0eef8; color: #5a487a; }
+    .idea-tag.vibe { background: #fdf0f5; color: #8a3858; }
+
+    .idea-card .idea-ingredients {
       font-family: system-ui, sans-serif;
       font-size: 0.78rem;
-      line-height: 1.45;
+      line-height: 1.4;
       color: var(--warm-gray);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       display: -webkit-box;
-      -webkit-line-clamp: 2;
+      -webkit-line-clamp: 1;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
@@ -367,6 +388,41 @@
       text-transform: uppercase;
       letter-spacing: 0.1em;
       opacity: 0.7;
+    }
+
+    /* Expanded detail */
+    .idea-detail {
+      display: none;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 0.5px solid var(--linen);
+    }
+
+    .idea-card.open .idea-detail { display: block; }
+    .idea-card.open .idea-ingredients {
+      -webkit-line-clamp: unset;
+      display: block;
+    }
+
+    .idea-detail-section {
+      margin-bottom: 10px;
+    }
+
+    .idea-detail-label {
+      font-family: system-ui, sans-serif;
+      font-size: 9px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--stem);
+      margin-bottom: 4px;
+    }
+
+    .idea-detail-text {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 0.85rem;
+      line-height: 1.65;
+      color: var(--charcoal);
     }
 
     .idea-actions {
@@ -1486,18 +1542,55 @@
       empty.style.display = ideas.length ? 'none' : 'block';
 
       ideas.forEach((idea, idx) => {
-        const title = idea.title || extractTitle(idea.text);
-        const snippet = extractSnippet(idea.text);
         const accent = IDEA_ACCENTS[idx % IDEA_ACCENTS.length];
         const card = document.createElement('div');
         card.className = 'idea-card';
+
+        // Build tag pills
+        let tagsHtml = '';
+        if (idea.cuisine) tagsHtml += `<span class="idea-tag cuisine">${idea.cuisine}</span>`;
+        if (idea.difficulty) tagsHtml += `<span class="idea-tag difficulty">${idea.difficulty}</span>`;
+        if (idea.time) tagsHtml += `<span class="idea-tag time">${idea.time}</span>`;
+        if (idea.vibe) tagsHtml += `<span class="idea-tag vibe">${idea.vibe}</span>`;
+
+        // Ingredients summary (first few)
+        let ingredientsHtml = '';
+        if (idea.keyIngredients) {
+          ingredientsHtml = `<div class="idea-ingredients">${idea.keyIngredients}</div>`;
+        }
+
+        // Detail sections
+        let detailHtml = '';
+        if (idea.flavorProfile) {
+          detailHtml += `<div class="idea-detail-section"><div class="idea-detail-label">Flavor Profile</div><div class="idea-detail-text">${idea.flavorProfile}</div></div>`;
+        }
+        if (idea.keyIngredients) {
+          detailHtml += `<div class="idea-detail-section"><div class="idea-detail-label">Key Ingredients</div><div class="idea-detail-text">${idea.keyIngredients}</div></div>`;
+        }
+        if (idea.method) {
+          detailHtml += `<div class="idea-detail-section"><div class="idea-detail-label">How to Make It</div><div class="idea-detail-text">${idea.method}</div></div>`;
+        }
+        if (idea.whyItWorks) {
+          detailHtml += `<div class="idea-detail-section"><div class="idea-detail-label">Why It Works</div><div class="idea-detail-text">${idea.whyItWorks}</div></div>`;
+        }
+        if (idea.tip) {
+          detailHtml += `<div class="idea-detail-section"><div class="idea-detail-label">Pro Tip</div><div class="idea-detail-text">${idea.tip}</div></div>`;
+        }
+
+        // If no structured detail, show the raw text
+        if (!detailHtml && idea.text) {
+          detailHtml = `<div class="idea-detail-section"><div class="idea-detail-text">${formatChat(idea.text)}</div></div>`;
+        }
+
         card.innerHTML = `
           <div class="idea-accent" style="background:${accent};"></div>
-          <div class="idea-title">${title}</div>
-          <div class="idea-snippet">${snippet}</div>
+          <div class="idea-title" onclick="this.closest('.idea-card').classList.toggle('open')">${idea.title || extractTitle(idea.text)}</div>
+          ${tagsHtml ? '<div class="idea-tags">' + tagsHtml + '</div>' : ''}
+          ${ingredientsHtml}
           <div class="idea-meta">${idea.date}${idea.source ? ' · ' + idea.source : ''}</div>
+          <div class="idea-detail">${detailHtml}</div>
           <div class="idea-actions">
-            <button class="idea-action promote" onclick="promoteIdea(${idx})">Make</button>
+            <button class="idea-action promote" onclick="promoteIdea(${idx})">Make This</button>
             <button class="idea-action remove" onclick="removeIdea(${idx})">Remove</button>
           </div>
         `;
@@ -1505,7 +1598,7 @@
       });
     }
 
-    function addIdea(text, source) {
+    async function addIdea(text, source) {
       if (!text) {
         const input = document.getElementById('idea-input');
         text = input.value.trim();
@@ -1513,15 +1606,64 @@
         input.value = '';
         source = null;
       }
-      // Try to extract a clean title
-      const title = extractTitle(text);
-      const ideas = loadIdeas();
-      ideas.unshift({
-        title: title,
+
+      const idea = {
+        title: extractTitle(text),
         text: text,
         date: new Date().toISOString().split('T')[0],
         source: source || null
-      });
+      };
+
+      // If we have a Claude key and the text is substantial, enrich it
+      const chefKey = getChefKey();
+      if (chefKey && text.length > 50) {
+        try {
+          const resp = await fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-api-key': chefKey,
+              'anthropic-version': '2023-06-01',
+              'anthropic-dangerous-direct-browser-access': 'true'
+            },
+            body: JSON.stringify({
+              model: 'claude-sonnet-4-20250514',
+              max_tokens: 512,
+              messages: [{
+                role: 'user',
+                content: `Extract structured info from this recipe idea. Return ONLY valid JSON:
+{
+  "title": "short dish name",
+  "cuisine": "e.g. Italian, Mexican, etc. or null",
+  "difficulty": "Easy/Medium/Weekend Project or null",
+  "time": "e.g. 30 min, 1 hour or null",
+  "vibe": "one word mood — e.g. cozy, fresh, bold, light, rich, spicy or null",
+  "keyIngredients": "the 4-6 most important ingredients as a comma-separated string",
+  "flavorProfile": "1 sentence — what does this taste like, what are the dominant flavors",
+  "method": "2-3 sentence sketch of how to make it",
+  "whyItWorks": "1 sentence — the culinary logic",
+  "tip": "1 sentence pro tip or null"
+}
+
+Text: ${text}`
+              }]
+            })
+          });
+          if (resp.ok) {
+            const data = await resp.json();
+            const match = data.content[0].text.match(/\{[\s\S]*\}/);
+            if (match) {
+              const enriched = JSON.parse(match[0]);
+              Object.assign(idea, enriched);
+            }
+          }
+        } catch (e) {
+          // Non-fatal — save with basic info
+        }
+      }
+
+      const ideas = loadIdeas();
+      ideas.unshift(idea);
       saveIdeas(ideas);
       renderIdeas();
     }
@@ -2559,9 +2701,12 @@ Use **markdown** for formatting. Be generous with detail but not verbose — eve
         const ideaBtn = document.createElement('button');
         ideaBtn.className = 'chat-action-btn';
         ideaBtn.textContent = 'Save as Idea';
-        ideaBtn.onclick = () => {
-          addIdea(text, 'Ask the Chef');
+        ideaBtn.onclick = async () => {
+          ideaBtn.textContent = 'Saving...';
+          ideaBtn.classList.add('saving');
+          await addIdea(text, 'Ask the Chef');
           ideaBtn.textContent = 'Saved!';
+          ideaBtn.classList.remove('saving');
           ideaBtn.classList.add('saved');
         };
 
