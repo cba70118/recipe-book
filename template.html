@@ -200,7 +200,7 @@
     .search-bar input:focus { border-color: var(--tobacco); }
 
     /* --- Tag filters --- */
-    .filter-section { margin-bottom: 14px; }
+    .filter-section { margin-bottom: 6px; }
 
     .filter-label {
       font-size: 10px; font-weight: 500;
@@ -281,11 +281,84 @@
       color: #faf7f2;
     }
 
-    /* --- Divider --- */
-    .section-rule {
-      border: none;
-      border-top: 1px solid var(--light-rule);
-      margin: 16px 0;
+    /* --- Filter Drawer --- */
+    .filter-toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .filter-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: var(--cream);
+      border: 0.5px solid var(--linen);
+      border-radius: 4px;
+      font-family: system-ui, sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--warm-gray);
+      cursor: pointer;
+      letter-spacing: 0.06em;
+      transition: all 150ms ease-out;
+    }
+
+    .filter-toggle:active { transform: translateY(-1px); }
+
+    .filter-count {
+      background: var(--stem);
+      color: #faf7f2;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 1px 7px;
+      border-radius: 10px;
+      display: none;
+    }
+
+    .filter-count.visible { display: inline; }
+
+    .filter-chevron {
+      font-size: 10px;
+      transition: transform 200ms ease-out;
+    }
+
+    .filter-chevron.open { transform: rotate(180deg); }
+
+    .filter-clear {
+      padding: 6px 12px;
+      background: none;
+      border: 1px solid var(--linen);
+      border-radius: 4px;
+      font-family: system-ui, sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--tulip);
+      cursor: pointer;
+      letter-spacing: 0.06em;
+    }
+
+    .filter-drawer {
+      display: none;
+      padding: 14px 16px;
+      background: var(--cream);
+      border: 0.5px solid var(--linen);
+      border-radius: 4px;
+      margin-bottom: 14px;
+    }
+
+    .filter-drawer.open { display: block; }
+
+    .filter-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 20px;
+    }
+
+    @media (max-width: 480px) {
+      .filter-grid { grid-template-columns: 1fr; }
     }
 
     /* --- Recipe cards --- */
@@ -905,38 +978,49 @@
       </div>
 
       <div class="who-bar">
-        <button class="who-btn active" data-who="all" onclick="filterWho('all')">All Recipes</button>
+        <button class="who-btn active" data-who="all" onclick="filterWho('all')">All</button>
         <button class="who-btn" data-who="cory" onclick="filterWho('cory')">Cory's</button>
         <button class="who-btn" data-who="kayla" onclick="filterWho('kayla')">Kayla's</button>
-        <button class="who-btn" data-who="both" onclick="filterWho('both')">Our Favorites</button>
+        <button class="who-btn" data-who="both" onclick="filterWho('both')">Ours</button>
       </div>
 
-      <div class="filter-section">
-        <div class="filter-label">Meal</div>
-        <div class="filter-row" id="meal-filters">{{MEAL_TAG_BUTTONS}}</div>
-      </div>
-      <div class="filter-section">
-        <div class="filter-label">Cuisine</div>
-        <div class="filter-row" id="cuisine-filters">{{CUISINE_TAG_BUTTONS}}</div>
-      </div>
-      <div class="filter-section">
-        <div class="filter-label">Protein</div>
-        <div class="filter-row" id="protein-filters">{{PROTEIN_TAG_BUTTONS}}</div>
-      </div>
-      <div class="filter-section">
-        <div class="filter-label">Style</div>
-        <div class="filter-row" id="style-filters">{{STYLE_TAG_BUTTONS}}</div>
-      </div>
-      <div class="filter-section">
-        <div class="filter-label">Occasion</div>
-        <div class="filter-row" id="occasion-filters">{{OCCASION_TAG_BUTTONS}}</div>
-      </div>
-      <div class="filter-section">
-        <div class="filter-label">Tool</div>
-        <div class="filter-row" id="tool-filters">{{TOOL_TAG_BUTTONS}}</div>
+      <div class="filter-toggle-row">
+        <button class="filter-toggle" onclick="toggleFilters()">
+          <span id="filter-toggle-label">Filters</span>
+          <span class="filter-count" id="filter-count"></span>
+          <span class="filter-chevron" id="filter-chevron">&#9662;</span>
+        </button>
+        <button class="filter-clear" id="filter-clear" onclick="clearAllFilters()" style="display:none;">Clear</button>
       </div>
 
-      <hr class="section-rule">
+      <div class="filter-drawer" id="filter-drawer">
+        <div class="filter-grid">
+          <div class="filter-section">
+            <div class="filter-label">Meal</div>
+            <div class="filter-row" id="meal-filters">{{MEAL_TAG_BUTTONS}}</div>
+          </div>
+          <div class="filter-section">
+            <div class="filter-label">Cuisine</div>
+            <div class="filter-row" id="cuisine-filters">{{CUISINE_TAG_BUTTONS}}</div>
+          </div>
+          <div class="filter-section">
+            <div class="filter-label">Protein</div>
+            <div class="filter-row" id="protein-filters">{{PROTEIN_TAG_BUTTONS}}</div>
+          </div>
+          <div class="filter-section">
+            <div class="filter-label">Style</div>
+            <div class="filter-row" id="style-filters">{{STYLE_TAG_BUTTONS}}</div>
+          </div>
+          <div class="filter-section">
+            <div class="filter-label">Occasion</div>
+            <div class="filter-row" id="occasion-filters">{{OCCASION_TAG_BUTTONS}}</div>
+          </div>
+          <div class="filter-section">
+            <div class="filter-label">Tool</div>
+            <div class="filter-row" id="tool-filters">{{TOOL_TAG_BUTTONS}}</div>
+          </div>
+        </div>
+      </div>
 
       <div id="recipe-list">
         {{RECIPE_CARDS}}
@@ -1180,6 +1264,35 @@
       applyFilters();
     }
 
+    // --- Filter drawer ---
+    function toggleFilters() {
+      const drawer = document.getElementById('filter-drawer');
+      const chevron = document.getElementById('filter-chevron');
+      drawer.classList.toggle('open');
+      chevron.classList.toggle('open');
+    }
+
+    function updateFilterCount() {
+      const count = activeFilters.size;
+      const el = document.getElementById('filter-count');
+      const clearBtn = document.getElementById('filter-clear');
+      if (count > 0) {
+        el.textContent = count;
+        el.classList.add('visible');
+        clearBtn.style.display = 'inline-block';
+      } else {
+        el.classList.remove('visible');
+        clearBtn.style.display = 'none';
+      }
+    }
+
+    function clearAllFilters() {
+      activeFilters.clear();
+      document.querySelectorAll('.filter-btn.active').forEach(b => b.classList.remove('active'));
+      updateFilterCount();
+      applyFilters();
+    }
+
     function toggleRecipe(header) {
       header.closest('.recipe-card').classList.toggle('open');
     }
@@ -1202,6 +1315,7 @@
         btn.classList.toggle('active');
         if (activeFilters.has(tag)) activeFilters.delete(tag);
         else activeFilters.add(tag);
+        updateFilterCount();
         applyFilters();
       });
     });
