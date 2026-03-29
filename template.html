@@ -163,6 +163,55 @@
 
     .filter-btn:active { transform: scale(0.97); }
 
+    /* --- Who Bar --- */
+    .who-bar {
+      display: flex;
+      gap: 0;
+      margin-bottom: 16px;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--linen);
+    }
+
+    .who-btn {
+      flex: 1;
+      padding: 10px 8px;
+      text-align: center;
+      font-family: system-ui, sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      border: none;
+      background: var(--cream);
+      color: var(--warm-gray);
+      transition: all 150ms ease-out;
+    }
+
+    .who-btn + .who-btn {
+      border-left: 1px solid var(--linen);
+    }
+
+    .who-btn.active {
+      background: var(--ink);
+      color: #faf7f2;
+    }
+
+    .who-btn[data-who="cory"].active {
+      background: var(--stem);
+      color: #faf7f2;
+    }
+
+    .who-btn[data-who="kayla"].active {
+      background: var(--peony);
+      color: #faf7f2;
+    }
+
+    .who-btn[data-who="both"].active {
+      background: var(--lavender);
+      color: #faf7f2;
+    }
+
     /* --- Divider --- */
     .section-rule {
       border: none;
@@ -774,10 +823,13 @@
         <input type="text" id="search" placeholder="Search recipes..." oninput="applyFilters()">
       </div>
 
-      <div class="filter-section">
-        <div class="filter-label">Whose</div>
-        <div class="filter-row" id="who-filters">{{WHO_TAG_BUTTONS}}</div>
+      <div class="who-bar">
+        <button class="who-btn active" data-who="all" onclick="filterWho('all')">All Recipes</button>
+        <button class="who-btn" data-who="cory" onclick="filterWho('cory')">Cory's</button>
+        <button class="who-btn" data-who="kayla" onclick="filterWho('kayla')">Kayla's</button>
+        <button class="who-btn" data-who="both" onclick="filterWho('both')">Our Favorites</button>
       </div>
+
       <div class="filter-section">
         <div class="filter-label">Meal</div>
         <div class="filter-row" id="meal-filters">{{MEAL_TAG_BUTTONS}}</div>
@@ -884,8 +936,12 @@
       </div>
 
       <div class="form-group">
-        <label>Whose</label>
-        <div class="check-group" id="who-checks">{{WHO_TAG_CHECKS}}</div>
+        <label>Whose Favorite</label>
+        <div class="who-bar" id="who-form-bar" style="margin-bottom:0;">
+          <button type="button" class="who-btn" data-who="cory" onclick="selectWhoForm(this)">Cory's</button>
+          <button type="button" class="who-btn" data-who="kayla" onclick="selectWhoForm(this)">Kayla's</button>
+          <button type="button" class="who-btn active" data-who="both" onclick="selectWhoForm(this)">Both</button>
+        </div>
       </div>
       <div class="form-group">
         <label>Meal Type</label>
@@ -1032,6 +1088,17 @@
       document.getElementById('token-view').style.display = 'none';
     }
 
+    // --- Who filter ---
+    let activeWho = 'all';
+
+    function filterWho(who) {
+      activeWho = who;
+      document.querySelectorAll('.who-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.who === who);
+      });
+      applyFilters();
+    }
+
     function toggleRecipe(header) {
       header.closest('.recipe-card').classList.toggle('open');
     }
@@ -1066,7 +1133,17 @@
         const matchesSearch = !q || text.includes(q);
         const matchesTags = activeFilters.size === 0 ||
           [...activeFilters].every(f => tags.includes(f));
-        card.style.display = (matchesSearch && matchesTags) ? '' : 'none';
+        // Who filter: "all" shows everything, otherwise match the who tag
+        // "cory" matches recipes tagged "cory" or "both"
+        // "kayla" matches recipes tagged "kayla" or "both"
+        // "both" matches only recipes tagged "both" (shared favorites)
+        let matchesWho = true;
+        if (activeWho !== 'all') {
+          if (activeWho === 'cory') matchesWho = tags.includes('cory') || tags.includes('both');
+          else if (activeWho === 'kayla') matchesWho = tags.includes('kayla') || tags.includes('both');
+          else matchesWho = tags.includes(activeWho);
+        }
+        card.style.display = (matchesSearch && matchesTags && matchesWho) ? '' : 'none';
       });
     }
 
@@ -1088,6 +1165,11 @@
       if (view === 'chef') {
         setTimeout(() => document.getElementById('chat-input').focus(), 100);
       }
+    }
+
+    function selectWhoForm(btn) {
+      btn.parentElement.querySelectorAll('.who-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
     }
 
     function addCustomTag(type) {
@@ -1115,8 +1197,11 @@
       if (!ingredients.length) { showStatus('Please enter at least one ingredient.', 'error'); return; }
       if (!steps.length) { showStatus('Please enter at least one step.', 'error'); return; }
 
-      const tagCats = ['who', 'meal', 'cuisine', 'protein', 'style', 'occasion', 'tool'];
+      const tagCats = ['meal', 'cuisine', 'protein', 'style', 'occasion', 'tool'];
       const tags = {};
+      // Get "who" from the dedicated bar
+      const whoBtn = document.querySelector('#who-form-bar .who-btn.active');
+      tags.who = whoBtn ? [whoBtn.dataset.who] : ['both'];
       tagCats.forEach(cat => {
         tags[cat] = [...document.querySelectorAll(`#${cat}-checks input:checked`)].map(cb => cb.value);
       });
@@ -1248,6 +1333,7 @@ For you_might_also_like, suggest 3 real dishes from the culinary world that are 
         document.querySelectorAll('#add-view input[type="text"], #add-view textarea').forEach(el => el.value = '');
         document.querySelectorAll('#add-view input[type="checkbox"]').forEach(cb => cb.checked = false);
         document.querySelectorAll('#add-view input[type="radio"]').forEach(r => r.checked = false);
+        document.querySelectorAll('#who-form-bar .who-btn').forEach(b => b.classList.toggle('active', b.dataset.who === 'both'));
       } catch (e) {
         showStatus(`Error: ${e.message}`, 'error');
       }
@@ -1696,9 +1782,15 @@ Clean up the ingredients and steps to be clear and concise. Standardize measurem
         document.getElementById('add-time-total').value = r.time.total || r.time_total || '';
       }
 
-      // Check matching tag checkboxes across all categories
+      // Set the who bar
       const tags = r.tags || {};
-      ['who', 'meal', 'cuisine', 'protein', 'style', 'occasion', 'tool'].forEach(cat => {
+      const whoVal = (tags.who || ['both'])[0];
+      document.querySelectorAll('#who-form-bar .who-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.who === whoVal);
+      });
+
+      // Check matching tag checkboxes across all categories
+      ['meal', 'cuisine', 'protein', 'style', 'occasion', 'tool'].forEach(cat => {
         (tags[cat] || []).forEach(tag => {
           const cb = document.querySelector(`#${cat}-checks input[value="${tag}"]`);
           if (cb) cb.checked = true;
