@@ -655,7 +655,6 @@
     #add-view { display: none; }
     #add-view.active { display: block; }
     #recipes-view.hidden { display: none; }
-    #token-view { display: none; }
 
     .form-group { margin-bottom: 18px; }
 
@@ -765,7 +764,6 @@
     /* --- Chef Chat --- */
     #chef-view { display: none; }
     #chef-view.active { display: flex; flex-direction: column; height: calc(100vh - 200px); }
-    #chef-key-view { display: none; }
 
     .chat-messages {
       flex: 1;
@@ -986,11 +984,30 @@
   <!-- Auth Gate -->
   <div id="auth-gate">
     <div class="auth-box">
-      <h1 class="auth-title">Our Recipe Book</h1>
-      <p class="auth-sub">Enter the password to continue</p>
-      <input type="password" id="auth-input" placeholder="Password" onkeydown="if(event.key==='Enter')checkAuth()">
-      <button class="auth-btn" onclick="checkAuth()">Enter</button>
-      <div class="auth-error" id="auth-error"></div>
+      <!-- Step 1: Password -->
+      <div id="auth-step-pw">
+        <h1 class="auth-title">Our Recipe Book</h1>
+        <p class="auth-sub">Enter the password to continue</p>
+        <input type="password" id="auth-input" placeholder="Password" onkeydown="if(event.key==='Enter')checkAuth()">
+        <button class="auth-btn" onclick="checkAuth()">Enter</button>
+        <div class="auth-error" id="auth-error"></div>
+      </div>
+
+      <!-- Step 2: Tokens (only shown if missing) -->
+      <div id="auth-step-tokens" style="display:none;">
+        <h1 class="auth-title">Almost there</h1>
+        <p class="auth-sub">One-time setup — these are saved in your browser</p>
+        <div id="auth-gh-row" style="margin-bottom:14px;">
+          <p class="auth-sub" style="margin-bottom:6px; text-align:left; font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--leaf);">GitHub Token</p>
+          <input type="password" id="auth-gh-input" placeholder="Paste GitHub token..." style="width:100%; padding:12px 14px; border:1px solid rgba(255,255,255,0.15); border-radius:4px; background:rgba(255,255,255,0.06); color:#faf7f2; font-size:0.9rem; font-family:inherit; outline:none;">
+        </div>
+        <div id="auth-claude-row" style="margin-bottom:14px;">
+          <p class="auth-sub" style="margin-bottom:6px; text-align:left; font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--leaf);">Claude API Key <span style="opacity:0.5;">(for Ask the Chef)</span></p>
+          <input type="password" id="auth-claude-input" placeholder="Paste Claude API key..." style="width:100%; padding:12px 14px; border:1px solid rgba(255,255,255,0.15); border-radius:4px; background:rgba(255,255,255,0.06); color:#faf7f2; font-size:0.9rem; font-family:inherit; outline:none;">
+        </div>
+        <button class="auth-btn" onclick="saveAuthTokens()">Continue</button>
+        <button class="auth-btn" onclick="skipTokens()" style="margin-top:8px; background:transparent; border:1px solid rgba(255,255,255,0.15); color:var(--warm-gray); font-size:0.75rem;">Skip for now</button>
+      </div>
     </div>
   </div>
 
@@ -1000,12 +1017,33 @@
       const input = document.getElementById('auth-input');
       if (input.value === 'yumma') {
         localStorage.setItem(AUTH_KEY, 'true');
-        unlockApp();
+        // Check if tokens are already set
+        const hasGh = !!localStorage.getItem('recipe_book_token');
+        const hasClaude = !!localStorage.getItem('recipe_book_chef_key');
+        if (hasGh && hasClaude) {
+          unlockApp();
+        } else {
+          // Show token step, hide fields already set
+          document.getElementById('auth-step-pw').style.display = 'none';
+          document.getElementById('auth-step-tokens').style.display = 'block';
+          if (hasGh) document.getElementById('auth-gh-row').style.display = 'none';
+          if (hasClaude) document.getElementById('auth-claude-row').style.display = 'none';
+        }
       } else {
         document.getElementById('auth-error').textContent = 'Wrong password';
         input.value = '';
         input.focus();
       }
+    }
+    function saveAuthTokens() {
+      const gh = document.getElementById('auth-gh-input').value.trim();
+      const claude = document.getElementById('auth-claude-input').value.trim();
+      if (gh) localStorage.setItem('recipe_book_token', gh);
+      if (claude) localStorage.setItem('recipe_book_chef_key', claude);
+      unlockApp();
+    }
+    function skipTokens() {
+      unlockApp();
     }
     function unlockApp() {
       document.getElementById('auth-gate').style.display = 'none';
@@ -1023,8 +1061,8 @@
   <div class="container">
     <div class="tabs">
       <div class="tab active" onclick="showView('recipes')">Recipes</div>
-      <div class="tab" onclick="showView(getChefKey() ? 'chef' : 'chef-key')">Ask the Chef</div>
-      <div class="tab" onclick="showView(getToken() ? 'add' : 'token')">Add New</div>
+      <div class="tab" onclick="showView('chef')">Ask the Chef</div>
+      <div class="tab" onclick="showView('add')">Add New</div>
     </div>
 
     <!-- Recipes View -->
@@ -1250,31 +1288,6 @@
       </div>
     </div>
 
-    <!-- Chef Key Setup (shown once) -->
-    <div id="chef-key-view">
-      <div class="instructions">
-        <strong>One-time setup:</strong> To chat with the Chef, paste the API key below. It stays in your browser only.
-      </div>
-      <div class="form-group">
-        <label>Claude API Key</label>
-        <input type="password" id="chef-key-input" placeholder="Paste API key here...">
-      </div>
-      <button class="btn" onclick="saveChefKey()">Save Key</button>
-      <div class="status-msg" id="chef-key-status"></div>
-    </div>
-
-    <!-- Token Setup (shown once) -->
-    <div id="token-view">
-      <div class="instructions">
-        <strong>One-time setup:</strong> To save recipes directly from this page, paste the access token below. It will be stored in your browser only — never sent anywhere else.
-      </div>
-      <div class="form-group">
-        <label>Access Token</label>
-        <input type="password" id="token-input" placeholder="Paste token here...">
-      </div>
-      <button class="btn" onclick="saveToken()">Save Token</button>
-      <div class="status-msg" id="token-status"></div>
-    </div>
   </div>
 
   <script>
@@ -1283,31 +1296,7 @@
     function getToken() { return localStorage.getItem('recipe_book_token') || ''; }
     function getChefKey() { return localStorage.getItem('recipe_book_chef_key') || ''; }
 
-    function saveChefKey() {
-      const val = document.getElementById('chef-key-input').value.trim();
-      if (!val) {
-        document.getElementById('chef-key-status').textContent = 'Please paste an API key.';
-        document.getElementById('chef-key-status').className = 'status-msg error';
-        return;
-      }
-      localStorage.setItem('recipe_book_chef_key', val);
-      document.getElementById('chef-key-status').textContent = 'Key saved!';
-      document.getElementById('chef-key-status').className = 'status-msg success';
-      setTimeout(() => showView('chef'), 500);
-    }
 
-    function saveToken() {
-      const val = document.getElementById('token-input').value.trim();
-      if (!val) {
-        document.getElementById('token-status').textContent = 'Please paste a token.';
-        document.getElementById('token-status').className = 'status-msg error';
-        return;
-      }
-      localStorage.setItem('recipe_book_token', val);
-      document.getElementById('token-status').textContent = 'Token saved!';
-      document.getElementById('token-status').className = 'status-msg success';
-      document.getElementById('token-view').style.display = 'none';
-    }
 
     // --- Who filter ---
     let activeWho = 'all';
@@ -1399,19 +1388,17 @@
     }
 
     function showView(view) {
-      const views = ['recipes', 'add', 'token', 'chef', 'chef-key'];
+      const views = ['recipes', 'add', 'chef'];
       views.forEach(v => {
         const el = document.getElementById(v + '-view');
         if (!el) return;
         if (v === 'recipes') el.classList.toggle('hidden', view !== 'recipes');
-        else if (v === 'add') el.classList.toggle('active', view === 'add');
-        else if (v === 'chef') el.classList.toggle('active', view === 'chef');
-        else el.style.display = view === v ? 'block' : 'none';
+        else el.classList.toggle('active', view === v);
       });
       const tabs = document.querySelectorAll('.tab');
       tabs[0].classList.toggle('active', view === 'recipes');
-      tabs[1].classList.toggle('active', view === 'chef' || view === 'chef-key');
-      tabs[2].classList.toggle('active', view === 'add' || view === 'token');
+      tabs[1].classList.toggle('active', view === 'chef');
+      tabs[2].classList.toggle('active', view === 'add');
 
       if (view === 'chef') {
         setTimeout(() => document.getElementById('chat-input').focus(), 100);
