@@ -1029,6 +1029,16 @@
       cursor: pointer;
     }
 
+    .chat-attach {
+      display: flex; align-items: center; justify-content: center;
+      width: 44px; flex-shrink: 0;
+      background: var(--cream); border: 1px solid var(--linen);
+      border-radius: 4px; cursor: pointer;
+      font-size: 1.1rem; transition: all 150ms ease-out;
+    }
+
+    .chat-attach:active { background: var(--linen); }
+
     .chat-input-row button:disabled { background: var(--warm-gray); cursor: not-allowed; }
 
     .chat-typing {
@@ -1926,7 +1936,17 @@
       <div class="chat-messages" id="chat-messages">
         <div class="chat-msg assistant">What are we cooking tonight? Tell me what you're in the mood for, what's in your fridge, or just say hi — I'll find something great.</div>
       </div>
+      <div id="chat-image-preview" style="display:none; padding:8px 0;">
+        <div style="position:relative; display:inline-block;">
+          <img id="chat-preview-img" style="max-height:80px; border-radius:4px; border:1px solid var(--linen);">
+          <button onclick="clearChatImage()" style="position:absolute; top:-6px; right:-6px; width:20px; height:20px; border-radius:50%; background:var(--ink); color:#faf7f2; border:none; font-size:11px; cursor:pointer; line-height:20px; padding:0;">×</button>
+        </div>
+      </div>
       <div class="chat-input-row">
+        <label class="chat-attach" for="chat-image-input" title="Attach image">
+          <input type="file" id="chat-image-input" accept="image/*" capture="environment" onchange="previewChatImage(this)" style="display:none;">
+          &#128247;
+        </label>
         <input type="text" id="chat-input" placeholder="e.g. something quick with chicken..." onkeydown="if(event.key==='Enter')sendChat()">
         <button id="chat-send" onclick="sendChat()">Send</button>
       </div>
@@ -3239,17 +3259,59 @@ Use **markdown** for formatting. Be generous with detail but not verbose — eve
         .replace(/^(.*)$/, '<p>$1</p>');
     }
 
+    let chatImageData = null;
+
+    function previewChatImage(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = e => {
+          chatImageData = {
+            base64: e.target.result.split(',')[1],
+            mediaType: input.files[0].type || 'image/jpeg'
+          };
+          document.getElementById('chat-preview-img').src = e.target.result;
+          document.getElementById('chat-image-preview').style.display = 'block';
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    function clearChatImage() {
+      chatImageData = null;
+      document.getElementById('chat-image-input').value = '';
+      document.getElementById('chat-image-preview').style.display = 'none';
+    }
+
     async function sendChat() {
       const input = document.getElementById('chat-input');
       const btn = document.getElementById('chat-send');
       const msg = input.value.trim();
-      if (!msg) return;
+      const hasImage = !!chatImageData;
+      if (!msg && !hasImage) return;
 
-      addChatMsg('user', msg);
+      addChatMsg('user', msg || '(sent an image)');
       input.value = '';
       btn.disabled = true;
 
-      chatHistory.push({ role: 'user', content: msg });
+      // Build the message content — text + optional image
+      let userContent;
+      if (hasImage) {
+        userContent = [];
+        userContent.push({
+          type: 'image',
+          source: { type: 'base64', media_type: chatImageData.mediaType, data: chatImageData.base64 }
+        });
+        if (msg) {
+          userContent.push({ type: 'text', text: msg });
+        } else {
+          userContent.push({ type: 'text', text: 'What can I make with what you see here? Or tell me about this dish.' });
+        }
+        clearChatImage();
+      } else {
+        userContent = msg;
+      }
+
+      chatHistory.push({ role: 'user', content: userContent });
       persistChat();
 
       // Show typing indicator
