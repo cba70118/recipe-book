@@ -1490,7 +1490,7 @@
       </div>
       <div class="chat-input-row">
         <label class="chat-attach" for="chat-image-input" title="Attach image">
-          <input type="file" id="chat-image-input" accept="image/*" capture="environment" onchange="previewChatImage(this)" style="display:none;">
+          <input type="file" id="chat-image-input" accept="image/*" onchange="previewChatImage(this)" style="display:none;">
           &#128247;
         </label>
         <input type="text" id="chat-input" placeholder="e.g. something quick with chicken..." onkeydown="if(event.key==='Enter')sendChat()">
