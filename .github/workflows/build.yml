@@ -4,8 +4,10 @@ on:
   push:
     paths:
       - 'recipes/**'
+      - 'ideas/**'
       - 'template.html'
       - 'build.py'
+      - 'preferences.json'
 
 permissions:
   contents: write

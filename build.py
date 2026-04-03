@@ -195,8 +195,23 @@ def build_preferences_summary():
     return "\\n".join(lines)
 
 
+def load_ideas():
+    """Load all ideas from ideas/*.json."""
+    ideas_dir = ROOT / "ideas"
+    if not ideas_dir.exists():
+        return []
+    ideas = []
+    for path in sorted(ideas_dir.glob("*.json"), key=lambda p: p.stat().st_mtime, reverse=True):
+        with open(path, "r", encoding="utf-8") as f:
+            idea = json.load(f)
+            idea["_slug"] = path.stem
+            ideas.append(idea)
+    return ideas
+
+
 def build_site():
     recipes = load_recipes()
+    ideas = load_ideas()
     all_tags = collect_all_tags(recipes)
     cards_html = "\n".join(build_recipe_card(r) for r in recipes)
     recipe_summary = build_recipe_summary(recipes)
@@ -221,6 +236,7 @@ def build_site():
     html = template.replace("{{RECIPE_CARDS}}", cards_html)
     html = html.replace("{{RECIPE_COUNT}}", str(len(recipes)))
     html = html.replace("{{RECIPE_SUMMARY}}", recipe_summary)
+    html = html.replace("{{IDEAS_JSON}}", json.dumps(ideas))
     html = html.replace("{{PREFERENCES_SUMMARY}}", preferences_summary)
 
     # Replace tag placeholders for each category

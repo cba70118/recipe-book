@@ -1951,13 +1951,53 @@
       '#6b8f3a', '#c4688a', '#d87040', '#8a7aa8', '#d8b830', '#7a9a52'
     ];
 
+    // Ideas are embedded at build time from ideas/*.json
+    let ideasData = [];
+
     function loadIdeas() {
-      try { return JSON.parse(localStorage.getItem(IDEAS_KEY) || '[]'); }
-      catch (e) { return []; }
+      return ideasData;
     }
 
-    function saveIdeas(ideas) {
-      localStorage.setItem(IDEAS_KEY, JSON.stringify(ideas));
+    async function saveIdeaToGithub(idea) {
+      const ghToken = getToken();
+      if (!ghToken) return false;
+      const slug = (idea.title || 'idea').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      const filename = `ideas/${slug}-${Date.now()}.json`;
+      const content = JSON.stringify(idea, null, 2);
+      const encoded = btoa(unescape(encodeURIComponent(content)));
+      try {
+        const resp = await fetch(`https://api.github.com/repos/${REPO}/contents/${filename}`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `token ${ghToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ message: `Add idea: ${idea.title}`, content: encoded }),
+        });
+        return resp.ok;
+      } catch (e) { return false; }
+    }
+
+    async function deleteIdeaFromGithub(slug) {
+      const ghToken = getToken();
+      if (!ghToken) return false;
+      const filename = `ideas/${slug}.json`;
+      try {
+        const getResp = await fetch(`https://api.github.com/repos/${REPO}/contents/${filename}`, {
+          headers: { 'Authorization': `token ${ghToken}` }
+        });
+        if (!getResp.ok) return false;
+        const fileData = await getResp.json();
+        const delResp = await fetch(`https://api.github.com/repos/${REPO}/contents/${filename}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `token ${ghToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ message: `Remove idea: ${slug}`, sha: fileData.sha }),
+        });
+        return delResp.ok;
+      } catch (e) { return false; }
     }
 
     function extractTitle(text) {
@@ -2116,22 +2156,32 @@ Text: ${text}`
         }
       }
 
-      const ideas = loadIdeas();
-      ideas.unshift(idea);
-      saveIdeas(ideas);
-      renderIdeas();
+      // Save to GitHub
+      const saved = await saveIdeaToGithub(idea);
+      if (saved) {
+        ideasData.unshift(idea);
+        renderIdeas();
+      } else {
+        // Fallback to local display even if GitHub fails
+        ideasData.unshift(idea);
+        renderIdeas();
+        console.log('GitHub save failed — idea shown locally but may not persist');
+      }
     }
 
-    function removeIdea(idx) {
-      const ideas = loadIdeas();
-      ideas.splice(idx, 1);
-      saveIdeas(ideas);
+    async function removeIdea(idx) {
+      const idea = ideasData[idx];
+      if (!confirm(`Remove "${idea.title || 'this idea'}"?`)) return;
+      const slug = idea._slug;
+      if (slug) {
+        await deleteIdeaFromGithub(slug);
+      }
+      ideasData.splice(idx, 1);
       renderIdeas();
     }
 
     function promoteIdea(idx) {
-      const ideas = loadIdeas();
-      const idea = ideas[idx];
+      const idea = ideasData[idx];
       showView('add');
       document.getElementById('import-text-input').value = idea.text;
       showImportPane('text');
