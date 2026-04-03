@@ -2660,7 +2660,7 @@ Use **markdown** for formatting. Be generous with detail but not verbose — eve
     // Restore chat from localStorage on load
     function restoreChat() {
       try {
-        const saved = JSON.parse(localStorage.getItem(CHAT_STORAGE_KEY) || '[]');
+        const saved = JSON.parse(sessionStorage.getItem(CHAT_STORAGE_KEY) || '[]');
         if (saved.length) {
           chatHistory = saved;
           const container = document.getElementById('chat-messages');
@@ -2674,7 +2674,7 @@ Use **markdown** for formatting. Be generous with detail but not verbose — eve
     function persistChat() {
       // Keep only last N messages
       const toSave = chatHistory.slice(-CHAT_MAX_MESSAGES);
-      localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(toSave));
+      sessionStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(toSave));
     }
 
     function addChatMsg(role, text, skipPersist) {
