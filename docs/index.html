@@ -3289,6 +3289,16 @@ Use **markdown** for formatting. Be generous with detail but not verbose — eve
       const hasImage = !!chatImageData;
       if (!msg && !hasImage) return;
 
+      // Make sure we have a Claude API key
+      if (!getChefKey()) {
+        const key = prompt('Paste your Claude API key to chat with the Chef (saved to your browser, never sent elsewhere):');
+        if (key && key.trim()) {
+          localStorage.setItem('recipe_book_chef_key', key.trim());
+        } else {
+          return;
+        }
+      }
+
       addChatMsg('user', msg || '(sent an image)');
       input.value = '';
       btn.disabled = true;
